@@ -1,6 +1,6 @@
 /*
 SQLyog Community v12.4.0 (64 bit)
-MySQL - 8.0.30 : Database - ekonomi_hijau
+MySQL - 8.0.30 : Database - greengrowth
 *********************************************************************
 */
 
@@ -12,9 +12,9 @@ MySQL - 8.0.30 : Database - ekonomi_hijau
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`ekonomi_hijau` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`greengrowth` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
-USE `ekonomi_hijau`;
+USE `greengrowth`;
 
 /*Table structure for table `admin_pemerintah` */
 
@@ -22,15 +22,15 @@ DROP TABLE IF EXISTS `admin_pemerintah`;
 
 CREATE TABLE `admin_pemerintah` (
   `admin_id` int NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `nama_admin` varchar(100) NOT NULL,
+  `email_admin` varchar(100) NOT NULL,
   `admin_role` enum('admin') DEFAULT 'admin',
-  `password` varchar(25) NOT NULL,
-  `foto` varchar(255) DEFAULT NULL,
+  `password_admin` varchar(25) NOT NULL,
+  `foto_admin` varchar(255) DEFAULT NULL,
   `instansi` varchar(150) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`admin_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email_admin` (`email_admin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `admin_pemerintah` */
@@ -41,9 +41,9 @@ DROP TABLE IF EXISTS `artikel`;
 
 CREATE TABLE `artikel` (
   `artikel_id` int NOT NULL AUTO_INCREMENT,
-  `judul` varchar(150) NOT NULL,
+  `judul_artikel` varchar(150) NOT NULL,
   `deskripsi` text,
-  `foto` varchar(255) DEFAULT NULL,
+  `foto_artikel` varchar(255) DEFAULT NULL,
   `program_id` int NOT NULL,
   `admin_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -65,7 +65,7 @@ CREATE TABLE `lamaran` (
   `lamaran_id` int NOT NULL AUTO_INCREMENT,
   `lowongan_id` int NOT NULL,
   `user_id` int NOT NULL,
-  `status` enum('menunggu','diterima','ditolak') DEFAULT 'menunggu',
+  `status_lamaran` enum('menunggu','diterima','ditolak') DEFAULT 'menunggu',
   `applied_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`lamaran_id`),
   KEY `fk_lamaran_lowongan` (`lowongan_id`),
@@ -83,7 +83,7 @@ DROP TABLE IF EXISTS `laporan`;
 CREATE TABLE `laporan` (
   `laporan_id` int NOT NULL AUTO_INCREMENT,
   `program_id` int NOT NULL,
-  `foto` varchar(255) DEFAULT NULL,
+  `foto_laporan` varchar(255) DEFAULT NULL,
   `laporan_tanggal` date DEFAULT NULL,
   `laporan_persentase_progres` decimal(5,2) DEFAULT NULL,
   `laporan_output_ekonomi` bigint DEFAULT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE `lowongan` (
   `lowongan_id` int NOT NULL AUTO_INCREMENT,
   `program_id` int NOT NULL,
   `judul_lowongan` varchar(150) DEFAULT NULL,
-  `status` enum('dibuka','ditutup') DEFAULT 'dibuka',
+  `status_lowongan` enum('dibuka','ditutup') DEFAULT 'dibuka',
   `lowongan_min_umur` int DEFAULT NULL,
   `lowongan_max_umur` int DEFAULT NULL,
   `lowongan_keahlian` text,
@@ -125,11 +125,11 @@ DROP TABLE IF EXISTS `program`;
 CREATE TABLE `program` (
   `program_id` int NOT NULL AUTO_INCREMENT,
   `nama_program` varchar(150) NOT NULL,
-  `sektor` varchar(100) DEFAULT NULL,
-  `tujuan` text,
-  `lokasi` varchar(150) DEFAULT NULL,
-  `status` enum('perencanaan','berjalan','selesai') DEFAULT 'perencanaan',
-  `deskripsi` text,
+  `sektor_program` varchar(100) DEFAULT NULL,
+  `tujuan_program` text,
+  `lokasi_program` varchar(150) DEFAULT NULL,
+  `status_program` enum('perencanaan','berjalan','selesai') DEFAULT 'perencanaan',
+  `deskripsi_program` text,
   `admin_id` int DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`program_id`),
@@ -163,11 +163,11 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `user_id` int NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `nama_user` varchar(100) NOT NULL,
+  `email_user` varchar(100) NOT NULL,
   `user_role` enum('user') DEFAULT 'user',
-  `password` varchar(255) NOT NULL,
-  `foto` varchar(255) DEFAULT NULL,
+  `password_user` varchar(255) NOT NULL,
+  `foto_user` varchar(255) DEFAULT NULL,
   `gender` enum('Laki-laki','Perempuan') DEFAULT NULL,
   `tanggal_lahir` date DEFAULT NULL,
   `pendidikan_tertinggi` varchar(100) DEFAULT NULL,
@@ -178,7 +178,7 @@ CREATE TABLE `users` (
   `alamat` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email_user` (`email_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `users` */
