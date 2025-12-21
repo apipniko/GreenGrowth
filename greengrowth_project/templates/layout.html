@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <nav>
-            {%block nav%}{%endblock%}
-        </nav>
-        {%block header%}{%endblock%}
+      <nav>{% block nav %}{% include 'partials/navbar.html' %}{% endblock %}</nav>
+      {% block header %}{% endblock %}
     </header>
     <main>
-        <aside>
-            {%block aside%}{%endblock%}
-        </aside>
-        <article>
-            {%block article%}{%endblock%}
-        </article>
+      <aside>{%block aside%}{%endblock%}</aside>
+      <article>{%block article%}{%endblock%}</article>
     </main>
-</body>
+  </body>
 </html>

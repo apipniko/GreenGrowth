@@ -24,5 +24,9 @@ app.register_blueprint(user_bp)
 app.register_blueprint(admin_bp)
 
 @app.route('/')
-def welcome():
-    return render_template('welcome.html')
+def home():
+    return render_template('homepage/home.html')
+
+# @app.route('/create-program', methods=['GET', 'POST'])
+# def create_program():
+#     return createProgram()

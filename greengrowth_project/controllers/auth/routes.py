@@ -22,12 +22,14 @@ def login():
             session['logged_in'] = True
             session['user_id'] = akun_user[0]
             session['user_role'] = akun_user[3]
+            session['role'] = 'user'
             return redirect(url_for('user.dashboard'))
         # Cek akun admin
         elif akun_admin is not None and check_password_hash(akun_admin[4], password):
             session['logged_in'] = True
             session['admin_id'] = akun_admin[0]
             session['admin_role'] = akun_admin[3]
+            session['role'] = 'admin'
             return redirect(url_for('admin.dashboard'))
         else:
             flash('Login gagal, email atau password anda salah!')
@@ -56,3 +58,9 @@ def register():
         flash("Berhasil untuk mendaftar akun!")
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html')
+
+@auth_bp.route('/logout')
+def logout():
+    session.clear()
+    flash('Logout berhasil')
+    return redirect(url_for('auth.login'))

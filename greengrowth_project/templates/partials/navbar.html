@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-brand">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="GreenGrowth Logo">
+        <span>GreenGrowth</span>
+    </div>
+    <ul class="navbar-menu">
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="/lowongan">Lowongan</a></li>
+      <li><a href="/about">Artikel</a></li>
+    </ul>
+    <div class="navbar-actions">
+      {% if session.get('logged_in') %} {% if session.get('role') == 'admin' or session.get('admin_id') %}
+      <a>Program</a>
+      <a>Lowongan</a>
+      <a>Artikel</a>
+      <a>Laporan</a>
+      <a>Monitoring</a>
+      <a>Statistik</a>
+      <a href="{{ url_for('auth.logout') }}">Logout</a>
+      {% elif session.get('role') == 'user' or session.get('user_id') %}
+      <a>Artikel</a>
+      <a>Profil</a>
+      <a>My Activity</a>
+      <a>Eksplore</a>
+      <a href="{{ url_for('auth.logout') }}">Logout</a>
+      {% else %}
+      <a href="{{ url_for('auth.logout') }}">Logout</a>
+      {% endif %} {% else %}
+      <a href="{{ url_for('auth.login') }}" class="btn-login">Login</a>
+      <a href="{{ url_for('auth.register') }}" class="btn-signup">Sign Up</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
