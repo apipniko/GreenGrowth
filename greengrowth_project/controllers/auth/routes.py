@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from greengrowth_project.models.user import get_account_user, add_account_user
+from greengrowth_project.models.admin import get_account_admin
 import MySQLdb.cursors
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -13,16 +14,24 @@ def login():
         email = request.form['email']
         password = request.form['password']
         # Validasi data
-        akun = get_account_user(email)
-        if akun is None:
-            flash('Login gagal, email atau password anda salah!')
-        elif not check_password_hash(akun[4], password):
-            flash('Login gagal, email atau password anda salah!')
-        else:
+        akun_user = get_account_user(email)
+        akun_admin = get_account_admin(email)
+        
+        # Cek akun user
+        if akun_user is not None and check_password_hash(akun_user[4], password):
             session['logged_in'] = True
-            session['user_id'] = akun[0]
-            session['user_role'] = akun[3]
+            session['user_id'] = akun_user[0]
+            session['user_role'] = akun_user[3]
             return redirect(url_for('user.dashboard'))
+        # Cek akun admin
+        elif akun_admin is not None and check_password_hash(akun_admin[4], password):
+            session['logged_in'] = True
+            session['admin_id'] = akun_admin[0]
+            session['admin_role'] = akun_admin[3]
+            return redirect(url_for('admin.dashboard'))
+        else:
+            flash('Login gagal, email atau password anda salah!')
+            return redirect(url_for('auth.login'))
     return render_template('auth/login.html')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])

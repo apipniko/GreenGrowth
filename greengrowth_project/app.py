@@ -4,7 +4,8 @@ from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from .controllers.auth.routes import auth_bp
-from .controllers.user.routes import user_bp
+from .controllers.user.dashboard import user_bp
+from .controllers.admin.dashboard import admin_bp
 
 load_dotenv()
 
@@ -20,6 +21,7 @@ mysql = MySQL(app)
 # Blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(user_bp)
+app.register_blueprint(admin_bp)
 
 @app.route('/')
 def welcome():
