@@ -6,8 +6,8 @@
     </div>
     <ul class="navbar-menu">
       <li><a href="{{ url_for('home') }}">Home</a></li>
-      <li><a href="/lowongan">Lowongan</a></li>
-      <li><a href="/about">Artikel</a></li>
+      <li><a href="{{ url_for('auth.login') }}">Lowongan</a></li>
+      <li><a href="{{ url_for('auth.login') }}">Artikel</a></li>
     </ul>
     <div class="navbar-actions">
       {% if session.get('logged_in') %} {% if session.get('role') == 'admin' or session.get('admin_id') %}
