@@ -4,15 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
   </head>
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     <header>
       <nav>{% block nav %}{% endblock %}</nav>
       {% block header %}{% endblock %}
     </header>
     <main>
+      <div class="container">
       <aside>{%block aside%}{%endblock%}</aside>
       <article>{%block article%}{%endblock%}</article>
+      </div>
     </main>
     <footer>{%block footer%}{%endblock%}</footer>
   </body>

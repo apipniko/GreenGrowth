@@ -1,10 +1,20 @@
 {%extends 'layout.html'%}
 
-{%block header%} <h1>Silahkan Login</h1> {%endblock%}
-
-{%block aside%} {%endblock%}
+{%block header%}{%endblock%}
+{% block body_class %}auth{% endblock %}
+{%block aside%}
+<div class="image-box">Pict</div>
+{%endblock%}
 
 {%block article%} 
+<section class="form-section">
+
+  <header class="logo-wrapper">
+    <img src="{{ url_for('static', filename='images/logo.png') }}"
+         alt="Logo"
+         class="auth-logo">
+    <p>Please sign in account to continue</p>
+  </header>
      <form method="post">
         <label for="email">Email</label>
         <input name="email" id="email" required>
@@ -22,4 +32,5 @@
 
         <input type="submit" value="Log In">
     </form>
+</section>
 {%endblock%}

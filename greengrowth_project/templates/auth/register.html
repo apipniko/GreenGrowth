@@ -1,15 +1,25 @@
 {%extends 'layout.html'%}
 
 {%block nav%} 
+
 {%endblock%}
 
 {%block header%} 
-    <h1>Registrasi</h1>
+{%endblock%}
+{% block body_class %}auth{% endblock %}
+{%block aside%} 
+<div class="image-box">Pict</div>
 {%endblock%}
 
-{%block aside%} {%endblock%}
-
 {%block article%} 
+<section class="form-section">
+
+  <header  class="logo-wrapper">
+    <img src="{{ url_for('static', filename='images/logo.png') }}"
+         alt="Logo"
+         class="auth-logo">
+    <p>Please create account to continue</p>
+  </header>
     <form method="post">
         <label for="nama">Nama Lengkap</label>
         <input name="nama" id="nama" required>
@@ -33,4 +43,5 @@
 
         <input type="submit" value="Register">
     </form>
+</section>
 {%endblock%}
