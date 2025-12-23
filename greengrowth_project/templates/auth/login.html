@@ -1,36 +1,46 @@
-{%extends 'layout.html'%}
+{% extends 'layout.html' %}
 
-{%block header%}{%endblock%}
-{% block body_class %}auth{% endblock %}
-{%block aside%}
-<div class="image-box">Pict</div>
-{%endblock%}
-
-{%block article%} 
-<section class="form-section">
-
-  <header class="logo-wrapper">
-    <img src="{{ url_for('static', filename='images/logo.png') }}"
-         alt="Logo"
-         class="auth-logo">
-    <p>Please sign in account to continue</p>
-  </header>
-     <form method="post">
-        <label for="email">Email</label>
-        <input name="email" id="email" required>
-
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-
-        <div class="" id="notification">
-                {% block notification %}
-                    {% for notif in get_flashed_messages() %} 
-                        <span>{{ notif }}</span>
-                    {% endfor %}
-                {% endblock %}
-        </div>
-
-        <input type="submit" value="Log In">
-    </form>
+{% block aside %}
+<section class="hidden md:flex bg-emerald-500 items-center justify-center bg-emerald-400">
+  <img
+    src="{{ url_for('static', filename='images/image.png') }}"
+    alt="Auth"
+    class="w-full h-full object-cover"
+  >
 </section>
-{%endblock%}
+{% endblock %}
+
+{% block article %}
+<section class="bg-white flex flex-col justify-center px-[50px] py-[40px]">
+
+  <div class="text-center mb-6">
+    <img src="{{ url_for('static', filename='images/logo.png') }}"
+         class="w-[100px] mx-auto mb-2">
+    <p class="text-gray-600 text-sm">
+      Please sign in account to continue
+    </p>
+  </div>
+
+  <form method="post" class="flex flex-col gap-4">
+
+    <input
+      name="email"
+      placeholder="Email"
+      class="p-3 border rounded-md focus:outline-none focus:border-emerald-400">
+
+    <input
+      type="password"
+      name="password"
+      placeholder="Password"
+      class="p-3 border rounded-md focus:outline-none focus:border-emerald-400">
+
+    <button
+      class="mt-2 p-3 rounded-md font-bold text-white
+             bg-gradient-to-r from-emerald-400 to-emerald-600">
+      Log In
+    </button>
+
+  </form>
+
+</section>
+{% endblock %}

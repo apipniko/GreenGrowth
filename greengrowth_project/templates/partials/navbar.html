@@ -1,34 +1,72 @@
-<nav class="navbar">
-  <div class="container">
-    <div class="navbar-brand">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="GreenGrowth Logo">
-    </div>
-    <ul class="navbar-menu">
-      <li><a href="{{ url_for('home') }}">Home</a></li>
-      <li><a href="{{ url_for('auth.login') }}">Lowongan</a></li>
-      <li><a href="{{ url_for('auth.login') }}">Artikel</a></li>
-    </ul>
-    <div class="navbar-actions">
-      {% if session.get('logged_in') %} {% if session.get('role') == 'admin' or session.get('admin_id') %}
-      <a>Program</a>
-      <a>Lowongan</a>
-      <a>Artikel</a>
-      <a>Laporan</a>
-      <a>Monitoring</a>
-      <a>Statistik</a>
-      <a href="{{ url_for('auth.logout') }}">Logout</a>
-      {% elif session.get('role') == 'user' or session.get('user_id') %}
-      <a>Artikel</a>
-      <a>Profil</a>
-      <a>My Activity</a>
-      <a>Eksplore</a>
-      <a href="{{ url_for('auth.logout') }}">Logout</a>
-      {% else %}
-      <a href="{{ url_for('auth.logout') }}">Logout</a>
-      {% endif %} {% else %}
-      <a href="{{ url_for('auth.login') }}" class="btn-login">Login</a>
-      <a href="{{ url_for('auth.register') }}" class="btn-signup">Sign Up</a>
-      {% endif %}
+<nav class="bg-[#FBF7DE] border-b">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- LEFT : LOGO -->
+      <div class="flex items-center gap-3">
+        <img
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="Logo"
+          class="w-9 h-9"
+        >
+        <span class="font-bold text-[#7A3E14] text-lg">
+          GreenGrowth
+        </span>
+      </div>
+
+      <!-- CENTER : MENU -->
+      <ul class="hidden md:flex gap-8 font-medium text-[#7A3E14]">
+        <li><a href="{{ url_for('home') }}" class="hover:underline">Home</a></li>
+        <li><a href="{{ url_for('auth.login') }}" class="hover:underline">Lowongan</a></li>
+        <li><a href="{{ url_for('auth.login') }}" class="hover:underline">Artikel</a></li>
+      </ul>
+
+      <!-- RIGHT : ACTIONS -->
+      <div class="flex items-center gap-3">
+
+        {% if session.get('logged_in') %}
+
+          {% if session.get('role') == 'admin' or session.get('admin_id') %}
+            <a>Program</a>
+            <a>Lowongan</a>
+            <a>Artikel</a>
+            <a>Laporan</a>
+            <a>Monitoring</a>
+            <a>Statistik</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+          {% elif session.get('role') == 'user' or session.get('user_id') %}
+            <a>Artikel</a>
+            <a>Profil</a>
+            <a>My Activity</a>
+            <a>Eksplore</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+          {% else %}
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+          {% endif %}
+
+        {% else %}
+          <!-- LOGIN -->
+          <a
+            href="{{ url_for('auth.login') }}"
+            class="px-4 py-2 border border-[#7A3E14] text-[#7A3E14]
+                   rounded-md font-medium hover:bg-[#7A3E14] hover:text-white transition"
+          >
+            Login
+          </a>
+
+          <!-- SIGN UP -->
+          <a
+            href="{{ url_for('auth.register') }}"
+            class="px-4 py-2 border border-[#7A3E14] text-[#7A3E14]
+                   rounded-md font-medium hover:bg-[#7A3E14] hover:text-white transition"
+          >
+            Sign Up
+          </a>
+        {% endif %}
+
+      </div>
     </div>
   </div>
 </nav>
