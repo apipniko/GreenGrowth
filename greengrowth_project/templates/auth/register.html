@@ -7,13 +7,14 @@
 {% block footer %}{% endblock %}
 
 {% block aside %}
-<section class="hidden md:flex relative overflow-hidden">
+<section
+  class="hidden md:flex items-center justify-center
+         bg-gradient-to-br from-emerald-400 to-emerald-600">
+
   <img
-    src="{{ url_for('static', filename='images/logo.png') }}"
-    alt="Auth Image"
-    class="absolute inset-0 w-full h-full object-cover"
-  >
-  <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/60 to-emerald-900/80"></div>
+    src="{{ url_for('static', filename='images/daun.png') }}"
+    alt="Auth"
+    class="w-full h-full object-cover opacity-90">
 </section>
 {% endblock %}
 
@@ -93,6 +94,13 @@
     >
       Register
     </button>
+          <p class="text-center text-gray-500 text-sm mt-4">
+        Already have account?
+        <a href="{{ url_for('auth.login') }}"
+          class="font-semibold text-emerald-600 hover:text-emerald-700 transition">
+           Log in
+        </a>
+      </p>
 
   </form>
 

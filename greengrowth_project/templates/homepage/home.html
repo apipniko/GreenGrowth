@@ -9,52 +9,21 @@
 {# ================= LEFT : CONTENT ================= #}
 {% block article %}
 <section class="order-1 md:order-1 px-10 py-16 flex flex-col min-h-screen">
-  <!-- SEARCH BAR -->
-  <div class="mb-10">
-    <div class="flex items-center gap-4 bg-white shadow rounded-xl p-4 max-w-2xl">
-      <input
-        type="text"
-        placeholder="Job title, Keyword..."
-        class="flex-1 outline-none text-gray-600"
-      >
-      <div class="w-px h-6 bg-gray-300"></div>
-      <input
-        type="text"
-        placeholder="Your Location"
-        class="flex-1 outline-none text-gray-600"
-      >
-      <button class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium">
-        Find Job
-      </button>
-    </div>
-  </div>
-
   <!-- TEXT -->
   <h1 class="text-5xl font-bold leading-tight mb-6">
     Discover Career <br>
     Opportunities in <span class="text-blue-600">Green Jobs</span>
   </h1>
-
   <p class="text-gray-600 max-w-xl mb-10">
-    A platform that provides information and job opportunities
-    in the field of environmental friendliness to support
-    sustainable development.
-  </p>
-
-  <!-- gambar stats -->
-  <div class="mt-auto grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl">
-    <img src="{{ url_for('static', filename='images/stats/live-job.png') }}">
-    <img src="{{ url_for('static', filename='images/stats/companies.png') }}">
-    <img src="{{ url_for('static', filename='images/stats/candidates.png') }}">
-    <img src="{{ url_for('static', filename='images/stats/new-jobs.png') }}">
-  </div>
-
+    A platform dedicated to connecting individuals with meaningful career opportunities in the field of environmental sustainability. Our mission is to provide comprehensive information, resources, and job listings for those who are passionate about contributing to a greener future.
+    In today’s world, the need for sustainable development and eco-friendly practices is more urgent than ever. Green jobs roles that promote environmental protection, renewable energy, waste reduction, sustainable agriculture, and conservation are critical for building resilient communities and combating climate change.
+    This platform serves as a bridge between talented professionals and organizations committed to environmental stewardship. Users can explore various career paths, gain insights into emerging industries, and access opportunities that align with their skills and values.</p>
 </section>
 {% endblock %}
 {% block aside %}
 <section class="order-2 md:order-2 flex items-center justify-center p-10">
   <img
-    src="{{ url_for('static', filename='images/hero.png') }}"
+    src="{{ url_for('static', filename='images/daun.png') }}"
     alt="Hero Image"
     class="max-w-lg"
   >

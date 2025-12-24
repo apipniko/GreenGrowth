@@ -1,72 +1,110 @@
 <nav class="bg-[#FBF7DE] border-b">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="flex items-center justify-between h-16">
+    <div class="flex items-center h-16 relative">
 
       <!-- LEFT : LOGO -->
       <div class="flex items-center gap-3">
         <img
           src="{{ url_for('static', filename='images/logo.png') }}"
           alt="Logo"
-          class="w-12 h-12 rounded-full object-cover"
-        >
+          class="w-10 h-10 rounded-full object-cover">
         <span class="font-bold text-[#7A3E14] text-lg">
           GreenGrowth
         </span>
       </div>
 
       <!-- CENTER : MENU -->
-      <ul class="hidden md:flex gap-8 font-medium text-[#7A3E14]">
-        <li><a href="{{ url_for('home') }}" class="hover:underline">Home</a></li>
-        <li><a href="{{ url_for('auth.login') }}" class="hover:underline">Lowongan</a></li>
-        <li><a href="{{ url_for('auth.login') }}" class="hover:underline">Artikel</a></li>
-      </ul>
+      <div class="absolute left-1/2 -translate-x-1/2 hidden md:block">
+        <ul class="flex gap-8 font-medium text-[#7A3E14]">
 
-      <!-- RIGHT : ACTIONS -->
-      <div class="flex items-center gap-3">
+          {% if session.get('logged_in') %}
 
-        {% if session.get('logged_in') %}
-
-          {% if session.get('role') == 'admin' or session.get('admin_id') %}
-            <a>Program</a>
-            <a>Lowongan</a>
-            <a>Artikel</a>
-            <a>Laporan</a>
-            <a>Monitoring</a>
-            <a>Statistik</a>
-            <a href="{{ url_for('auth.logout') }}">Logout</a>
-
-          {% elif session.get('role') == 'user' or session.get('user_id') %}
-            <a>Artikel</a>
-            <a>Profil</a>
-            <a>My Activity</a>
-            <a>Eksplore</a>
-            <a href="{{ url_for('auth.logout') }}">Logout</a>
+            {% if session.get('role') == 'admin' %}
+              <li><a href="#" class="hover:underline">Program</a></li>
+              <li><a href="#" class="hover:underline">Lowongan</a></li>
+              <li><a href="#" class="hover:underline">Artikel</a></li>
+              <li><a href="#" class="hover:underline">Laporan</a></li>
+            {% else %}
+              <li><a href="#" class="hover:underline">Home</a></li>
+              <li><a href="#" class="hover:underline">Artikel</a></li>
+              <li><a href="#" class="hover:underline">My Activity</a></li>
+              <li><a href="#" class="hover:underline">Explore</a></li>
+            {% endif %}
 
           {% else %}
-            <a href="{{ url_for('auth.logout') }}">Logout</a>
+            <li><a href="/" class="hover:underline">Home</a></li>
+            <li><a href="{{ url_for('auth.login') }}" class="hover:underline">Lowongan</a></li>
+            <li><a href="{{ url_for('auth.login') }}" class="hover:underline">Artikel</a></li>
           {% endif %}
 
-        {% else %}
-          <!-- LOGIN -->
-          <a
-            href="{{ url_for('auth.login') }}"
-            class="px-4 py-2 border border-[#7A3E14] text-[#7A3E14]
-                   rounded-md font-medium hover:bg-[#7A3E14] hover:text-white transition"
-          >
-            Login
-          </a>
+        </ul>
+      </div>
 
-          <!-- SIGN UP -->
-          <a
-            href="{{ url_for('auth.register') }}"
-            class="px-4 py-2 border border-[#7A3E14] text-[#7A3E14]
-                   rounded-md font-medium hover:bg-[#7A3E14] hover:text-white transition"
-          >
-            Sign Up
-          </a>
+      <!-- RIGHT : ACTION -->
+      <div class="ml-auto flex items-center gap-3 text-[#7A3E14]">
+
+        {% if session.get('logged_in') %}
+        <!-- PROFILE -->
+        <div class="relative">
+          <button
+            onclick="toggleProfileMenu()"
+            class="flex items-center gap-2 focus:outline-none">
+
+            <img
+              src="{{ url_for('static', filename='images/default.png') }}"
+              class="w-9 h-9 rounded-full object-cover border"
+              alt="Profile">
+
+            <span class="hidden md:block font-medium">
+              {{ session.get('user_name', 'User') }}
+            </span>
+          </button>
+
+          <!-- DROPDOWN -->
+          <div
+            id="profileMenu"
+            class="hidden absolute right-0 mt-2 w-40 bg-white
+                   rounded-md shadow-lg z-50">
+
+            <a href="#"
+               class="block px-4 py-2 text-sm hover:bg-gray-100">
+              Profil
+            </a>
+
+            <a href="#"
+               class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+              Logout
+            </a>
+          </div>
+        </div>
+
+        {% else %}
+        <!-- LOGIN / REGISTER -->
+        <a href="{{ url_for('auth.login') }}"
+           class="px-4 py-2 border border-[#7A3E14]
+                  rounded-md hover:bg-[#7A3E14]
+                  hover:text-white transition">
+          Login
+        </a>
+
+        <a href="{{ url_for('auth.register') }}"
+           class="px-4 py-2 border border-[#7A3E14]
+                  rounded-md hover:bg-[#7A3E14]
+                  hover:text-white transition">
+          Sign Up
+        </a>
         {% endif %}
 
       </div>
+
     </div>
   </div>
 </nav>
+
+<!-- JS DROPDOWN -->
+<script>
+function toggleProfileMenu() {
+  const menu = document.getElementById('profileMenu');
+  menu.classList.toggle('hidden');
+}
+</script>
