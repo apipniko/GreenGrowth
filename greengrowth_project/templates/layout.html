@@ -4,18 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body class="{% block body_class %}{% endblock %}">
-    <header>
-      <nav>{% block nav %}{% endblock %}</nav>
+      {% block nav %}{% endblock %}
       {% block header %}{% endblock %}
-    </header>
-    <main>
-      <div class="container">
-      <aside>{%block aside%}{%endblock%}</aside>
-      <article>{%block article%}{%endblock%}</article>
-      </div>
+    <main class="min-h-screen grid grid-cols-1 md:grid-cols-2">
+    {%block home %}{% endblock %}
+    {% block aside %}{% endblock %}
+    {% block article %}{% endblock %}
     </main>
     <footer>{%block footer%}{%endblock%}</footer>
   </body>

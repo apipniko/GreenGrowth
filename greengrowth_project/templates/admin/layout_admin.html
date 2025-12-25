@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-green-100">
+    <!-- Grid Layout: Sidebar + Content -->
+    <div class="grid grid-cols-1 md:grid-cols-[320px_1fr] min-h-screen">
+      <!-- Sidebar -->
+      {% block sidebar %}{% endblock %}
+
+      <!-- Main Content -->
+      <main>{% block content %}{% endblock %}</main>
+    </div>
+  </body>
+</html>

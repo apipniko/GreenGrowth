@@ -1,42 +1,35 @@
 {% extends 'layout.html' %}
 
+{% block body_class %}bg-white font-sans{% endblock %}
+
 {% block nav %}
-    {% include 'partials/navbar.html' %}
+  {% include 'partials/navbar.html' %}
 {% endblock %}
 
+{# ================= LEFT : CONTENT ================= #}
 {% block article %}
-<section class="hero-text">
-    <h1>
-        Find Your <span>Dream Job</span><br>
-        With Your Interest<br>
-        And Skills
-    </h1>
-
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam quis nostrud exercitation.
-    </p>
-
-    <div class="hero-action">
-        <a href="/login" class="btn-primary">Browse Jobs</a>
-        <span class="stats">20k+<br><small>daily active users</small></span>
-    </div>
+<section class="order-1 md:order-1 px-10 py-16 flex flex-col min-h-screen">
+  <!-- TEXT -->
+  <h1 class="text-5xl font-bold leading-tight mb-6">
+    Discover Career <br>
+    Opportunities in <span class="text-blue-600">Green Jobs</span>
+  </h1>
+  <p class="text-gray-600 max-w-xl mb-10">
+    A platform dedicated to connecting individuals with meaningful career opportunities in the field of environmental sustainability. Our mission is to provide comprehensive information, resources, and job listings for those who are passionate about contributing to a greener future.
+    In today’s world, the need for sustainable development and eco-friendly practices is more urgent than ever. Green jobs roles that promote environmental protection, renewable energy, waste reduction, sustainable agriculture, and conservation are critical for building resilient communities and combating climate change.
+    This platform serves as a bridge between talented professionals and organizations committed to environmental stewardship. Users can explore various career paths, gain insights into emerging industries, and access opportunities that align with their skills and values.</p>
 </section>
 {% endblock %}
-
 {% block aside %}
-<section class="hero-image">
-    <div class="badge">
-        <strong>250+</strong>
-        <span>Jobs<br>Post Daily</span>
-    </div>
-
-    <img src="{{ url_for('static', filename='images/hero.png') }}"
-         alt="Job Search Illustration">
+<section class="order-2 md:order-2 flex items-center justify-center p-10">
+  <img
+    src="{{ url_for('static', filename='images/daun.png') }}"
+    alt="Hero Image"
+    class="max-w-lg"
+  >
 </section>
 {% endblock %}
 
-{%block footer%}
-    {% include 'partials/footer.html' %}
-{%endblock%}
+{% block footer %}
+  {% include 'partials/footer.html' %}
+{% endblock %}
