@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+
+{% block article %}
+<section class="w-full px-10 py-14">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-10">
+    <div class="flex items-center gap-3">
+      <a href="#" class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+        ←
+      </a>
+      <h1 class="text-2xl font-semibold">Edit Profile</h1>
+    </div>
+    <div class="px-5 py-2 bg-gray-300 rounded-full font-medium">LOGO</div>
+  </div>
+
+  <!-- Content -->
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Profile Picture -->
+    <div class="bg-gray-200 rounded-2xl flex flex-col items-center justify-center h-80 gap-4">
+      <img
+        id="preview"
+        src="{{ user.photo if user.photo else url_for('static', filename='images/default.png') }}"
+        class="w-32 h-32 rounded-full object-cover bg-white"
+      />
+
+      <label class="cursor-pointer text-sm bg-white px-4 py-2 rounded-full shadow">
+        Upload Photo
+        <input
+          type="file"
+          name="photo"
+          accept="image/*"
+          class="hidden"
+          onchange="previewImage(event)"
+          form="profileForm"
+        />
+      </label>
+    </div>
+
+    <!-- Form -->
+    <div class="md:col-span-2 bg-gray-200 rounded-2xl p-6">
+      <form
+        id="profileForm"
+        method="POST"
+        action="{{ url_for('update_profile') }}"
+        enctype="multipart/form-data"
+        class="space-y-4"
+      >
+        <input type="text" name="name" value="{{ user.name }}" placeholder="name" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+
+        <select name="gender" class="w-full px-4 py-3 rounded-xl focus:outline-none">
+          <option disabled>gender</option>
+          <option value="male" {% if user.gender == 'male' %}selected{% endif %}>Male</option>
+          <option value="female" {% if user.gender == 'female' %}selected{% endif %}>Female</option>
+        </select>
+
+        <input type="date" name="dob" value="{{ user.dob }}" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+
+        <select name="education" class="w-full px-4 py-3 rounded-xl focus:outline-none">
+          <option disabled>highest level of education</option>
+          <option {% if user.education=='High School' %}selected{% endif %}>High School</option>
+          <option {% if user.education=='Diploma' %}selected{% endif %}>Diploma</option>
+          <option {% if user.education=='Bachelor' %}selected{% endif %}>Bachelor</option>
+          <option {% if user.education=='Master' %}selected{% endif %}>Master</option>
+        </select>
+
+        <input type="text" name="soft_skills" value="{{ user.soft_skills }}" placeholder="soft skills" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <input type="text" name="hard_skills" value="{{ user.hard_skills }}" placeholder="hard skills" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <input type="text" name="experience" value="{{ user.experience }}" placeholder="experience" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <input type="text" name="phone" value="{{ user.phone }}" placeholder="phone number" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <input type="text" name="address" value="{{ user.address }}" placeholder="address" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+
+        <div class="flex justify-end pt-4">
+          <button type="submit" class="px-8 py-3 bg-white rounded-full font-semibold shadow">
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- Preview Script -->
+<script>
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      document.getElementById('preview').src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
+{% endblock %}
+
+{% block footer %}
+  {% include 'partials/footer.html' %}
+{% endblock %}
