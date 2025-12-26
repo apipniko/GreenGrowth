@@ -1,19 +1,24 @@
 <nav class="bg-[#E6F4EA] border-b border-[#38A169]">
   <div class="max-w-7xl mx-auto px-6">
+
     <div class="flex items-center h-16 relative">
 
-      <!-- LEFT : LOGO -->
-      <div class="flex items-center gap-3">
+      <!-- LOGO (MOBILE TOGGLE) -->
+      <button
+        onclick="toggleMobileMenu()"
+        class="flex items-center gap-3 focus:outline-none md:cursor-default">
+
         <img
           src="{{ url_for('static', filename='images/logo.png') }}"
           alt="Logo"
           class="w-10 h-10 rounded-full object-cover border-2 border-[#38A169]">
+
         <span class="font-bold text-[#2F855A] text-lg">
           GreenGrowth
         </span>
-      </div>
+      </button>
 
-      <!-- CENTER : MENU -->
+      <!-- CENTER -->
       <div class="absolute left-1/2 -translate-x-1/2 hidden md:block">
         <ul class="flex gap-8 font-medium text-[#2F855A]">
 
@@ -40,7 +45,7 @@
         </ul>
       </div>
 
-      <!-- RIGHT : ACTION -->
+      <!-- RIGHT -->
       <div class="ml-auto flex items-center gap-3">
 
         {% if session.get('logged_in') %}
@@ -51,16 +56,21 @@
             class="flex items-center gap-2 focus:outline-none text-[#2F855A]">
 
             <img
-              src="{{ url_for('static', filename='images/default.png') }}"
+              src="{% if profile_image %}
+                      {{ url_for('static', filename=profile_image) }}
+                  {% else %}
+                      https://cdn-icons-png.flaticon.com/512/892/892781.png
+                  {% endif %}"
               class="w-9 h-9 rounded-full object-cover border-2 border-[#38A169]"
-              alt="Profile">
+              alt="Profile"
+              referrerpolicy="no-referrer">
 
             <span class="hidden md:block font-medium">
               {{ session.get('user_name', 'User') }}
             </span>
           </button>
 
-          <!-- DROPDOWN -->
+          <!-- DROPDOWN PROFILE -->
           <div
             id="profileMenu"
             class="hidden absolute right-0 mt-2 w-40 bg-white
@@ -101,9 +111,44 @@
   </div>
 </nav>
 
+<!-- MOBILE MENU (HIDDEN DESKTOP) -->
+<div
+  id="mobileMenu"
+  class="md:hidden hidden
+         bg-[#E6F4EA] border-b border-[#38A169]">
+
+  <ul class="flex flex-col gap-4 px-6 py-4
+             font-medium text-[#2F855A]">
+
+    {% if session.get('logged_in') %}
+
+      {% if session.get('role') == 'admin' %}
+        <li><a href="#" class="hover:text-[#68D391]">Program</a></li>
+        <li><a href="#" class="hover:text-[#68D391]">Lowongan</a></li>
+        <li><a href="#" class="hover:text-[#68D391]">Artikel</a></li>
+        <li><a href="#" class="hover:text-[#68D391]">Laporan</a></li>
+      {% else %}
+        <li><a href="{{ url_for('user.dashboard') }}" class="hover:text-[#68D391]">Home</a></li>
+        <li><a href="#" class="hover:text-[#68D391]">Artikel</a></li>
+        <li><a href="#" class="hover:text-[#68D391]">My Activity</a></li>
+        <li><a href="#" class="hover:text-[#68D391]">Explore</a></li>
+      {% endif %}
+
+    {% else %}
+      <li><a href="/" class="hover:text-[#68D391]">Home</a></li>
+      <li><a href="{{ url_for('auth.login') }}" class="hover:text-[#68D391]">Lowongan</a></li>
+      <li><a href="{{ url_for('auth.login') }}" class="hover:text-[#68D391]">Artikel</a></li>
+    {% endif %}
+
+  </ul>
+</div>
+
 <script>
 function toggleProfileMenu() {
-  const menu = document.getElementById('profileMenu');
-  menu.classList.toggle('hidden');
+  document.getElementById('profileMenu')?.classList.toggle('hidden');
+}
+
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu')?.classList.toggle('hidden');
 }
 </script>
