@@ -1,6 +1,5 @@
 <nav class="bg-[#FBF7DE] border-b">
   <div class="max-w-7xl mx-auto px-6">
-
     <div class="flex items-center h-16 relative">
       <!-- LEFT : LOGO -->
       <div class="flex items-center gap-3">
@@ -8,22 +7,7 @@
         <span class="font-bold text-[#7A3E14] text-lg"> GreenGrowth </span>
       </div>
 
-      <!-- LOGO (MOBILE TOGGLE) -->
-      <button
-        onclick="toggleMobileMenu()"
-        class="flex items-center gap-3 focus:outline-none md:cursor-default">
-
-        <img
-          src="{{ url_for('static', filename='images/logo.png') }}"
-          alt="Logo"
-          class="w-10 h-10 rounded-full object-cover border-2 border-[#38A169]">
-
-        <span class="font-bold text-[#2F855A] text-lg">
-          GreenGrowth
-        </span>
-      </button>
-
-      <!-- CENTER -->
+      <!-- CENTER : MENU -->
       <div class="absolute left-1/2 -translate-x-1/2 hidden md:block">
         <ul class="flex gap-8 font-medium text-[#7A3E14]">
           {% if session.get('logged_in') %} {% if session.get('role') == 'admin' %}
@@ -46,9 +30,6 @@
 
       <!-- RIGHT : ACTION -->
       <div class="ml-auto flex items-center gap-3 text-[#7A3E14]">
-      <!-- RIGHT -->
-      <div class="ml-auto flex items-center gap-3">
-
         {% if session.get('logged_in') %}
         <!-- PROFILE -->
         <div class="relative">
@@ -61,26 +42,6 @@
           <!-- DROPDOWN -->
           <div id="profileMenu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50">
             <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100"> Profil </a>
-            <img
-              src="{% if profile_image %}
-                      {{ url_for('static', filename=profile_image) }}
-                  {% else %}
-                      https://cdn-icons-png.flaticon.com/512/892/892781.png
-                  {% endif %}"
-              class="w-9 h-9 rounded-full object-cover border-2 border-[#38A169]"
-              alt="Profile"
-              referrerpolicy="no-referrer">
-
-            <span class="hidden md:block font-medium">
-              {{ session.get('user_name', 'User') }}
-            </span>
-          </button>
-
-          <!-- DROPDOWN PROFILE -->
-          <div
-            id="profileMenu"
-            class="hidden absolute right-0 mt-2 w-40 bg-white
-                   rounded-md shadow-lg z-50">
 
             <a href="{{url_for('auth.logout')}}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"> Logout </a>
           </div>
@@ -103,4 +64,4 @@
     const menu = document.getElementById("profileMenu");
     menu.classList.toggle("hidden");
   }
-
+</script>
