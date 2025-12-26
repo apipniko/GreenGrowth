@@ -12,10 +12,8 @@ def list_program():
     if 'logged_in' not in session or 'admin_id' not in session:
         flash("Anda harus login sebagai admin!")
         return redirect(url_for('auth.login'))
-    
     admin_id = session['admin_id']
     programs = readProgram_by_admin(admin_id)
-    
     return render_template('admin/program/list.html', programs=programs)
 
 
@@ -25,10 +23,8 @@ def create_program():
     if 'logged_in' not in session or 'admin_id' not in session:
         flash("Anda harus login sebagai admin!")
         return redirect(url_for('auth.login'))
-    
     if request.method == "POST":
         admin_id = session['admin_id']
-        
         # Ambil data dari form
         nama_program = request.form.get('nama_program', '').strip()
         if not nama_program:
@@ -46,12 +42,7 @@ def create_program():
         result = createProgram_db(admin_id, nama_program, sektor_program, tujuan_program, 
                                  lokasi_program, status_program, deskripsi_program)
         # Validasi untuk memeriksa query dalam veriabel result apakah berhasil atau tidak?
-        if result:
-            flash("Program berhasil dibuat!")
-            return redirect(url_for('program.list_program'))
-        else:
-            flash("Gagal membuat program!")
-            return redirect(url_for('program.create_program'))
+        return redirect(url_for('program.create_program'))
     return render_template('admin/program/create.html')
 
 

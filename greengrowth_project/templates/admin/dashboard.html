@@ -20,17 +20,17 @@
           </a>
         </li>
         <li>
-          <a href="{{ url_for('program.create_program') }}" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
+          <a href="{{ url_for('program.list_program') }}" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
             <span>Lihat Program</span>
           </a>
         </li>
         <li>
-          <a href="#" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
+          <a href="{{ url_for('lowongan.create_lowongan') }}" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
             <span>Buat Pekerjaan Baru</span>
           </a>
         </li>
         <li>
-          <a href="#" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
+          <a href="{{ url_for('lowongan.read_lowongan') }}" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
             <span>Lihat Pekerjaan</span>
           </a>
         </li>
@@ -52,6 +52,11 @@
         <li>
           <a href="{{ url_for('artikel.index') }}" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
             <span>Kelola Artikel</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('auth.logout') }}" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
+            <span>Logout</span>
           </a>
         </li>
       </ul>

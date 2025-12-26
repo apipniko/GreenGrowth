@@ -66,4 +66,4 @@ def register():
 def logout():
     session.clear()
     flash('Logout berhasil')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('home'))
