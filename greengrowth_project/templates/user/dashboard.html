@@ -1,12 +1,13 @@
 {% extends 'layout.html' %}
 
+{% block body_class %}bg-gray-50 font-sans{% endblock %}
+
 {% block nav %}
   {% include 'partials/navbar.html' %}
 {% endblock %}
 
 {% block article %}
 <style>
-  /* Override main agar dashboard full width vertikal */
   main {
     display: flex !important;
     flex-direction: column !important;
@@ -14,29 +15,28 @@
   }
 </style>
 
-<div class="w-full flex flex-col space-y-12 px-10 py-14 bg-gray-50">
+<div class="w-full flex flex-col space-y-12 px-10 py-14">
+
 
   <!-- ================= CATEGORY ================= -->
   <article class="w-full">
     <h2 class="text-3xl font-bold mb-6 text-green-800">Category</h2>
-
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-      <!-- Dummy category cards -->
-      <div class="category-card cursor-pointer bg-white border border-green-200 rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:bg-green-50 transition-all duration-300 flex flex-col items-center justify-center p-6 space-y-2" data-category="Education">
+      <div class="category-card bg-white border border-green-200 rounded-2xl shadow-md p-6 text-center hover:shadow-lg transition-all duration-300">
         <span class="text-2xl text-green-600">🎓</span>
-        <span class="font-semibold text-gray-800 text-lg">Education</span>
+        <p class="font-semibold text-gray-800 mt-2">Education</p>
       </div>
-      <div class="category-card cursor-pointer bg-white border border-green-200 rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:bg-green-50 transition-all duration-300 flex flex-col items-center justify-center p-6 space-y-2" data-category="Environment">
+      <div class="category-card bg-white border border-green-200 rounded-2xl shadow-md p-6 text-center hover:shadow-lg transition-all duration-300">
         <span class="text-2xl text-green-600">🌳</span>
-        <span class="font-semibold text-gray-800 text-lg">Environment</span>
+        <p class="font-semibold text-gray-800 mt-2">Environment</p>
       </div>
-      <div class="category-card cursor-pointer bg-white border border-green-200 rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:bg-green-50 transition-all duration-300 flex flex-col items-center justify-center p-6 space-y-2" data-category="Health">
+      <div class="category-card bg-white border border-green-200 rounded-2xl shadow-md p-6 text-center hover:shadow-lg transition-all duration-300">
         <span class="text-2xl text-green-600">🩺</span>
-        <span class="font-semibold text-gray-800 text-lg">Health</span>
+        <p class="font-semibold text-gray-800 mt-2">Health</p>
       </div>
-      <div class="category-card cursor-pointer bg-white border border-green-200 rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:bg-green-50 transition-all duration-300 flex flex-col items-center justify-center p-6 space-y-2" data-category="Agriculture">
+      <div class="category-card bg-white border border-green-200 rounded-2xl shadow-md p-6 text-center hover:shadow-lg transition-all duration-300">
         <span class="text-2xl text-green-600">🌾</span>
-        <span class="font-semibold text-gray-800 text-lg">Agriculture</span>
+        <p class="font-semibold text-gray-800 mt-2">Agriculture</p>
       </div>
     </div>
   </article>
@@ -44,59 +44,27 @@
   <!-- ================= PROGRAM ================= -->
   <aside class="w-full">
     <h2 class="text-3xl font-bold mb-6 text-green-800">Program</h2>
-
     <div id="program-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-      <!-- Dummy program cards -->
-      {# ================= LOOP FOR PROGRAMS =================
-    {% for program in programs %}
-      <div class="program-card bg-white rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden border border-green-100" data-category="Education">
-        <div class="h-40 bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center mb-4 rounded-t-2xl">
-          <span class="text-green-500 text-lg font-semibold">No Image</span>
-        </div>
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="font-semibold text-xl mb-1 text-green-800">School Renovation</h3>
-          <p class="text-sm text-green-600 mb-2">📍 Jakarta</p>
-          <p class="text-sm text-green-700 flex-grow">Renovating schools for better education.</p>
-          <a href="#" class="mt-4 self-start px-5 py-2 text-sm bg-gradient-to-r from-green-400 to-green-600 text-white rounded-md hover:from-green-500 hover:to-green-700 transition-all duration-300">View details</a>
-        </div>
-      </div>
-      {% endfor %} #}
-
-      <div class="program-card bg-white rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden border border-green-100" data-category="Environment">
-        <div class="h-40 bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center mb-4 rounded-t-2xl">
-          <span class="text-green-500 text-lg font-semibold">No Image</span>
-        </div>
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="font-semibold text-xl mb-1 text-green-800">Tree Planting</h3>
-          <p class="text-sm text-green-600 mb-2">📍 Yogyakarta</p>
-          <p class="text-sm text-green-700 flex-grow">Planting trees to improve urban greenery.</p>
-          <a href="#" class="mt-4 self-start px-5 py-2 text-sm bg-gradient-to-r from-green-400 to-green-600 text-white rounded-md hover:from-green-500 hover:to-green-700 transition-all duration-300">View details</a>
-        </div>
+      <div class="program-card bg-white rounded-2xl shadow-md p-4 flex flex-col hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 border border-green-100">
+        <h3 class="font-semibold text-xl text-green-800 mb-1">Tree Planting</h3>
+        <p class="text-sm text-green-600 mb-2">📍 Yogyakarta</p>
+        <p class="text-sm text-green-700 flex-grow">Planting trees to improve urban greenery.</p>
+        <a href="#" class="mt-4 self-start px-5 py-2 text-sm bg-gradient-to-r from-green-400 to-green-600 text-white rounded-md hover:from-green-500 hover:to-green-700 transition-all duration-300">View details</a>
       </div>
 
-      <div class="program-card bg-white rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden border border-green-100" data-category="Health">
-        <div class="h-40 bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center mb-4 rounded-t-2xl">
-          <span class="text-green-500 text-lg font-semibold">No Image</span>
-        </div>
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="font-semibold text-xl mb-1 text-green-800">Medical Camp</h3>
-          <p class="text-sm text-green-600 mb-2">📍 Bali</p>
-          <p class="text-sm text-green-700 flex-grow">Providing free medical check-ups in villages.</p>
-          <a href="#" class="mt-4 self-start px-5 py-2 text-sm bg-gradient-to-r from-green-400 to-green-600 text-white rounded-md hover:from-green-500 hover:to-green-700 transition-all duration-300">View details</a>
-        </div>
+      <div class="program-card bg-white rounded-2xl shadow-md p-4 flex flex-col hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 border border-green-100">
+        <h3 class="font-semibold text-xl text-green-800 mb-1">Medical Camp</h3>
+        <p class="text-sm text-green-600 mb-2">📍 Bali</p>
+        <p class="text-sm text-green-700 flex-grow">Providing free medical check-ups in villages.</p>
+        <a href="#" class="mt-4 self-start px-5 py-2 text-sm bg-gradient-to-r from-green-400 to-green-600 text-white rounded-md hover:from-green-500 hover:to-green-700 transition-all duration-300">View details</a>
       </div>
 
-      <div class="program-card bg-white rounded-2xl shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden border border-green-100" data-category="Agriculture">
-        <div class="h-40 bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center mb-4 rounded-t-2xl">
-          <span class="text-green-500 text-lg font-semibold">No Image</span>
-        </div>
-        <div class="p-4 flex flex-col flex-grow">
-          <h3 class="font-semibold text-xl mb-1 text-green-800">Organic Farming</h3>
-          <p class="text-sm text-green-600 mb-2">📍 Bandung</p>
-          <p class="text-sm text-green-700 flex-grow">Promoting organic farming in rural areas.</p>
-          <a href="#" class="mt-4 self-start px-5 py-2 text-sm bg-gradient-to-r from-green-400 to-green-600 text-white rounded-md hover:from-green-500 hover:to-green-700 transition-all duration-300">View details</a>
-        </div>
+      <div class="program-card bg-white rounded-2xl shadow-md p-4 flex flex-col hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 border border-green-100">
+        <h3 class="font-semibold text-xl text-green-800 mb-1">Organic Farming</h3>
+        <p class="text-sm text-green-600 mb-2">📍 Bandung</p>
+        <p class="text-sm text-green-700 flex-grow">Promoting organic farming in rural areas.</p>
+        <a href="#" class="mt-4 self-start px-5 py-2 text-sm bg-gradient-to-r from-green-400 to-green-600 text-white rounded-md hover:from-green-500 hover:to-green-700 transition-all duration-300">View details</a>
       </div>
 
     </div>
