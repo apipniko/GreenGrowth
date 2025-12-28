@@ -1,86 +1,28 @@
-{% extends "admin/layout_admin.html" %} {% block sidebar %}
-<div class="flex flex-col h-screen p-4">
-  <div class="mb-6 flex justify-center">
-    <img
-      src="{{ url_for('static', filename='images/logo_rmv.png') }}"
-      alt="Logo"
-      class="w-24 h-24"
-    />
+{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include
+'admin/sidebar.html' %} {% endblock %} {% block content %}
+
+<!--============================= KONTEN UTAMA ===========================-->
+<div class="p-6 flex flex-col h-screen">
+  <!-- Header -->
+  <div class="mb-6 text-center mt-4 shrink-0">
+    <h1 class="text-4xl font-bold text-black">Dashboard Admin</h1>
   </div>
 
-  <aside class="flex-1 p-6 rounded-3xl overflow-y-auto bg-[#0BDAAA] mb-1">
-    <nav>
-      <ul class="space-y-1">
-        <li>
-          <a
-            href="{{ url_for('admin.dashboard') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Statistik</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('program.create_program') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Buat Program Baru</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('program.list_program') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Lihat Program</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('lowongan.create_lowongan') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Buat Pekerjaan Baru</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('lowongan.read_lowongan') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Lihat Pekerjaan</a
-          >
-        </li>
-        <li>
-          <a
-            href="#"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Memantau Lamaran</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{url_for('laporan.read_laporan')}}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Laporan</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('artikel.create') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Buat Artikel</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('artikel.index') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Kelola Artikel</a
-          >
-        </li>
-        <li>
-           <a href="{{ url_for('auth.logout') }}" class="flex items-center px-5 py-3 text-gray-800 hover:bg-green-400 rounded-lg text-lg font-medium">
-            <span>Logout</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </aside>
+  {% include 'partials/flash.html' %}
+  <!-- Main Content -->
+  <div
+    class="flex-1 bg-[#0BDAAA] rounded-3xl flex flex-col justify-center items-center mt-8"
+  >
+      <!-- Welcome Message -->
+      <h2 class="text-3xl font-bold text-black mb-4">
+        Selamat Datang di Dashboard Admin!
+      </h2>
+      <p class="text-lg text-black font-semibold mb-8">
+        Kelola program, lowongan pekerjaan, artikel, dan loporan dengan mudah melalui
+        sistem manajemen ini.
+      </p>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -1,0 +1,82 @@
+<!--============================= SIDE BAR (LOGO DAN NAVBAR) ===========================-->
+<div class="flex flex-col h-screen p-4">
+  <!--============================= LOGO ===========================-->
+  <div class="mb-6 flex justify-center">
+    <img
+      src="{{ url_for('static', filename='images/logo_rmv.png') }}"
+      alt="Logo"
+      class="w-24 h-24"
+    />
+  </div>
+
+  <!--============================= NAVBAR ===========================-->
+  <aside class="flex-1 p-6 rounded-3xl bg-[#0BDAAA]">
+    <nav>
+      <ul class="space-y-1">
+        <li>
+          <a
+            href="{{ url_for('program.list_program') }}"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
+            >program statistics</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="{{ url_for('program.create_program') }}"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
+            >create a program</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="{{ url_for('lowongan.read_lowongan') }}"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
+            >view job vacancies</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="{{ url_for('lowongan.create_lowongan') }}"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
+            >create job vacancies</a
+          >
+        </li>
+        <li>
+          <a
+            href="#"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
+            >Memantau Lamaran</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="{{url_for('laporan.read_laporan')}}"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
+            >Report</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="{{ url_for('artikel.index') }}"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
+            >articles</a
+          >
+        </li>
+
+        <li>
+          <a
+            href="{{ url_for('auth.logout') }}"
+            class="block px-4 py-2.5 font-bold text-black hover:bg-red-500 rounded-2xl"
+          >
+            Logout
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+</div>

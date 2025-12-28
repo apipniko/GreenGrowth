@@ -1,85 +1,154 @@
-{% extends "admin/layout_admin.html" %} {% block sidebar %}{% include
-'admin/dashboard.html' %}{% endblock %} {% block content %}
-<div class="p-6 flex flex-col h-full">
-  <div class="mb-10 text-center mt-4">
-    <h1 class="text-4xl font-bold text-black">Buat Program Baru</h1>
-  </div>
+{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include
+'admin/sidebar.html' %} {% endblock %}{% block content %}
 
+<!--============================= KONTEN UTAMA ===========================-->
+<div class="p-6 flex flex-col h-screen">
+  <!--============================= judul halaman ===========================-->
+  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
+    Create a Program
+  </h1>
   {% include 'partials/flash.html' %}
-
-  <div class="flex-1 bg-[#0BDAAA] rounded-3xl p-8 overflow-y-auto mt-4">
+  <!--============================= INPUT FORM ===========================-->
+  <div class="bg-[#0BDAAA] rounded-3xl p-6 overflow-y-auto mt-8">
     <form
       method="post"
       action="{{ url_for('program.create_program') }}"
-      class="space-y-4"
+      class="space-y-2"
     >
-      <input
-        type="text"
-        name="nama_program"
-        placeholder="program name"
-        class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-        required
-      />
-      <input
-        type="text"
-        name="sektor_program"
-        placeholder="sector/category"
-        class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-        required
-      />
-      <textarea
-        name="tujuan_program"
-        rows="3"
-        placeholder="target/goal"
-        class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-        required
-      ></textarea>
-      <input
-        type="text"
-        name="lokasi_program"
-        placeholder="region"
-        class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-        required
-      />
-      <select
-        name="status_program"
-        class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none"
-        required
-      >
-        <option value="" disabled selected style="background-color: #15f275">
-          Pilih status program
-        </option>
-        <option
-          value="perencanaan"
-          style="background-color: #15f275; font-weight: bold"
+      <!--============================= nama program ===========================-->
+      <div>
+        <label
+          for="nama_program"
+          class="block text-black font-bold mb-2 text-sm"
         >
-          Perencanaan
-        </option>
-        <option
-          value="berjalan"
-          style="background-color: #15f275; font-weight: bold"
+          Program Name
+        </label>
+        <input
+          type="text"
+          id="nama_program"
+          name="nama_program"
+          placeholder="Enter the program name"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          required
+        />
+      </div>
+
+      <!--============================= status program ===========================-->
+      <div>
+        <label
+          for="status_program"
+          class="block text-black font-bold mb-2 text-sm"
         >
-          Berjalan
-        </option>
-        <option
-          value="selesai"
-          style="background-color: #15f275; font-weight: bold"
+          Program Status
+        </label>
+        <select
+          id="status_program"
+          name="status_program"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none"
+          required
         >
-          Selesai
-        </option>
-      </select>
-      <textarea
-        name="deskripsi_program"
-        rows="5"
-        placeholder="criteria/description"
-        class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-      ></textarea>
-      <div class="flex justify-center pt-4">
+          <option value="" disabled selected style="background-color: #15f275">
+            Select program status
+          </option>
+          <option
+            value="perencanaan"
+            style="background-color: #15f275; font-weight: bold"
+          >
+            Perencanaan
+          </option>
+          <option
+            value="berjalan"
+            style="background-color: #15f275; font-weight: bold"
+          >
+            Berjalan
+          </option>
+          <option
+            value="selesai"
+            style="background-color: #15f275; font-weight: bold"
+          >
+            Selesai
+          </option>
+        </select>
+      </div>
+
+      <!--============================= sektor program ===========================-->
+      <div>
+        <label
+          for="sektor_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Sector
+        </label>
+        <input
+          type="text"
+          id="sektor_program"
+          name="sektor_program"
+          placeholder="Enter sector/category"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          required
+        />
+      </div>
+
+      <!--============================= lokasi program ===========================-->
+      <div>
+        <label
+          for="lokasi_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Location
+        </label>
+        <input
+          type="text"
+          id="lokasi_program"
+          name="lokasi_program"
+          placeholder="Enter location/region"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          required
+        />
+      </div>
+
+      <!--============================= tujuan program ===========================-->
+      <div>
+        <label
+          for="tujuan_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Objectives
+        </label>
+        <textarea
+          id="tujuan_program"
+          name="tujuan_program"
+          rows="2"
+          placeholder="Enter the program objectives/targets"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          required
+        ></textarea>
+      </div>
+
+      <!--============================= deskripsi program ===========================-->
+      <div>
+        <label
+          for="deskripsi_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Description
+        </label>
+        <textarea
+          id="deskripsi_program"
+          name="deskripsi_program"
+          rows="3"
+          placeholder="Enter description"
+          class="w-full px-4 py-2 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+        ></textarea>
+      </div>
+
+      <!--============================= BAGIAN BUTTON ===========================-->
+      <div class="flex justify-center gap-4 pt-2">
         <button
           type="submit"
-          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full transition shadow-md hover:shadow-xl"
+          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
         >
-          Create
+          create a program
         </button>
       </div>
     </form>

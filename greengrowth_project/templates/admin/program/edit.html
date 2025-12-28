@@ -1,124 +1,163 @@
-{% extends "admin/layout_admin.html" %}
-{% block sidebar %}{% include 'admin/dashboard.html' %}{% endblock %}
-{% block content %}
-<div class="p-6 flex flex-col h-full">
-  <div class="mb-10 text-center mt-4">
-    <h1 class="text-4xl font-bold text-black">Edit Program</h1>
-  </div>
+{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include
+'admin/sidebar.html' %} {% endblock %}{% block content %}
 
-  <div class="flex-1 bg-[#0BDAAA] rounded-3xl p-6 overflow-y-auto mt-4">
-    {% include 'partials/flash.html' %}
+<!--============================= KONTEN UTAMA ===========================-->
+<div class="p-6 flex flex-col h-screen">
+  <!--============================= judul halaman ===========================-->
+  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
+    Edit Program
+  </h1>
+{% include 'partials/flash.html' %}
+  <!--============================= INPUT FORM ===========================-->
+  <div class="bg-[#0BDAAA] rounded-3xl p-6 overflow-y-auto mt-8">
 
-    <form method="POST" class="space-y-3">
+    <form method="POST" class="space-y-2">
+      <!--============================= nama program ===========================-->
       <div>
-        <label for="nama_program" class="block text-black font-bold mb-1 text-sm">
-          Nama Program 
+        <label
+          for="nama_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Name
         </label>
         <input
           type="text"
           id="nama_program"
           name="nama_program"
-          placeholder="program name"
+          placeholder="Enter the program name"
           value="{{ program[1] or '' }}"
-          class="w-full px-4 py-2.5 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
           required
         />
       </div>
 
+      <!--============================= status program ===========================-->
       <div>
-        <label for="sektor_program" class="block text-black font-bold mb-1 text-sm">
-          Sektor Program 
-        </label>
-        <input
-          type="text"
-          id="sektor_program"
-          name="sektor_program"
-          placeholder="sector/category"
-          value="{{ program[2] or '' }}"
-          class="w-full px-4 py-2.5 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-          required
-        />
-      </div>
-
-      <div>
-        <label for="tujuan_program" class="block text-black font-bold mb-1 text-sm">
-          Tujuan Program 
-        </label>
-        <textarea
-          id="tujuan_program"
-          name="tujuan_program"
-          rows="2"
-          placeholder="target/goal"
-          class="w-full px-4 py-2.5 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-          required
-        >{{ program[3] or '' }}</textarea>
-      </div>
-
-      <div>
-        <label for="lokasi_program" class="block text-black font-bold mb-1 text-sm">
-          Lokasi Program
-        </label>
-        <input
-          type="text"
-          id="lokasi_program"
-          name="lokasi_program"
-          placeholder="region"
-          value="{{ program[4] or '' }}"
-          class="w-full px-4 py-2.5 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-          required
-        />
-      </div>
-
-      <div>
-        <label for="status_program" class="block text-black font-bold mb-1 text-sm">
-          Status Program 
+        <label
+          for="status_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Status
         </label>
         <select
           id="status_program"
           name="status_program"
-          class="w-full px-4 py-2.5 bg-black/10 rounded-xl text-black font-bold focus:outline-none"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none"
           required
         >
           <option value="" disabled style="background-color: #15f275">
-            Pilih status program
+            Select program status
           </option>
-          <option value="perencanaan" {% if program[5] == 'perencanaan' %}selected{% endif %} style="background-color: #15f275">
+          <option
+            value="perencanaan"
+            {% if program[5] == 'perencanaan' %}selected{% endif %}
+            style="background-color: #15f275; font-weight: bold"
+          >
             Perencanaan
           </option>
-          <option value="berjalan" {% if program[5] == 'berjalan' %}selected{% endif %} style="background-color: #15f275">
+          <option
+            value="berjalan"
+            {% if program[5] == 'berjalan' %}selected{% endif %}
+            style="background-color: #15f275; font-weight: bold"
+          >
             Berjalan
           </option>
-          <option value="selesai" {% if program[5] == 'selesai' %}selected{% endif %} style="background-color: #15f275">
+          <option
+            value="selesai"
+            {% if program[5] == 'selesai' %}selected{% endif %}
+            style="background-color: #15f275; font-weight: bold"
+          >
             Selesai
           </option>
         </select>
       </div>
 
+      <!--============================= sektor program ===========================-->
       <div>
-        <label for="deskripsi_program" class="block text-black font-bold mb-1 text-sm">
+        <label
+          for="sektor_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Sector
+        </label>
+        <input
+          type="text"
+          id="sektor_program"
+          name="sektor_program"
+          placeholder="Enter sector/category"
+          value="{{ program[2] or '' }}"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          required
+        />
+      </div>
+
+      <!--============================= lokasi program ===========================-->
+      <div>
+        <label
+          for="lokasi_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Location
+        </label>
+        <input
+          type="text"
+          id="lokasi_program"
+          name="lokasi_program"
+          placeholder="Enter location/region"
+          value="{{ program[4] or '' }}"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          required
+        />
+      </div>
+
+      <!--============================= tujuan program ===========================-->
+      <div>
+        <label
+          for="tujuan_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
+          Program Description
+        </label>
+        <textarea
+          id="tujuan_program"
+          name="tujuan_program"
+          rows="2"
+          placeholder="Enter the program objectives/targets"
+          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          required
+        >{{ program[3] or '' }}</textarea>
+      </div>
+
+      <!--============================= deskripsi program ===========================-->
+      <div>
+        <label
+          for="deskripsi_program"
+          class="block text-black font-bold mb-2 text-sm"
+        >
           Deskripsi Program
         </label>
         <textarea
           id="deskripsi_program"
           name="deskripsi_program"
           rows="3"
-          placeholder="criteria/description"
-          class="w-full px-4 py-2.5 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          placeholder="Enter description"
+          class="w-full px-4 py-2 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
         >{{ program[6] or '' }}</textarea>
       </div>
 
-      <div class="flex justify-center gap-4 pt-4">
+      <!--============================= BAGIAN BUTTON ===========================-->
+      <div class="flex justify-center gap-4 pt-2">
         <button
           type="submit"
-          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-16 py-3 rounded-full transition shadow-md hover:shadow-xl"
+          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
         >
-          Simpan Perubahan
+          Save Changes
         </button>
         <a
           href="{{ url_for('program.list_program') }}"
-          class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full transition shadow-md hover:shadow-xl inline-flex items-center justify-center"
+          class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full"
         >
-          Batal
+          Canceled
         </a>
       </div>
     </form>
