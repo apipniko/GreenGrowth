@@ -64,6 +64,7 @@ def update_profile():
 
     # Ambil data dari form
     nama_user = request.form.get('nama_user')
+    email_user = request.form.get('email_user')
     gender = request.form.get('gender')
     tanggal_lahir = request.form.get('tanggal_lahir')
     pendidikan_tertinggi = request.form.get('pendidikan_tertinggi')
