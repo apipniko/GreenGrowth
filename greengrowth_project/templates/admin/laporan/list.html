@@ -1,0 +1,59 @@
+{% extends "admin/layout_admin.html" %}
+{% block sidebar %} {% include 'admin/dashboard.html' %} {% endblock %}
+{% block content %}
+<div class="p-6 flex flex-col h-screen">
+  <div class="mb-10 text-center mt-4 shrink-0">
+    <h1 class="text-4xl font-bold text-black">Daftar Laporan</h1>
+  </div>
+
+  <div class="mt-4 text-left">
+    <a href="{{ url_for('laporan.create_laporan') }}" class="inline-block bg-[#32CD32] hover:bg-[#7CFC00] text-black font-bold px-6 py-2 rounded-full">Buat Laporan</a>
+  </div>
+
+  {% include 'partials/flash.html' %}
+  
+          <div class="flex-1 bg-[#0BDAAA] rounded-3xl p-8 mt-4 flex flex-col overflow-hidden">
+    {% if laporan | length > 0 %}
+            <div class="flex-1 overflow-y-auto pr-3">
+              <ul class="space-y-6">
+                {% for l in laporan %}
+                <li class="p-6 bg-white/90 rounded-xl shadow-sm">
+                  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                      <div class="w-28 h-28 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                        {% if l[2] %}
+                        <img src="{{ url_for('static', filename=l[2]) }}" alt="foto laporan" class="w-full h-full object-cover" />
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-sm text-gray-500">No Image</div>
+                        {% endif %}
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-700"><strong>ID:</strong> {{ l[0] }}</p>
+                        <p class="text-sm text-gray-700"><strong>Nama Program:</strong> {{ l[1] }}</p>
+                        <p class="text-sm text-gray-700"><strong>Tanggal:</strong> {{ l[3] }}</p>
+                        <p class="text-sm text-gray-700"><strong>Progres:</strong> {{ l[4] }}%</p>
+                        <p class="text-sm text-gray-700"><strong>Output Ekonomi:</strong> {{ l[5] }}</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="mt-4 flex gap-3 justify-end">
+                    <a href="{{ url_for('laporan.update_laporan', laporan_id=l[0]) }}" class="px-4 py-2 bg-[#C7FB01] text-black rounded-full font-bold">Edit</a>
+                    <form method="POST" action="{{ url_for('laporan.delete_laporan', laporan_id=l[0]) }}" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">
+                      <button type="submit" class="px-4 py-2 bg-white border border-gray-300 rounded-full">Hapus</button>
+                    </form>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+    {% else %}
+    <div class="flex-1 flex flex-col items-center justify-center text-center">
+      <p class="text-black font-bold text-lg mb-6">Belum ada laporan.</p>
+      <a href="{{ url_for('admin.dashboard') }}" class="inline-block bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-8 py-3 rounded-full">Kembali ke Dashboard</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

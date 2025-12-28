@@ -1,0 +1,59 @@
+{% extends 'layout.html' %} 
+
+{% block nav %}{% endblock %}
+
+{% block header %}
+<h1>Buat Lowongan Baru</h1>
+{% endblock %} 
+
+{% block article %} 
+{% with messages = get_flashed_messages() %} 
+{% if messages %}
+<ul class="flashes">
+  {% for msg in messages %}
+  <li>{{ msg }}</li>
+  {% endfor %}
+</ul>
+{% endif %} 
+{% endwith %}
+
+<form method="post" action="{{ url_for('laporan.create_laporan') }}" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="program_id">Program</label>
+    <select id="program_id" name="program_id" required>
+      <option value="">-- Pilih Program --</option>
+      {% for program in programs %}
+        <option value="{{ program[0] }}" {% if program[0]|string == selected_program_id|string %}selected{% endif %}>
+          {{ program[1] if program[1] else 'Program ' ~ program[0] }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="form-group">
+   <label class="">Foto (unggah dari perangkat)</label>
+      <input type="file" name="foto_laporan" accept="image/*" required class="mt-1 block w-full" />
+  </div>
+
+  <div class="form-group">
+    <label for="tanggal_laporan">Tanggal</label>
+    <input type="date" id="tanggal_laporan" name="tanggal_laporan" required />
+  </div>
+
+  <div class="form-group">
+    <label for="laporan_persentase_progres">Persentase Program Berjalan</label>
+    <input type="number" id="laporan_persentase_progres" name="laporan_persentase_progres" min="0" max="100" required />
+  </div>
+
+  <div class="form-group">
+    <label for="laporan_output_ekonomi">Ouput Ekonomi</label>
+    <input type="number" id="laporan_output_ekonomi" name="laporan_output_ekonomi" min="0.0" max="1000000000000" required />
+  </div>
+
+  <div class="form-actions">
+    <button type="submit">Buat Lowongan</button>
+    <a href="{{ url_for('admin.dashboard') }}">Batal</a>
+  </div>
+</form>
+
+{% endblock %}

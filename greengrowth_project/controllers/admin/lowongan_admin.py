@@ -7,12 +7,12 @@ ALLOWED_STATUS = {'dibuka', 'ditutup'}
 
 @lowongan_bp.route('/create_lowongan', methods=['GET', 'POST'])
 def create_lowongan():
-    # Memeriksa apakah session ada
     if request.method == "POST":
+    # Memeriksa apakah session ada
         if 'logged_in' not in session:
             flash("Anda harus login sebagai admin!")
             return redirect(url_for('auth.login'))
-        # Ambil program_id dari form
+        # Mengambil program_id dari form dropdown program
         try:
             program_id = request.form.get('program_id')
         except ValueError:
@@ -30,18 +30,15 @@ def create_lowongan():
         keahlian = request.form.get('keahlian', '')
         pengalaman = request.form.get('pengalaman', '')
         min_pendidikan = request.form.get('min_pendidikan', '')
-        # Memanggil fungsi model create_lowongan
+        # Memanggil model create_lowongan
         createLowongan_db(program_id, nama_lowongan, status_lowongan, min_umur, max_umur, keahlian, pengalaman, min_pendidikan, kuota_pekerja)
-        # if result:
-        #     flash("Lowongan berhasil ditambahkan!")
-        # redirect ke read_lowongan
         return redirect(url_for('lowongan.read_lowongan', program_id=program_id))
     # GET request - tampil form, untuk menampilkan dropdown
-    admin_id = session.get('admin_id')
+    admin_id = session.get('admin_id') #Ambil ID admin yang sedang login dari session
     print(f"DEBUG create_lowongan GET: admin_id={admin_id}")
-    programs = get_all_programs_by_admin(admin_id)
+    programs = get_all_programs_by_admin(admin_id) # Ambil semua program milik admin dari database (untuk dropdown di form)
     print(f"DEBUG create_lowongan: programs={programs}")
-    program_id = request.args.get('program_id', '')
+    program_id = request.args.get('program_id', '') #A mbil program_id dari URL query parameter (jika ada)
     return render_template('admin/kelola_lowongan/create_lowongan.html', programs=programs, selected_program_id=program_id)
 
 @lowongan_bp.route('/edit_lowongan/<int:lowongan_id>', methods=['GET', 'POST'])
@@ -57,7 +54,6 @@ def edit_lowongan(lowongan_id):
         status_lowongan = request.form.get('status_lowongan', 'dibuka')
         if status_lowongan not in ALLOWED_STATUS:
             status_lowongan = "dibuka"
-        # Validasi input angka
         min_umur = request.form.get('min_umur', 0)
         max_umur = request.form.get('max_umur', 0)
         kuota_pekerja = request.form.get('kuota_pekerja', 0)
