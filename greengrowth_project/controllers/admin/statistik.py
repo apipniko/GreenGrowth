@@ -73,6 +73,6 @@ def statistik_output_ekonomi(program_id):
         program = readProgram_by_id(program_id)
     except Exception:
         program = None
-    # Render menggunakan template yang sama (menggunakan labels/data)
-    return render_template('admin/statistik/statistik_program.html', statistik=statistik_list, program_id=program_id, labels=labels, data=data, program=program)
+    # Render using the ekonomi template (no chart removed there but table shown)
+    return render_template('admin/statistik/statistik_output_ekonomi.html', statistik=statistik_list, program_id=program_id, labels=labels, data=data, program=program)
 
