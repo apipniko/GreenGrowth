@@ -10,6 +10,7 @@ from .controllers.admin.artikel import artikel_bp
 from .controllers.admin.lowongan_admin import lowongan_bp
 from .controllers.admin.laporan import laporan_bp
 from .controllers.user.artikel import artikel_user_bp
+from .controllers.user.profil import profil_bp
 load_dotenv()
 
 app = Flask(__name__)
@@ -35,6 +36,7 @@ app.register_blueprint(artikel_bp)
 app.register_blueprint(lowongan_bp)
 app.register_blueprint(laporan_bp)
 app.register_blueprint(artikel_user_bp)
+app.register_blueprint(profil_bp)
 
 @app.route('/')
 def home():

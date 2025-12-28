@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.utils import secure_filename
 import os
 
@@ -32,7 +32,6 @@ def profile():
     # Ubah tuple menjadi dict agar mudah di template
     user_dict = {}
     if user:
-        # Sesuaikan dengan urutan kolom di tabel 'users'
         user_dict = {
             'user_id': user[0],
             'nama_user': user[1],
@@ -58,7 +57,8 @@ def profile():
 def update_profile():
     """Update profil user"""
     if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'User tidak login'})
+        flash("User tidak login", "error")
+        return redirect(url_for('auth.login'))
 
     user_id = session['user_id']
 
@@ -82,7 +82,7 @@ def update_profile():
             os.makedirs(UPLOAD_FOLDER)
         foto_path = os.path.join(UPLOAD_FOLDER, filename)
         foto_file.save(foto_path)
-        foto_filename = foto_path.replace("\\", "/")  # path valid di HTML
+        foto_filename = foto_path.replace("\\", "/")  # agar path valid di HTML
 
     # Update database
     from greengrowth_project.app import mysql
@@ -107,7 +107,9 @@ def update_profile():
 
         mysql.connection.commit()
         cur.close()
-        return jsonify({'success': True})
+        flash("Data berhasil disimpan!", "success")
+        return redirect(url_for('profil.profile'))
+
     except Exception as e:
-        print(f"Error update profil: {e}")
-        return jsonify({'success': False, 'message': str(e)})
+        flash(f"Tolong isikan {str(e)} terlebih dahulu", "error")
+        return redirect(url_for('profil.profile'))
