@@ -1,0 +1,100 @@
+{% extends 'layout.html' %}
+
+{% block article %}
+<section class="w-full px-10 py-14">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-10">
+    <div class="flex items-center gap-3">
+      <a href="{{ url_for('profile_user.view_profile', user_id=profile.user_id) }}" class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">←</a>
+      <h1 class="text-2xl font-semibold">Edit Profil</h1>
+    </div>
+    <div class="px-5 py-2 bg-gray-300 rounded-full font-medium">USER</div>
+  </div>
+
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Photo -->
+    <div class="bg-gray-200 rounded-2xl flex flex-col items-center justify-center h-80 gap-4 p-6">
+      <img id="preview" src="{{ profile.foto_user if profile.foto_user else 'https://cdn-icons-png.flaticon.com/512/892/892781.png' }}" class="w-32 h-32 rounded-full object-cover bg-white" alt="Preview Foto" />
+      <div class="flex gap-3">
+        <button type="button" onclick="triggerCamera()" class="text-sm bg-white px-4 py-2 rounded-full shadow">Ambil Foto</button>
+        <button type="button" onclick="triggerGallery()" class="text-sm bg-white px-4 py-2 rounded-full shadow">Pilih dari Memori</button>
+      </div>
+      <input id="fotoInput" type="file" name="foto_user" accept="image/*" class="hidden" onchange="previewImage(event)" form="editProfileForm" />
+      <p class="text-xs text-gray-600 mt-2">Pilih file gambar dari perangkat atau ambil foto (mobile).</p>
+    </div>
+
+    <!-- Form -->
+    <div class="md:col-span-2 bg-gray-200 rounded-2xl p-6">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="space-y-2 mb-4">
+            {% for category, msg in messages %}
+              <div class="px-4 py-2 rounded {{ 'bg-green-100 text-green-800' if category=='success' else 'bg-red-100 text-red-800' }}">{{ msg }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form id="editProfileForm" method="POST" action="{{ url_for('profile_user.edit_profile', user_id=profile.user_id) }}" enctype="multipart/form-data" class="space-y-4">
+        <input type="text" name="nama_user" value="{{ profile.nama_user }}" placeholder="Nama" class="w-full px-4 py-3 rounded-xl focus:outline-none" required />
+        <input type="email" name="email_user" value="{{ profile.email_user }}" placeholder="Email" class="w-full px-4 py-3 rounded-xl focus:outline-none" required />
+
+        <select name="gender" class="w-full px-4 py-3 rounded-xl focus:outline-none">
+          <option value="">Pilih Jenis Kelamin</option>
+          <option value="male" {% if profile.gender == 'male' %}selected{% endif %}>Laki-laki</option>
+          <option value="female" {% if profile.gender == 'female' %}selected{% endif %}>Perempuan</option>
+        </select>
+
+        <input type="date" name="tanggal_lahir" value="{{ profile.tanggal_lahir }}" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+
+        <select name="pendidikan_tertinggi" class="w-full px-4 py-3 rounded-xl focus:outline-none">
+          <option value="">Pilih Pendidikan</option>
+          <option value="High School" {% if profile.pendidikan_tertinggi=='High School' %}selected{% endif %}>High School</option>
+          <option value="Diploma" {% if profile.pendidikan_tertinggi=='Diploma' %}selected{% endif %}>Diploma</option>
+          <option value="Bachelor" {% if profile.pendidikan_tertinggi=='Bachelor' %}selected{% endif %}>Bachelor</option>
+          <option value="Master" {% if profile.pendidikan_tertinggi=='Master' %}selected{% endif %}>Master</option>
+        </select>
+
+        <input type="text" name="softskill" value="{{ profile.softskill }}" placeholder="Softskill" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <input type="text" name="hardskill" value="{{ profile.hardskill }}" placeholder="Hardskill" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <input type="text" name="pengalaman" value="{{ profile.pengalaman }}" placeholder="Pengalaman" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <input type="text" name="no_hp" value="{{ profile.no_hp }}" placeholder="No HP" class="w-full px-4 py-3 rounded-xl focus:outline-none" />
+        <textarea name="alamat" placeholder="Alamat" class="w-full px-4 py-3 rounded-xl focus:outline-none" rows="3">{{ profile.alamat }}</textarea>
+
+        <div class="flex justify-end pt-4 gap-3">
+          <a href="{{ url_for('profile_user.view_profile', user_id=profile.user_id) }}" class="px-6 py-3 rounded-full bg-white shadow">Batal</a>
+          <button type="submit" class="px-8 py-3 bg-green-500 text-white rounded-full font-semibold">Simpan</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function previewImage(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function () {
+    document.getElementById('preview').src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function triggerCamera() {
+  const input = document.getElementById('fotoInput');
+  input.setAttribute('capture', 'environment');
+  input.click();
+}
+
+function triggerGallery() {
+  const input = document.getElementById('fotoInput');
+  input.removeAttribute('capture');
+  input.click();
+}
+</script>
+
+{% endblock %}

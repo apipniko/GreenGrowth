@@ -10,7 +10,7 @@ from .controllers.admin.artikel import artikel_bp
 from .controllers.admin.lowongan_admin import lowongan_bp
 from .controllers.admin.laporan import laporan_bp
 from .controllers.user.artikel import artikel_user_bp
-from .controllers.user.profil import profil_bp
+from .controllers.user.profile import profile_user_bp as profil_bp
 load_dotenv()
 
 app = Flask(__name__)

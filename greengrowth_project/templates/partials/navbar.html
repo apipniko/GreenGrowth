@@ -76,7 +76,7 @@
             class="hidden absolute right-0 mt-2 w-40 bg-white
                    rounded-md shadow-lg z-50">
 
-            <a href="#"
+            <a href="{{ url_for('profile_user.view_profile', user_id=session.get('user_id')) }}"
                class="block px-4 py-2 text-sm hover:bg-[#C7FB01]/40">
               Profil
             </a>
