@@ -1,77 +1,176 @@
-{% extends 'admin/layout_admin.html' %}
-
-{% block sidebar %}
-  {% include 'admin/sidebar.html' %}
-{% endblock %}
-
-{% block content %}
-  <div class="p-6">
-    <div class="mb-6">
-      <h1 class="text-3xl font-bold text-black">Monitoring Lamaran</h1>
-      <p class="text-gray-700 mt-2">Daftar lamaran untuk program yang Anda kelola. Gunakan tombol pada kolom <span class="font-semibold">Aksi</span> untuk mengubah status.</p>
-    </div>
-    {% include 'partials/flash.html' %}
-
-    <div class="max-w-full">
-
-    {% if lamaran_list %}
-      <div class="overflow-x-auto bg-white rounded-lg shadow ring-1 ring-black/5">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelamar</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lowongan</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applied At</th>
-              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            {% for l in lamaran_list %}
-              <tr>
-                <td class="px-4 py-3 text-sm text-gray-700">{{ l.id }}</td>
-                <td class="px-4 py-3 text-sm">
-                  <div class="font-medium text-gray-800">{{ l.user_name }}</div>
-                </td>
-                <td class="px-4 py-3 text-sm text-gray-700">{{ l.judul_lowongan }}</td>
-                <td class="px-4 py-3 text-sm text-gray-700">{{ l.nama_program }}</td>
-                <td class="px-4 py-3 text-sm text-gray-500">{{ l.applied_at.strftime('%d %b %Y %H:%M') if l.applied_at else '-' }}</td>
-                <td class="px-4 py-3 text-sm">
-                  {% if l.status == 'menunggu' %}
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">Menunggu</span>
-                  {% elif l.status == 'diterima' %}
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Diterima</span>
-                  {% elif l.status == 'ditolak' %}
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Ditolak</span>
-                  {% else %}
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">{{ l.status }}</span>
-                  {% endif %}
-                </td>
-                <td class="px-4 py-3 text-right text-sm">
-                  <div class="inline-flex gap-2 items-center">
-                    <form method="post" action="{{ url_for('lamaran_admin.update_status', lamaran_id=l.id) }}" onsubmit="return confirm('Terima lamaran ID {{ l.id }}?')">
-                      <input type="hidden" name="status" value="diterima">
-                      <button type="submit" class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md">Terima</button>
-                    </form>
-
-                    <form method="post" action="{{ url_for('lamaran_admin.update_status', lamaran_id=l.id) }}" onsubmit="return confirm('Tolak lamaran ID {{ l.id }}?')">
-                      <input type="hidden" name="status" value="ditolak">
-                      <button type="submit" class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md">Tolak</button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    {% else %}
-      <div class="bg-white p-6 rounded-lg shadow">
-        <p class="text-gray-600">Belum ada lamaran untuk program Anda.</p>
-      </div>
-    {% endif %}
-    </div>
+{% extends 'admin/layout_admin.html' %} {% block sidebar %} {% include
+'admin/sidebar.html' %} {% endblock %} {% block content %}
+<!-- ============================================================================ -->
+<!--                              KONTEN UTAMA                                    -->
+<!-- ============================================================================ -->
+<div class="p-6 flex flex-col h-screen">
+  <!-- Judul Halaman -->
+  <div class="mb-6">
+    <h1 class="mt-4 text-center text-4xl font-bold text-black">
+      Application Monitoring
+    </h1>
   </div>
+
+  <!-- Flash Messages -->
+  {% include 'partials/flash.html' %}
+
+  <!-- ========================================================================== -->
+  <!--                         CONTAINER DAFTAR LAMARAN                           -->
+  <!-- ========================================================================== -->
+  <div class="mt-8 flex-1 bg-[#0BDAAA] rounded-3xl p-8 overflow-hidden">
+    {% if lamaran_list %}
+
+    <!-- Scrollable Table Area -->
+    <div class="overflow-auto h-full">
+      <table class="w-full">
+        <!-- Table Header -->
+        <thead class="bg-black/10 sticky top-0">
+          <tr>
+            <th
+              class="px-4 py-3 text-left text-sm font-bold text-black uppercase"
+            >
+              ID
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-bold text-black uppercase"
+            >
+              Applicant
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-bold text-black uppercase"
+            >
+              Job Vacancy
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-bold text-black uppercase"
+            >
+              Program
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-bold text-black uppercase"
+            >
+              Applied At
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-bold text-black uppercase"
+            >
+              Status
+            </th>
+            <th
+              class="px-4 py-3 text-center text-sm font-bold text-black uppercase"
+            >
+              Action
+            </th>
+          </tr>
+        </thead>
+
+        <!-- Table Body -->
+        <tbody class="divide-y divide-black/10">
+          {% for l in lamaran_list %}
+          <tr class="bg-white/50 hover:bg-white/70 transition-colors">
+            <!-- ID -->
+            <td class="px-4 py-3 text-sm font-semibold text-black">
+              {{ l.id }}
+            </td>
+
+            <!-- Applicant Name -->
+            <td class="px-4 py-3 text-sm">
+              <div class="font-bold text-black">{{ l.user_name }}</div>
+            </td>
+
+            <!-- Job Vacancy -->
+            <td class="px-4 py-3 text-sm text-black">{{ l.judul_lowongan }}</td>
+
+            <!-- Program -->
+            <td class="px-4 py-3 text-sm text-black">{{ l.nama_program }}</td>
+
+            <!-- Applied Date -->
+            <td class="px-4 py-3 text-sm text-black/80">
+              {{ l.applied_at.strftime('%d %b %Y %H:%M') if l.applied_at else
+              '-' }}
+            </td>
+
+            <!-- Status Badge -->
+            <td class="px-4 py-3 text-sm">
+              {% if l.status == 'menunggu' %}
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-200 text-yellow-800"
+              >
+                Pending
+              </span>
+              {% elif l.status == 'diterima' %}
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-200 text-green-800"
+              >
+                Accepted
+              </span>
+              {% elif l.status == 'ditolak' %}
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-200 text-red-800"
+              >
+                Rejected
+              </span>
+              {% else %}
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-200 text-gray-800"
+              >
+                {{ l.status }}
+              </span>
+              {% endif %}
+            </td>
+
+            <!-- Action Buttons -->
+            <td class="px-4 py-3 text-center">
+              <div class="inline-flex gap-2 items-center">
+                <!-- Accept Button -->
+                <form
+                  method="post"
+                  action="{{ url_for('lamaran_admin.update_status', lamaran_id=l.id) }}"
+                  onsubmit="return confirm('Accept application ID {{ l.id }}?')"
+                  class="inline"
+                >
+                  <input type="hidden" name="status" value="diterima" />
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-bold rounded-full transition-colors"
+                  >
+                    Accept
+                  </button>
+                </form>
+
+                <!-- Reject Button -->
+                <form
+                  method="post"
+                  action="{{ url_for('lamaran_admin.update_status', lamaran_id=l.id) }}"
+                  onsubmit="return confirm('Reject application ID {{ l.id }}?')"
+                  class="inline"
+                >
+                  <input type="hidden" name="status" value="ditolak" />
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-bold rounded-full transition-colors"
+                  >
+                    Reject
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+    <!-- ====================================================================== -->
+    <!--                      STATE: BELUM ADA LAMARAN                          -->
+    <!-- ====================================================================== -->
+    <div class="flex flex-col items-center justify-center h-full text-center">
+      <p class="text-lg font-bold text-black/60">
+        No applications yet for your programs.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
