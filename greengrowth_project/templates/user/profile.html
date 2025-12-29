@@ -1,195 +1,121 @@
 {% extends 'layout.html' %}
-{% block article %}
+{% block title %}Profil Saya | GreenGrowth{% endblock %}
 {% set is_editing = form_data or errors %}
-<section class="w-full px-10 py-14">
-  <form id="profileForm" method="POST" enctype="multipart/form-data" class="space-y-8">
-    <input type="hidden" name="next" value="{{ next_url or '' }}" />
-    <!-- Header -->
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="{{ back_url }}" class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"> ← </a>
+
+{# ================= LEFT / ASIDE ================= #}
+{% block aside %}{% endblock %}
+
+{# ================= RIGHT / ARTICLE ================= #}
+{% block article %}
+<section class="w-full min-h-screen bg-[#F5F7FA]">
+
+  <!-- COVER -->
+  <div class="relative w-full">
+    <a href="{{ back_url }}"
+       class="group absolute bg-[#0BDAAA] rounded-full top-3 left-3 inline-flex items-center gap-3 text-sm font-semibold text-black">
+      <span class="w-9 h-9 flex items-center justify-center rounded-full border border-[#0BDAAA]
+                   group-hover:bg-[#0BDAAA] transition">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="2" stroke="currentColor"
+             class="w-4 h-4 group-hover:text-black">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </span>
+    </a>
+    <div
+      class="w-full h-56 bg-cover bg-center"
+      style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')">
+    </div>
+
+    <!-- AVATAR -->
+    <div class="absolute left-10 bottom-0 translate-y-1/2">
+      <div class="relative w-40 h-40">
+        <img
+          id="profile-photo"
+          src="{{ profile.foto_user if profile.foto_user else 'https://cdn-icons-png.flaticon.com/512/892/892781.png' }}"
+          class="w-40 h-40 rounded-full border-4 border-white object-cover shadow-lg"
+          alt="Foto Profil"
+        >
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="max-w-6xl mx-auto px-10 pt-26 pb-20">
+
+    <div class="flex items-center mb-6 gap-8">
+      <div class="w-30"></div>
+      <div class="flex-1 flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-semibold">Profil Saya</h1>
-          <p class="text-sm text-gray-600">Kelola data pribadi tanpa pindah halaman.</p>
+          <h2 class="text-2xl font-semibold text-gray-700">{{ profile.nama_user }}</h2>
+          <p class="text-sm text-gray-500">{{ profile.email_user }}</p>
         </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <button type="button" id="editBtn" class="px-5 py-2 bg-white rounded-full shadow font-medium {{ 'hidden' if is_editing else '' }}">Edit Profil</button>
-        <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-200 rounded-full font-medium {{ '' if is_editing else 'hidden' }}">Batal</button>
-        <button type="submit" id="saveBtn" class="px-6 py-2 bg-green-500 text-white rounded-full font-semibold {{ '' if is_editing else 'hidden' }}">Simpan</button>
-      </div>
-    </div>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="space-y-2">
-          {% for category, msg in messages %}
-            <div class="px-4 py-3 rounded-xl {{ 'bg-green-100 text-green-800' if category=='success' else 'bg-red-100 text-red-800' }}">{{ msg }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
-
-    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Profile Picture & Basic -->
-      <div class="bg-gray-200 rounded-2xl flex flex-col items-center gap-4 p-6">
-        <img id="profile-photo" src="{{ profile.foto_user if profile.foto_user else 'https://cdn-icons-png.flaticon.com/512/892/892781.png' }}" class="w-32 h-32 rounded-full object-cover bg-white" alt="Foto Profil" />
-        <div class="text-center w-full">
-          <div class="view-field">
-            <h2 class="font-semibold text-lg">{{ profile.nama_user }}</h2>
-            <p class="text-sm text-gray-600">{{ profile.email_user }}</p>
-          </div>
-          <div class="edit-field {{ '' if is_editing else 'hidden' }} space-y-2">
-            <input type="text" name="nama_user" value="{{ form_data.get('nama_user', profile.nama_user) if form_data else profile.nama_user }}" placeholder="Nama" class="w-full px-4 py-3 rounded-xl focus:outline-none" required />
-            {% if errors.nama_user %}<p class="text-red-600 text-sm">{{ errors.nama_user }}</p>{% endif %}
-            <input type="email" name="email_user" value="{{ form_data.get('email_user', profile.email_user) if form_data else profile.email_user }}" placeholder="Email" class="w-full px-4 py-3 rounded-xl focus:outline-none" required />
-            {% if errors.email_user %}<p class="text-red-600 text-sm">{{ errors.email_user }}</p>{% endif %}
-          </div>
-        </div>
-        <div class="edit-field {{ '' if is_editing else 'hidden' }} w-full">
-          <label class="block text-sm text-gray-700 mb-2">Foto Profil</label>
-          <div class="flex gap-3">
-            <button type="button" onclick="triggerCamera()" class="text-sm bg-white px-4 py-2 rounded-full shadow">Ambil Foto</button>
-            <button type="button" onclick="triggerGallery()" class="text-sm bg-white px-4 py-2 rounded-full shadow">Pilih dari Galeri</button>
-          </div>
-          <input id="fotoInput" type="file" name="foto_user" accept="image/*" class="hidden" onchange="previewImage(event)" />
-          <p class="text-xs text-gray-600 mt-2">Unggah gambar (png/jpg/jpeg/gif).</p>
-          {% if errors.foto_user %}<p class="text-red-600 text-sm mt-1">{{ errors.foto_user }}</p>{% endif %}
-        </div>
-      </div>
-
-      <!-- Detail Cards -->
-      <div class="md:col-span-2 bg-gray-200 rounded-2xl p-6 space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-white p-4 rounded-lg">
-            <p class="text-xs text-gray-500">Jenis Kelamin</p>
-            <div class="flex items-center justify-between">
-              <span class="font-medium view-field">{{ profile.gender or '-' }}</span>
-              <select name="gender" class="edit-field {{ '' if is_editing else 'hidden' }} w-1/2 px-3 py-2 rounded-xl focus:outline-none">
-                <option value="" {% if not (form_data and form_data.get('gender')) and not profile.gender %}selected{% endif %}>Pilih</option>
-                <option value="male" {% if (form_data and form_data.get('gender')=='male') or (not form_data and profile.gender=='male') %}selected{% endif %}>Laki-laki</option>
-                <option value="female" {% if (form_data and form_data.get('gender')=='female') or (not form_data and profile.gender=='female') %}selected{% endif %}>Perempuan</option>
-              </select>
-            </div>
-            {% if errors.gender %}<p class="text-red-600 text-sm mt-1">{{ errors.gender }}</p>{% endif %}
-          </div>
-
-          <div class="bg-white p-4 rounded-lg">
-            <p class="text-xs text-gray-500">Tanggal Lahir</p>
-            <div class="flex items-center justify-between">
-              <span class="font-medium view-field">{{ profile.tanggal_lahir or '-' }}</span>
-              <input type="date" name="tanggal_lahir" value="{{ form_data.get('tanggal_lahir', profile.tanggal_lahir) if form_data else profile.tanggal_lahir }}" class="edit-field {{ '' if is_editing else 'hidden' }} w-1/2 px-3 py-2 rounded-xl focus:outline-none" />
-            </div>
-          </div>
-
-          <div class="bg-white p-4 rounded-lg">
-            <p class="text-xs text-gray-500">Pendidikan</p>
-            <div class="flex items-center justify-between">
-              <span class="font-medium view-field">{{ profile.pendidikan_tertinggi or '-' }}</span>
-              <select name="pendidikan_tertinggi" class="edit-field {{ '' if is_editing else 'hidden' }} w-1/2 px-3 py-2 rounded-xl focus:outline-none">
-                <option value="" {% if not (form_data and form_data.get('pendidikan_tertinggi')) and not profile.pendidikan_tertinggi %}selected{% endif %}>Pilih Pendidikan</option>
-                <option value="High School" {% if (form_data and form_data.get('pendidikan_tertinggi')=='High School') or (not form_data and profile.pendidikan_tertinggi=='High School') %}selected{% endif %}>High School</option>
-                <option value="Diploma" {% if (form_data and form_data.get('pendidikan_tertinggi')=='Diploma') or (not form_data and profile.pendidikan_tertinggi=='Diploma') %}selected{% endif %}>Diploma</option>
-                <option value="Bachelor" {% if (form_data and form_data.get('pendidikan_tertinggi')=='Bachelor') or (not form_data and profile.pendidikan_tertinggi=='Bachelor') %}selected{% endif %}>Bachelor</option>
-                <option value="Master" {% if (form_data and form_data.get('pendidikan_tertinggi')=='Master') or (not form_data and profile.pendidikan_tertinggi=='Master') %}selected{% endif %}>Master</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="bg-white p-4 rounded-lg">
-            <p class="text-xs text-gray-500">No HP</p>
-            <div class="flex items-center justify-between">
-              <span class="font-medium view-field">{{ profile.no_hp or '-' }}</span>
-              <input type="text" name="no_hp" value="{{ form_data.get('no_hp', profile.no_hp) if form_data else profile.no_hp }}" class="edit-field {{ '' if is_editing else 'hidden' }} w-1/2 px-3 py-2 rounded-xl focus:outline-none" />
-            </div>
-            {% if errors.no_hp %}<p class="text-red-600 text-sm mt-1">{{ errors.no_hp }}</p>{% endif %}
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-white p-4 rounded-lg">
-            <p class="text-xs text-gray-500">Softskill</p>
-            <span class="font-medium view-field">{{ profile.softskill or '-' }}</span>
-            <input type="text" name="softskill" value="{{ form_data.get('softskill', profile.softskill) if form_data else profile.softskill }}" class="edit-field {{ '' if is_editing else 'hidden' }} w-full mt-2 px-3 py-2 rounded-xl focus:outline-none" />
-          </div>
-
-          <div class="bg-white p-4 rounded-lg">
-            <p class="text-xs text-gray-500">Hardskill</p>
-            <span class="font-medium view-field">{{ profile.hardskill or '-' }}</span>
-            <input type="text" name="hardskill" value="{{ form_data.get('hardskill', profile.hardskill) if form_data else profile.hardskill }}" class="edit-field {{ '' if is_editing else 'hidden' }} w-full mt-2 px-3 py-2 rounded-xl focus:outline-none" />
-          </div>
-
-          <div class="bg-white p-4 rounded-lg">
-            <p class="text-xs text-gray-500">Pengalaman</p>
-            <span class="font-medium view-field">{{ profile.pengalaman or '-' }}</span>
-            <input type="text" name="pengalaman" value="{{ form_data.get('pengalaman', profile.pengalaman) if form_data else profile.pengalaman }}" class="edit-field {{ '' if is_editing else 'hidden' }} w-full mt-2 px-3 py-2 rounded-xl focus:outline-none" />
-          </div>
-
-          <div class="bg-white p-4 rounded-lg md:col-span-2">
-            <p class="text-xs text-gray-500">Alamat</p>
-            <span class="font-medium view-field">{{ profile.alamat or '-' }}</span>
-            <textarea name="alamat" rows="3" class="edit-field {{ '' if is_editing else 'hidden' }} w-full mt-2 px-3 py-2 rounded-xl focus:outline-none">{{ form_data.get('alamat', profile.alamat) if form_data else profile.alamat }}</textarea>
-          </div>
+        <div class="mt-2">
+          <a href="{{ url_for('profile_user.edit_profile', user_id=profile.user_id) }}" class="py-2 rounded-full border border-[#0BDAAA] text-[#0BDAAA] hover:bg-[#0BDAAA] hover:text-white transition">Edit Profil</a>
         </div>
       </div>
     </div>
-  </form>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-2xl shadow-lg">
+
+      <div>
+        <label class="text-sm text-gray-500">Nama Lengkap</label>
+        <div class="mt-1 text-gray-700">{{ profile.nama_user or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Email</label>
+        <div class="mt-1 text-gray-700">{{ profile.email_user or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Jenis Kelamin</label>
+        <div class="mt-1 text-gray-700">{{ profile.gender or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Tanggal Lahir</label>
+        <div class="mt-1 text-gray-700">{{ profile.tanggal_lahir or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Pendidikan Tertinggi</label>
+        <div class="mt-1 text-gray-700">{{ profile.pendidikan_tertinggi or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">No HP</label>
+        <div class="mt-1 text-gray-700">{{ profile.no_hp or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Softskill</label>
+        <div class="mt-1 text-gray-700">{{ profile.softskill or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Hardskill</label>
+        <div class="mt-1 text-gray-700">{{ profile.hardskill or '-' }}</div>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Pengalaman</label>
+        <div class="mt-1 text-gray-700">{{ profile.pengalaman or '-' }}</div>
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="text-sm text-gray-500">Alamat</label>
+        <div class="mt-1 text-gray-700">{{ profile.alamat or '-' }}</div>
+      </div>
+
+    </div>
+  </div>
 </section>
 
-<script>
-  function previewImage(event) {
-    const file = event.target.files && event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function () {
-      document.getElementById('profile-photo').src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function triggerCamera() {
-    const input = document.getElementById('fotoInput');
-    input.setAttribute('capture', 'environment');
-    input.click();
-  }
-
-  function triggerGallery() {
-    const input = document.getElementById('fotoInput');
-    input.removeAttribute('capture');
-    input.click();
-  }
-
-  const editBtn = document.getElementById('editBtn');
-  const cancelBtn = document.getElementById('cancelBtn');
-  const saveBtn = document.getElementById('saveBtn');
-  const viewFields = document.querySelectorAll('.view-field');
-  const editFields = document.querySelectorAll('.edit-field');
-  const profileForm = document.getElementById('profileForm');
-  const initiallyEditing = "{{ 'true' if is_editing else 'false' }}" === 'true';
-
-  function setEditing(on) {
-    editFields.forEach(el => el.classList.toggle('hidden', !on));
-    viewFields.forEach(el => el.classList.toggle('hidden', on));
-    editBtn.classList.toggle('hidden', on);
-    cancelBtn.classList.toggle('hidden', !on);
-    saveBtn.classList.toggle('hidden', !on);
-  }
-
-  setEditing(initiallyEditing);
-
-  if (editBtn) {
-    editBtn.addEventListener('click', () => setEditing(true));
-  }
-  if (cancelBtn) {
-    cancelBtn.addEventListener('click', () => {
-      setEditing(false);
-      profileForm.reset();
-      // reset preview to original when cancel
-      document.getElementById('profile-photo').src = "{{ profile.foto_user if profile.foto_user else 'https://cdn-icons-png.flaticon.com/512/892/892781.png' }}";
-    });
-  }
-</script>
 {% endblock %}
+
 {% block footer %}
-  {% include 'partials/footer.html' %}
+{% include 'partials/footer.html' %}
 {% endblock %}
+
+

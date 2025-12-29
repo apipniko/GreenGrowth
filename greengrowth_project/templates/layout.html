@@ -1,61 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}GreenGrowth{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}GreenGrowth{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-  <body class="{% block body_class %}bg-white font-sans overflow-x-hidden{% endblock %}">
+<body class="{% block body_class %}bg-white font-sans overflow-x-hidden{% endblock %}">
 
-    {% block nav %}{% endblock %}
+  {% block nav %}{% endblock %}
 
-    <!-- ================== FLASH MESSAGE ================== -->
+  <!-- FLASH MESSAGE -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-      <div id="flash-global" class="fixed top-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-3 z-50">
+      <div id="flash-global"
+           class="fixed top-10 left-1/2 -translate-x-1/2 z-50 space-y-3">
         {% for category, message in messages %}
-          <div class="px-5 py-3 rounded-lg shadow-md text-sm font-medium max-w-lg break-words
-                      transition transform duration-500
-                      {% if category == 'success' %}bg-emerald-500 text-white{% else %}bg-red-500 text-white{% endif %}">
+          <div class="px-5 py-3 rounded-lg shadow-md text-sm font-medium
+                      {% if category == 'success' %}
+                        bg-emerald-500 text-white
+                      {% else %}
+                        bg-red-500 text-white
+                      {% endif %}">
             {{ message }}
-            </div>
-          {% endfor %}
-        </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block header %}{% endblock %}
+
+  <!-- ================= MAIN ================= -->
+  <main class="w-full min-h-screen">
+
+    {% set has_aside = self.aside()|trim != '' %}
+
+    <div class="{% if has_aside %}grid grid-cols-1 md:grid-cols-2{% endif %} min-h-screen">
+
+      {% if has_aside %}
+        <aside class="w-full">
+          {% block aside %}{% endblock %}
+        </aside>
       {% endif %}
-    {% endwith %}
 
-    {% block header %}{% endblock %}
+      <section class="w-full">
+        {% block article %}{% endblock %}
+      </section>
 
-    <main class="min-h-screen grid grid-cols-1 md:grid-cols-2 gap-0">
-      {% block home %}{% endblock %}
-      {% block aside %}{% endblock %}
-      {% block article %}{% endblock %}
-    </main>
+    </div>
 
-    <footer>{% block footer %}{% endblock %}</footer>
+  </main>
 
-    <script>
-      document.querySelectorAll('#flash-global > div').forEach(el => {
-        el.style.transform = 'translateY(-20px)';
-        el.style.opacity = '0';
+  <footer>
+    {% block footer %}{% endblock %}
+  </footer>
+    <!-- SCRIPT: AUTO HIDE FLASH -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const flash = document.getElementById('flash-global');
+      if (flash) {
+        // Tampilkan 3 detik lalu fade out
         setTimeout(() => {
-          el.style.transition = 'all 0.5s ease';
-          el.style.transform = 'translateY(0)';
-          el.style.opacity = '1';
-        }, 50);
-      });
+          flash.classList.add('transition', 'duration-500', 'opacity-0');
+        }, 3000);
 
-      setTimeout(() => {
-        document.querySelectorAll('#flash-global > div').forEach(el => {
-          el.style.transition = 'all 0.5s ease';
-          el.style.transform = 'translateY(-20px)';
-          el.style.opacity = '0';
-          setTimeout(() => el.remove(), 500);
-        });
-      }, 3000);
-    </script>
+        // Hapus elemen setelah fade out selesai
+        setTimeout(() => {
+          if (flash.parentNode) flash.parentNode.removeChild(flash);
+        }, 3500);
+      }
+    });
+  </script>
 
-  </body>
+</body>
 </html>

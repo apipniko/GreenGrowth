@@ -1,147 +1,159 @@
 {% extends 'layout.html' %}
 {% block title %}Edit Profil | GreenGrowth{% endblock %}
 
-{# ================= ASIDE / LEFT ================= #}
-{% block aside %}
-<section class="w-full min-h-screen px-6 py-12 bg-[#F0FFF4] flex justify-center">
-  <div class="w-full max-w-md">
-
-    <!-- HEADER -->
-    <div class="flex items-center gap-3 mb-8">
-      <a href="{{ url_for('profile_user.view_profile', user_id=profile.user_id) }}"
-         class="flex items-center justify-center w-10 h-10 bg-[#0BDAAA] text-black rounded-full shadow hover:bg-[#15F275] transition">
-        ←
-      </a>
-      <h1 class="text-xl font-bold text-[#0BDAAA]">Edit Profil</h1>
-    </div>
-
-    <!-- PHOTO CARD -->
-    <div class="bg-[#F0FFF4]/80 backdrop-blur-md rounded-2xl shadow-lg p-6 flex flex-col items-center gap-5 border border-[#0BDAAA]/30">
-
-      <img id="preview"
-        src="{{ profile.foto_user or 'https://cdn-icons-png.flaticon.com/512/892/892781.png' }}"
-        class="w-32 h-32 rounded-full object-cover ring-4 ring-[#0BDAAA] shadow"
-        alt="Foto Profil">
-
-      <input
-        id="fotoInput"
-        type="file"
-        name="foto_user"
-        accept="image/*"
-        capture
-        class="hidden"
-        onchange="previewImage(event)"
-        form="editProfileForm"
-      />
-
-      <div class="flex gap-3">
-        <label for="fotoInput"
-          class="px-4 py-2 rounded-full text-sm bg-[#0BDAAA]/25 text-[#0BDAAA]
-                hover:bg-[#15F275]/30 transition cursor-pointer">
-          Ambil Foto
-        </label>
-
-        <label for="fotoInput"
-          class="px-4 py-2 rounded-full text-sm bg-[#0BDAAA]/25 text-[#0BDAAA]
-                hover:bg-[#15F275]/30 transition cursor-pointer">
-          Pilih dari Memori
-        </label>
-      </div>
-
-
-      <input id="fotoInput" type="file" name="foto_user" accept="image/*"
-        class="hidden" onchange="previewImage(event)" form="editProfileForm">
-    </div>
-  </div>
-</section>
-{% endblock %}
-
-{# ================= MAIN / FORM ================= #}
 {% block article %}
-<section class="w-full min-h-screen px-6 py-12 bg-[#F0FFF4] flex justify-center">
-  <div class="w-full max-w-3xl bg-[#F0FFF4]/80 backdrop-blur-md rounded-2xl shadow-lg p-8 border border-[#0BDAAA]/30">
+<section class="w-full min-h-screen bg-[#F5F7FA]">
 
-    <!-- FLASH MESSAGE -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="space-y-2 mb-6">
-          {% for category, msg in messages %}
-            <div class="px-4 py-2 rounded-xl
-              {{ 'bg-green-100 text-green-800' if category=='success'
-                 else 'bg-red-100 text-red-800' }}">
-              {{ msg }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
+  <!-- ================= COVER ================= -->
+  <div class="relative w-full">
+    <a href="{{ url_for('profile_user.view_profile', user_id=profile.user_id) }}"
+       class="group absolute bg-[#0BDAAA] rounded-full top-3 left-3 inline-flex items-center gap-3 text-sm font-semibold text-black">
+      <span class="w-9 h-9 flex items-center justify-center rounded-full border border-[#0BDAAA]
+                   group-hover:bg-[#0BDAAA] transition">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="2" stroke="currentColor"
+             class="w-4 h-4 group-hover:text-black">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </span>
+    </a>
+    <div
+      class="w-full h-56 bg-cover bg-center"
+      style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')">
+    </div>
 
-    <form id="editProfileForm" method="POST"
-      action="{{ url_for('profile_user.edit_profile', user_id=profile.user_id) }}"
-      enctype="multipart/form-data" class="space-y-4">
-
-      {% set input_class = "w-full px-4 py-3 rounded-xl bg-[#F0FFF4]/50 border border-[#0BDAAA]/30 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA]" %}
-
-      <input type="text" name="nama_user" value="{{ profile.nama_user or '' }}"
-        placeholder="Nama" class="{{ input_class }}" required>
-
-      <input type="email" name="email_user" value="{{ profile.email_user or '' }}"
-        placeholder="Email" class="{{ input_class }}" required>
-
-      <!-- ✅ GENDER FIX (ENUM SAFE) -->
-      <select name="gender" class="{{ input_class }}" required>
-        <option value="">Pilih Jenis Kelamin</option>
-        <option value="Laki-laki"
-          {% if profile.gender == 'Laki-laki' %}selected{% endif %}>
-          Laki-laki
-        </option>
-        <option value="Perempuan"
-          {% if profile.gender == 'Perempuan' %}selected{% endif %}>
-          Perempuan
-        </option>
-      </select>
-
-      <input type="date" name="tanggal_lahir"
-        value="{{ profile.tanggal_lahir or '' }}" class="{{ input_class }}">
-
-      <select name="pendidikan_tertinggi" class="{{ input_class }}">
-        <option value="">Pilih Pendidikan</option>
-        <option value="High School" {% if profile.pendidikan_tertinggi=='High School' %}selected{% endif %}>High School</option>
-        <option value="Diploma" {% if profile.pendidikan_tertinggi=='Diploma' %}selected{% endif %}>Diploma</option>
-        <option value="Bachelor" {% if profile.pendidikan_tertinggi=='Bachelor' %}selected{% endif %}>Bachelor</option>
-        <option value="Master" {% if profile.pendidikan_tertinggi=='Master' %}selected{% endif %}>Master</option>
-      </select>
-
-      <input type="text" name="softskill" value="{{ profile.softskill or '' }}"
-        placeholder="Softskill" class="{{ input_class }}">
-
-      <input type="text" name="hardskill" value="{{ profile.hardskill or '' }}"
-        placeholder="Hardskill" class="{{ input_class }}">
-
-      <input type="text" name="pengalaman" value="{{ profile.pengalaman or '' }}"
-        placeholder="Pengalaman" class="{{ input_class }}">
-
-      <input type="text" name="no_hp" value="{{ profile.no_hp or '' }}"
-        placeholder="No HP" class="{{ input_class }}">
-
-      <textarea name="alamat" rows="3" placeholder="Alamat"
-        class="{{ input_class }}">{{ profile.alamat or '' }}</textarea>
-
-      <div class="flex justify-end gap-3 pt-6">
-        <a href="{{ url_for('profile_user.view_profile', user_id=profile.user_id) }}"
-          class="px-6 py-3 rounded-full border border-[#0BDAAA]/30 hover:bg-[#0BDAAA]/10">
-          Batal
-        </a>
-        <button type="submit"
-          class="px-8 py-3 rounded-full bg-[#0BDAAA] text-black font-semibold hover:bg-[#15F275] transition">
-          Simpan
-        </button>
+    <!-- AVATAR -->
+    <div class="absolute left-10 bottom-0 translate-y-1/2">
+      <div class="relative w-40 h-40">
+        <img
+          id="preview"
+          src="{{ profile.foto_user or 'https://cdn-icons-png.flaticon.com/512/892/892781.png' }}"
+          class="w-40 h-40 rounded-full border-4 border-white object-cover shadow-lg"
+        >
+        <label for="fotoInput"
+          class="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow cursor-pointer hover:bg-gray-100 transition">
+          ✏️
+        </label>
       </div>
+    </div>
+
+    <input
+      id="fotoInput"
+      type="file"
+      name="foto_user"
+      accept="image/*"
+      class="hidden"
+      form="editProfileForm"
+      onchange="previewImage(event)">
+  </div>
+
+  <!-- ================= CONTENT ================= -->
+  <div class="max-w-6xl mx-auto px-10 pt-26 pb-20">
+
+    <!-- HEADER + SAVE BUTTON SEJAJAR DENGAN AVATAR -->
+    <div class="flex items-center mb-6 gap-8">
+      <!-- Spacer untuk avatar -->
+      <div class="w-30"></div>
+
+      <!-- Judul + tombol -->
+      <div class="flex-1 flex items-center justify-between">
+        <h2 class="text-2xl font-semibold text-gray-700">Personal details</h2>
+        <div class="mt-2">
+        <button
+          type="submit"
+          form="editProfileForm"
+          class=" py-2 rounded-full border border-[#0BDAAA]
+                 text-[#0BDAAA] hover:bg-[#0BDAAA] hover:text-white transition">
+          Save changes
+        </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM GRID -->
+    <form
+      id="editProfileForm"
+      method="POST"
+      action="{{ url_for('profile_user.edit_profile', user_id=profile.user_id) }}"
+      enctype="multipart/form-data"
+      class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-2xl shadow-lg">
+
+      {% set input = "w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#0BDAAA] focus:outline-none bg-white" %}
+
+      <div>
+        <label class="text-sm text-gray-500">Nama Lengkap</label>
+        <input name="nama_user" value="{{ profile.nama_user or '' }}" class="{{ input }}" required>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Email</label>
+        <input name="email_user" value="{{ profile.email_user or '' }}" readonly class="{{ input }} bg-gray-100">
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Jenis Kelamin</label>
+        <select name="gender" class="{{ input }}">
+          <option value="">Pilih</option>
+          <option value="male" {% if profile.gender=='male' or profile.gender=='Laki-laki' %}selected{% endif %}>Laki-laki</option>
+          <option value="female" {% if profile.gender=='female' or profile.gender=='Perempuan' %}selected{% endif %}>Perempuan</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Tanggal Lahir</label>
+        <input type="date" name="tanggal_lahir"
+               value="{{ profile.tanggal_lahir or '' }}" class="{{ input }}">
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Pendidikan Tertinggi</label>
+        <select name="pendidikan_tertinggi" class="{{ input }}">
+          <option value="">Pilih</option>
+          <option value="High School" {% if profile.pendidikan_tertinggi=='High School' %}selected{% endif %}>High School</option>
+          <option value="Diploma" {% if profile.pendidikan_tertinggi=='Diploma' %}selected{% endif %}>Diploma</option>
+          <option value="Bachelor" {% if profile.pendidikan_tertinggi=='Bachelor' %}selected{% endif %}>Bachelor</option>
+          <option value="Master" {% if profile.pendidikan_tertinggi=='Master' %}selected{% endif %}>Master</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Softskill</label>
+        <input name="softskill" value="{{ profile.softskill or '' }}" class="{{ input }}">
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Hardskill</label>
+        <input name="hardskill" value="{{ profile.hardskill or '' }}" class="{{ input }}">
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">Pengalaman</label>
+        <input name="pengalaman" value="{{ profile.pengalaman or '' }}" class="{{ input }}">
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-500">No HP</label>
+        <input name="no_hp" value="{{ profile.no_hp or '' }}" class="{{ input }}">
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="text-sm text-gray-500">Alamat</label>
+        <textarea name="alamat" rows="3" class="{{ input }}">{{ profile.alamat or '' }}</textarea>
+      </div>
+
     </form>
   </div>
 </section>
-{% endblock %}
 
-{% block footer %}
-{% include 'partials/footer.html' %}
+<script>
+function previewImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    document.getElementById('preview').src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+</script>
 {% endblock %}

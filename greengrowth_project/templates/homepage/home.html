@@ -7,7 +7,7 @@
 {% endblock %}
 
 {# ================= LEFT : CONTENT ================= #}
-{% block article %}
+{% block aside %}
 <section class="order-1 md:order-1 px-10 py-16 flex flex-col min-h-screen">
   <!-- TEXT -->
   <h1 class="text-5xl font-bold leading-tight mb-6">
@@ -20,7 +20,7 @@
     This platform serves as a bridge between talented professionals and organizations committed to environmental stewardship. Users can explore various career paths, gain insights into emerging industries, and access opportunities that align with their skills and values.</p>
 </section>
 {% endblock %}
-{% block aside %}
+{% block article %}
 <section class="order-2 md:order-2 flex items-center justify-center p-10 min-h-screen">
   <img
     src="{{ url_for('static', filename='images/home.png') }}"
