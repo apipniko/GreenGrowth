@@ -23,23 +23,34 @@
         class="w-32 h-32 rounded-full object-cover ring-4 ring-[#0BDAAA] shadow"
         alt="Foto Profil">
 
+      <input
+        id="fotoInput"
+        type="file"
+        name="foto_user"
+        accept="image/*"
+        capture
+        class="hidden"
+        onchange="previewImage(event)"
+        form="editProfileForm"
+      />
+
       <div class="flex gap-3">
-        <button type="button" onclick="triggerCamera()"
-          class="px-4 py-2 rounded-full text-sm bg-[#0BDAAA]/25 text-[#0BDAAA] hover:bg-[#15F275]/30 transition">
+        <label for="fotoInput"
+          class="px-4 py-2 rounded-full text-sm bg-[#0BDAAA]/25 text-[#0BDAAA]
+                hover:bg-[#15F275]/30 transition cursor-pointer">
           Ambil Foto
-        </button>
-        <button type="button" onclick="triggerGallery()"
-          class="px-4 py-2 rounded-full text-sm bg-[#0BDAAA]/25 text-[#0BDAAA] hover:bg-[#15F275]/30 transition">
+        </label>
+
+        <label for="fotoInput"
+          class="px-4 py-2 rounded-full text-sm bg-[#0BDAAA]/25 text-[#0BDAAA]
+                hover:bg-[#15F275]/30 transition cursor-pointer">
           Pilih dari Memori
-        </button>
+        </label>
       </div>
+
 
       <input id="fotoInput" type="file" name="foto_user" accept="image/*"
         class="hidden" onchange="previewImage(event)" form="editProfileForm">
-
-      <span class="px-5 py-2 rounded-full text-sm font-semibold bg-[#0BDAAA]/25 text-[#0BDAAA]">
-        USER
-      </span>
     </div>
   </div>
 </section>

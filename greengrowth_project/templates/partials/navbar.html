@@ -56,14 +56,14 @@
             class="flex items-center gap-2 focus:outline-none text-black">
 
             <img
-              src="{% if profile_image %}
-                      {{ url_for('static', filename=profile_image) }}
-                  {% else %}
-                      https://cdn-icons-png.flaticon.com/512/892/892781.png
-                  {% endif %}"
-              class="w-9 h-9 rounded-full object-cover border-2 border-[#15F275]"
-              alt="Profile"
-              referrerpolicy="no-referrer">
+            src="{% if session.get('profile_image') %}
+                    {{ session.get('profile_image') }}
+                {% else %}
+                    https://cdn-icons-png.flaticon.com/512/892/892781.png
+                {% endif %}"
+            class="w-9 h-9 rounded-full object-cover border-2 border-[#15F275]"
+            alt="Profile">
+
 
             <span class="hidden md:block font-medium">
               {{ session.get('user_name', 'User') }}

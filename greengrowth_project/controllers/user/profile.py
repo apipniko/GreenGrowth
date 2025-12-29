@@ -89,4 +89,3 @@ def edit_profile(user_id):
         flash('Profil berhasil diperbarui.', 'success')
         return redirect(url_for('profile_user.view_profile', user_id=user_id))
     return render_template('user/profile_edit.html', profile=profile)
-
