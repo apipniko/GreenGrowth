@@ -52,7 +52,7 @@ def readLowongan_db(program_id):
                 'keahlian': row[6],
                 'pengalaman': row[7],
                 'min_pendidikan': row[8],
-                'kuota': row[9]
+                'kuota_pekerja': row[9]
             })
         return lowongans
     except Exception as e:
@@ -95,7 +95,7 @@ def readLowongan_by_id(lowongan_id):
             'keahlian': row[6],
             'pengalaman': row[7],
             'min_pendidikan': row[8],
-            'kuota': row[9]
+            'kuota_pekerja': row[9]
         }
     except Exception as e:
         print(f"Error reading lowongan: {e}")
