@@ -5,7 +5,7 @@
 <div class="p-6 flex flex-col h-screen">
   <!--============================= judul halaman ===========================-->
   <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
-    Edit Program
+    Update Program
   </h1>
 {% include 'partials/flash.html' %}
   <!--============================= INPUT FORM ===========================-->
@@ -116,7 +116,7 @@
           for="tujuan_program"
           class="block text-black font-bold mb-2 text-sm"
         >
-          Program Description
+          program objectives
         </label>
         <textarea
           id="tujuan_program"
@@ -134,7 +134,7 @@
           for="deskripsi_program"
           class="block text-black font-bold mb-2 text-sm"
         >
-          Deskripsi Program
+          Program Description
         </label>
         <textarea
           id="deskripsi_program"
@@ -157,7 +157,7 @@
           href="{{ url_for('program.list_program') }}"
           class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full"
         >
-          Canceled
+          Back   
         </a>
       </div>
     </form>

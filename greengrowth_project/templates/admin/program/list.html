@@ -52,33 +52,44 @@
         
         <!-- ===================== bagian button ======================= -->
         <div class="flex items-center justify-between gap-3">
-          <a
-          href="#"
-          class="px-6 py-2 rounded-full text-sm font-semibold text-black bg-white/70 hover:bg-[#15F275] "
-          >
-          See Statistics
-        </a>
-        
-        <a
-        href="{{ url_for('program.edit_program', program_id=program[0]) }}"
-        class="px-6 py-2 rounded-full text-sm font-semibold text-black bg-green-300 hover:bg-[#15F275]"
-        >
-        Edit Program
-      </a>
-      
-          <form
-            method="POST"
-            action="{{ url_for('program.delete_program', program_id=program[0]) }}"
-            onsubmit="return confirm('Yakin ingin menghapus program ini?')"
+          <div class="flex items-center gap-3">
+            <a
+              href="{{ url_for('statistik.statistik_persentase_program', program_id=program[0]) }}"
+              class="px-6 py-2 rounded-full text-sm font-semibold text-black bg-white/70 hover:bg-[#15F275] "
             >
-            <button
-            type="submit"
-            class="px-6 py-2 rounded-full text-sm font-semibold text-black bg-red-500/90 hover:bg-red-800"
+              Statistik Persentase
+            </a>
+
+            <a
+              href="{{ url_for('statistik.statistik_output_ekonomi', program_id=program[0]) }}"
+              class="px-6 py-2 rounded-full text-sm font-semibold text-black bg-white/70 hover:bg-[#15F275] "
             >
-            Delete Program
-          </button>
-        </form>
-      </div>
+              Statistik Ekonomi
+            </a>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <a
+              href="{{ url_for('program.edit_program', program_id=program[0]) }}"
+              class="px-6 py-2 rounded-full text-sm font-semibold text-black bg-green-300 hover:bg-[#15F275]"
+            >
+              Update Program
+            </a>
+
+            <form
+              method="POST"
+              action="{{ url_for('program.delete_program', program_id=program[0]) }}"
+              onsubmit="return confirm('Yakin ingin menghapus program ini?')"
+            >
+              <button
+                type="submit"
+                class="px-6 py-2 rounded-full text-sm font-semibold text-black bg-red-500/90 hover:bg-red-800"
+              >
+                Delete Program
+              </button>
+            </form>
+          </div>
+        </div>
     </div>
     {% endfor %}
   </div>

@@ -124,3 +124,46 @@ def edit_profile(user_id):
     # Alihkan ke halaman profil utama agar edit dilakukan di tempat yang sama
     return view_profile(user_id)
 
+    if 'logged_in' not in session:
+        return redirect(url_for('auth.login'))
+    profile = get_user_profile(user_id)
+    if not profile:
+        abort(404)
+    if request.method == 'POST':
+        nama_user = request.form.get('nama_user')
+        email_user = request.form.get('email_user')
+        foto_file = request.files.get('foto_user')
+        gender = request.form.get('gender')
+        tanggal_lahir = request.form.get('tanggal_lahir')
+        pendidikan_tertinggi = request.form.get('pendidikan_tertinggi')
+        softskill = request.form.get('softskill')
+        hardskill = request.form.get('hardskill')
+        pengalaman = request.form.get('pengalaman')
+        no_hp = request.form.get('no_hp')
+        alamat = request.form.get('alamat')
+
+        # handle file upload: save to static/uploads and store the static URL (keep existing if not replaced)
+        foto_url = profile.get('foto_user')
+        if foto_file and getattr(foto_file, 'filename', None):
+            new_rel = save_upload(foto_file)
+            if new_rel is None:
+                flash('Format file tidak diizinkan atau tidak ada file yang dipilih.', 'error')
+                return render_template('user/profile_edit.html', profile=profile)
+            # Remove old local file if any
+            try:
+                old_rel = foto_url
+                if old_rel:
+                    if old_rel.startswith('/static/'):
+                        old_rel = old_rel[len('/static/'):]
+                    if old_rel.startswith('uploads/'):
+                        old_path = os.path.join(current_app.root_path, 'static', old_rel.replace('/', os.path.sep))
+                        if os.path.exists(old_path):
+                            os.remove(old_path)
+            except Exception:
+                pass
+            # store the static URL into DB so templates that use it directly work
+            foto_url = url_for('static', filename=new_rel)
+        edit_profile_by_id(user_id, nama_user, email_user, foto_url, gender, tanggal_lahir, pendidikan_tertinggi, softskill, hardskill, pengalaman, no_hp, alamat)
+        flash('Profil berhasil diperbarui.', 'success')
+        return redirect(url_for('profile_user.view_profile', user_id=user_id))
+    return render_template('user/profile_edit.html', profile=profile)

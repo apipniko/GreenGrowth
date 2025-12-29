@@ -9,6 +9,7 @@ from .controllers.admin.program_admin import program_bp
 from .controllers.admin.artikel import artikel_bp
 from .controllers.admin.lowongan_admin import lowongan_bp
 from .controllers.admin.laporan import laporan_bp
+from .controllers.admin.statistik import statistik_bp
 from .controllers.user.artikel import artikel_user_bp
 from .controllers.user.profile import profile_user_bp as profil_bp
 from .controllers.user.program import program_user_bp
@@ -43,6 +44,7 @@ app.register_blueprint(profil_bp)
 app.register_blueprint(program_user_bp)
 app.register_blueprint(lowongan_user_bp)
 app.register_blueprint(lamaran_user_bp)
+app.register_blueprint(statistik_bp)
 
 @app.route('/')
 def home():

@@ -7,23 +7,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
 
-  <body class="{% block body_class %}bg-gray-50 font-sans{% endblock %}">
+  <body class="{% block body_class %}bg-white font-sans overflow-x-hidden{% endblock %}">
 
     {% block nav %}{% endblock %}
 
     <!-- ================== FLASH MESSAGE ================== -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div id="flash-global" class="w-full flex flex-col items-center space-y-3 mt-4 z-50">
-          {% for category, message in messages %}
-            <div class="px-5 py-3 rounded-lg shadow-md text-sm font-medium max-w-lg break-words
-                        transition transform duration-500
-                        {% if category == 'success' %}
-                          bg-emerald-100 text-emerald-800
-                        {% else %}
-                          bg-red-100 text-red-700
-                        {% endif %}">
-              {{ message }}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div id="flash-global" class="fixed top-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-3 z-50">
+        {% for category, message in messages %}
+          <div class="px-5 py-3 rounded-lg shadow-md text-sm font-medium max-w-lg break-words
+                      transition transform duration-500
+                      {% if category == 'success' %}bg-emerald-500 text-white{% else %}bg-red-500 text-white{% endif %}">
+            {{ message }}
             </div>
           {% endfor %}
         </div>

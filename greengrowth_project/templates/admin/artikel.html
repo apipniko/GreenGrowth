@@ -1,67 +1,131 @@
-{% extends 'layout.html' %} {% block nav %} {% include 'partials/navbar.html' %} {% endblock %} {% block header %}
-<div class="bg-green-50 border-b border-green-200 p-6">
-  <div class="container mx-auto">
-    <h1 class="text-3xl font-extrabold text-gray-800">Artikel</h1>
-    <p class="text-gray-600 mt-1">Kelola semua artikel..</p>
-  </div>
-</div>
-{% endblock %} {% block article %}
-<div class="container mx-auto p-6">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-xl font-semibold">Daftar Artikel</h2>
-    <a href="{{ url_for('artikel.create') }}" class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">+ Tambah Artikel</a>
-  </div>
+{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include
+'admin/sidebar.html' %} {% endblock %} {% block content %}
+<div class="p-6 flex flex-col h-screen">
+  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
+    List of Articles
+  </h1>
 
-  {% include 'partials/flash.html' %} {% if artikels and artikels|length > 0 %}
-  <div class="overflow-x-auto bg-white rounded shadow">
-    <table class="min-w-full text-left">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="px-4 py-3 text-sm font-medium text-gray-700">#</th>
-          <th class="px-4 py-3 text-sm font-medium text-gray-700">Judul</th>
-          <th class="px-4 py-3 text-sm font-medium text-gray-700">Program</th>
-          <th class="px-4 py-3 text-sm font-medium text-gray-700">Deskripsi</th>
-          <th class="px-4 py-3 text-sm font-medium text-gray-700">Foto</th>
-          <th class="px-4 py-3 text-sm font-medium text-gray-700">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
+  {% include 'partials/flash.html' %}
+
+  <div class="mt-8 flex-1 flex bg-[#0BDAAA] rounded-3xl p-8 overflow-hidden">
+    {% if artikels and artikels|length > 0 %}
+    <div class="overflow-y-auto w-full">
+      <div class="flex justify-left mb-6">
+        <a
+          href="{{ url_for('artikel.create') }}"
+          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-8 py-3 rounded-full"
+        >
+          + Create Article
+        </a>
+      </div>
+
+      <div class="space-y-6">
         {% for artikel in artikels %}
-        <tr class="border-t">
-          <td class="px-4 py-3 text-sm text-gray-700">{{ loop.index }}</td>
-          <td class="px-4 py-3 text-sm text-gray-700">{{ artikel.program_name or '-' }}</td>
-          <td class="px-4 py-3 text-sm text-gray-800">{{ artikel.judul_artikel }}</td>
-          <td class="px-4 py-3 text-sm text-gray-700">{{ (artikel.deskripsi[:120] ~ ('...' if artikel.deskripsi and (artikel.deskripsi|length > 120) else '')) }}</td>
-          <td class="px-4 py-3 text-sm text-gray-700">
-            {% if artikel.foto_artikel %}
-            <img src="{{ url_for('static', filename=artikel.foto_artikel) }}" alt="{{ artikel.judul_artikel }}" class="w-24 h-auto rounded" />
-            {% else %} - {% endif %}
-          </td>
-          <td class="px-4 py-3 text-sm text-gray-700">
-            <a href="{{ url_for('artikel.show', artikel_id=artikel.artikel_id) }}" class="text-blue-600 hover:underline">Lihat</a>
-            <a href="{{ url_for('artikel.edit', artikel_id=artikel.artikel_id) }}" class="ml-3 text-yellow-600 hover:underline">Edit</a>
-            <form method="post" action="{{ url_for('artikel.delete', artikel_id=artikel.artikel_id) }}" class="inline" onsubmit="return confirm('Hapus artikel ini?');">
-              <button type="submit" class="ml-3 text-red-600 hover:underline">Hapus</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+        <div class="bg-black/10 rounded-2xl p-6">
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex-shrink-0">
+              <div class="w-48 h-48 bg-white rounded-xl overflow-hidden">
+                {% if artikel.foto_artikel %}
+                <img
+                  src="{{ url_for('static', filename=artikel.foto_artikel) }}"
+                  class="w-full h-full object-cover"
+                />
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center">
+                  <span class="text-gray-400 font-semibold">No Image</span>
+                </div>
+                {% endif %}
+              </div>
+            </div>
 
-  {% if pagination %}
-  <nav class="mt-6 flex items-center justify-center space-x-2">
-    {% if pagination.prev %}
-    <a href="{{ pagination.prev }}" class="px-3 py-1 border rounded">«</a>
-    {% endif %} {% for p in pagination.pages %}
-    <a href="{{ p.url }}" class="px-3 py-1 border rounded {% if p.active %}bg-gray-200{% endif %}">{{ p.num }}</a>
-    {% endfor %} {% if pagination.next %}
-    <a href="{{ pagination.next }}" class="px-3 py-1 border rounded">»</a>
+            <div class="flex-1 space-y-2">
+              <span class="text-black font-bold text-xl block"
+                >{{ artikel.judul_artikel }}</span
+              >
+              <div>
+                <span class="text-black/70 font-semibold text-sm"
+                  >Related Program:</span
+                >
+                <p class="text-black font-bold">
+                  {{ artikel.program_name or '-' }}
+                </p>
+              </div>
+              <div>
+                <span class="text-black/70 font-semibold text-sm"
+                  >Description:</span
+                >
+                <p class="text-black/80 text-sm line-clamp-3">
+                  {{ artikel.deskripsi or 'No description available.' }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="flex justify-end gap-3 mt-4 pt-4 border-t border-black/10"
+          >
+            <a
+              href="{{ url_for('artikel.show', artikel_id=artikel.artikel_id) }}"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-full text-sm"
+              >View</a
+            >
+            <a
+              href="{{ url_for('artikel.edit', artikel_id=artikel.artikel_id) }}"
+              class="bg-[#C7FB01] hover:bg-[#15F275] text-black font-semibold px-6 py-2 rounded-full text-sm"
+              >Update</a
+            >
+            <form
+              action="{{ url_for('artikel.delete', artikel_id=artikel.artikel_id) }}"
+              method="POST"
+              onsubmit="return confirm('Are you sure?')"
+              class="inline"
+            >
+              <button
+                type="submit"
+                class="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-full text-sm"
+              >
+                Delete
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if pagination %}
+      <nav class="mt-8 mb-4 flex items-center justify-center space-x-2">
+        {% if pagination.prev %}<a
+          href="{{ pagination.prev }}"
+          class="px-4 py-2 bg-white rounded-lg font-semibold text-black hover:bg-[#15F275]"
+        >
+          « </a
+        >{% endif %} {% for p in pagination.pages %}
+        <a
+          href="{{ p.url }}"
+          class="px-4 py-2 rounded-lg font-semibold text-black {% if p.active %}bg-[#15F275]{% else %}bg-white hover:bg-[#C7FB01]{% endif %}"
+          >{{ p.num }}</a
+        >
+        {% endfor %} {% if pagination.next %}<a
+          href="{{ pagination.next }}"
+          class="px-4 py-2 bg-white rounded-lg font-semibold text-black hover:bg-[#15F275]"
+        >
+          » </a
+        >{% endif %}
+      </nav>
+      {% endif %}
+    </div>
+    {% else %}
+    <div class="flex flex-1 flex-col items-center justify-center text-center">
+      <p class="mb-6 text-lg font-bold text-black">
+        No articles have been created yet.
+      </p>
+      <a
+        href="{{ url_for('artikel.create') }}"
+        class="px-20 py-3 rounded-full font-bold text-black bg-[#15F275] hover:bg-[#C7FB01]"
+        >Create First Article</a
+      >
+    </div>
     {% endif %}
-  </nav>
-  {% endif %} {% else %}
-  <div class="bg-white rounded shadow p-6 text-center text-gray-600">Belum ada artikel. <a href="{{ url_for('artikel.create') }}" class="text-green-600 hover:underline">Buat yang pertama</a>.</div>
-  {% endif %}
+  </div>
 </div>
 {% endblock %}

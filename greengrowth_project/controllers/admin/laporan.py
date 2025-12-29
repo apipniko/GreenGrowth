@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, Response, flash, session, abort, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 import os
 import uuid
-from werkzeug.utils import secure_filename
 from werkzeug.utils import secure_filename
 from greengrowth_project.models.laporan import createLaporan_db, readLaporan_db, readLaporan_by_id,updateLaporan_db, deleteLaporan_db
 from greengrowth_project.models.program import readProgram_by_admin, get_program_by_id
@@ -104,13 +103,13 @@ def update_laporan(laporan_id):
     laporan_tanggal = request.form.get('tanggal_laporan')
     laporan_persentase_progres = request.form.get('laporan_persentase_progres')
     laporan_output_ekonomi = request.form.get('laporan_output_ekonomi')
-    # get existing laporan to preserve foto if not replaced
+    # Mendapatkan laporan yang tersedia
     existing = readLaporan_by_id(laporan_id)
     # Ambil path file foto jika data laporan ada dan field foto tersedia
     foto_rel = None
     if existing and len(existing) >= 3:
         foto_rel = existing[2]
-    # If new file uploaded, save and replace
+    # Jika ada foto baru yang akan diupload, maka save dan replace
     if foto_file and foto_file.filename:
         new_rel = save_upload(foto_file)
         if new_rel is None:
@@ -120,7 +119,7 @@ def update_laporan(laporan_id):
             laporan = readLaporan_by_id(laporan_id)
             return render_template('admin/laporan/update.html', programs=programs, laporan_id=laporan_id, laporan=laporan)
         foto_rel = new_rel
-    # Call model update
+    # memanggil model update
     ok = updateLaporan_db(program_id, foto_rel, laporan_tanggal, laporan_persentase_progres, laporan_output_ekonomi, laporan_id)
     if ok:
         flash('Laporan berhasil diperbarui!', 'success')

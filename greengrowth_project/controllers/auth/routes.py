@@ -20,7 +20,9 @@ def login():
         if akun_user is not None and check_password_hash(akun_user[4], password):
             session['logged_in'] = True
             session['user_id'] = akun_user[0]
+            session['user_name'] = akun_user[1]
             session['user_role'] = akun_user[3]
+            session['profile_image'] = akun_user[5]
             session['role'] = 'user'
             flash(f'Selamat datang {akun_user[1]}!👋', 'success')
             return redirect(url_for('user.dashboard'))

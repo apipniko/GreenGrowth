@@ -1,55 +1,136 @@
-{% extends 'layout.html' %} {% block nav %} {% include 'partials/navbar.html' %} {% endblock %} {% block header %}
-<div class="bg-white border-b border-gray-200 p-6">
-  <div class="container mx-auto">
-    {% if artikel is defined %}
-    <h1 class="text-2xl font-bold text-gray-800">{{ artikel.judul_artikel }}</h1>
-    <p class="text-gray-500 mt-1">Diterbitkan: {{ artikel.created_at or artikel.updated_at or '-' }}</p>
-    {% elif artikels is defined %}
-    <h1 class="text-2xl font-bold text-gray-800">Daftar Artikel</h1>
-    <p class="text-gray-500 mt-1">Temukan artikel terbaru dari program kami.</p>
-    {% else %}
-    <h1 class="text-2xl font-bold text-gray-800">Artikel</h1>
-    {% endif %}
+{% extends 'layout.html' %}
+
+{% block nav %}
+{% include 'partials/navbar.html' %}
+{% endblock %}
+
+{# ================= HEADER ================= #}
+{% block header %}
+
+<div class="w-full bg-white">
+  <div class="bg-gradient-to-b from-[#F0FFF4] to-white pt-10 pb-16">
+    <div class="container mx-auto px-6">
+
+  {% if artikel is defined %}
+
+  <!-- BACK BUTTON -->
+  <div class="mb-6">
+    <a href="{{ url_for('artikel_user.list_artikel') }}"
+       class="group inline-flex items-center gap-3 text-sm font-semibold text-[#0BDAAA]">
+      <span class="w-9 h-9 flex items-center justify-center rounded-full border border-[#15F275]
+                   group-hover:bg-[#0BDAAA] transition">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="2" stroke="currentColor"
+             class="w-4 h-4 group-hover:text-black">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </span>
+      <span class="group-hover:underline">Kembali ke daftar artikel</span>
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+
+    <!-- LEFT -->
+    <div class="max-w-xl">
+      <p class="text-xs uppercase tracking-wider text-[#0BDAAA] font-semibold mb-2">Artikel</p>
+
+      <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+        {{ artikel.judul_artikel }}
+      </h1>
+
+      <p class="mt-3 text-sm text-gray-500">
+        Diterbitkan pada
+        <span class="font-medium text-gray-700">
+          {{ artikel.created_at or artikel.updated_at or '-' }}
+        </span>
+      </p>
+
+      {% if artikel.deskripsi %}
+      <p class="mt-4 text-base text-gray-600 leading-relaxed">
+        {{ artikel.deskripsi | striptags }}
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      {% if artikel.foto_artikel %}
+      <img src="{{ artikel.foto_artikel.startswith('http') and artikel.foto_artikel or url_for('static', filename=artikel.foto_artikel) }}"
+           alt="{{ artikel.judul_artikel }}"
+           class="w-full h-auto rounded-3xl shadow-lg border border-[#15F275]/40" />
+      {% endif %}
+    </div>
+
+  </div>
+
+  {% else %}
+  <div class="text-center pt-8 pb-10">
+    <h1 class="text-4xl font-extrabold text-gray-900">Artikel Pilihan</h1>
+    <p class="mt-3 text-gray-500 max-w-xl mx-auto">
+      Kumpulan artikel terbaik untuk menambah wawasan dan inspirasi kamu.
+    </p>
+  </div>
+  {% endif %}
+
+</div>
+
   </div>
 </div>
-{% endblock %} {% block article %}
-<div class="container mx-auto p-6">
-  {% include 'partials/flash.html' %} {% if artikel is defined %}
-  <div class="bg-white rounded shadow p-6">
-    {% if artikel.foto_artikel %} {% if artikel.foto_artikel.startswith('http') %}
-    <img src="{{ artikel.foto_artikel }}" alt="{{ artikel.judul_artikel }}" class="w-full h-auto mb-4 rounded" />
-    {% else %}
-    <img src="{{ url_for('static', filename=artikel.foto_artikel) }}" alt="{{ artikel.judul_artikel }}" class="w-full h-auto mb-4 rounded" />
-    {% endif %} {% endif %}
+{% endblock %}
 
-    <p class="text-sm text-gray-600">Program: <strong>{{ artikel.program_name or '-' }}</strong></p>
+{# ================= CONTENT ================= #}
+{% block article %}
 
-    <div class="prose max-w-none">{{ artikel.deskripsi | safe }}</div>
+<div class="bg-white">
+  <div class="container mx-auto px-6 pb-24">
 
-    <div class="mt-4 flex gap-3">
-      <a href="{{ url_for('artikel_user.list_artikel') }}" class="text-gray-600 hover:underline">Kembali</a>
-    </div>
-  </div>
-  {% elif artikels is defined %}
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+{% include 'partials/flash.html' %}
+
+{% if artikels is defined %}
+<div class="overflow-x-auto md:overflow-x-visible pb-8 bg-white">
+  <div class="flex gap-8 px-2 justify-center mx-auto">
+
     {% for artikel in artikels %}
-    <div class="bg-white rounded shadow p-4">
-      {% if artikel.foto_artikel %} {% if artikel.foto_artikel.startswith('http') %}
-      <img src="{{ artikel.foto_artikel }}" alt="{{ artikel.judul_artikel }}" class="w-full h-48 object-cover mb-4 rounded" />
+    <div class="bg-white rounded-2xl border border-[#15F275]/30 shadow-sm
+                hover:shadow-lg transition w-[320px] min-w-[320px]
+                flex flex-col overflow-hidden">
+
+      {% if artikel.foto_artikel %}
+      <img src="{{ artikel.foto_artikel.startswith('http') and artikel.foto_artikel or url_for('static', filename=artikel.foto_artikel) }}"
+           class="w-full h-56 object-cover" />
       {% else %}
-      <img src="{{ url_for('static', filename=artikel.foto_artikel) }}" alt="{{ artikel.judul_artikel }}" class="w-full h-48 object-cover mb-4 rounded" />
-      {% endif %} {% endif %}
-      <h2 class="text-xl font-semibold">{{ artikel.judul_artikel }}</h2>
-      <p class="text-gray-500 text-sm mb-2">Diterbitkan: {{ artikel.created_at or artikel.updated_at or '-' }}</p>
-      <p class="text-gray-700 text-sm mb-4">{{ artikel.deskripsi[:150] }}{% if artikel.deskripsi|length > 150 %}...{% endif %}</p>
-      <a href="{{ url_for('artikel_user.show', artikel_id=artikel.artikel_id) }}" class="text-blue-600 hover:underline">Baca selengkapnya</a>
+      <div class="w-full h-56 bg-[#F0FFF4]"></div>
+      {% endif %}
+
+      <div class="p-5 flex flex-col flex-grow">
+        <p class="text-xs text-gray-400 mb-1">
+          {{ artikel.created_at or artikel.updated_at or '-' }}
+        </p>
+
+        <h2 class="text-lg font-bold text-gray-900 mb-2">
+          {{ artikel.judul_artikel }}
+        </h2>
+
+        <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+          {{ artikel.deskripsi | striptags }}
+        </p>
+
+        <div class="mt-auto flex justify-end">
+          <a href="{{ url_for('artikel_user.show', artikel_id=artikel.artikel_id) }}"
+             class="bg-[#0BDAAA] text-black text-sm font-semibold px-5 py-2 rounded-xl
+                    hover:bg-[#15F275] transition">
+            Baca Artikel →
+          </a>
+        </div>
+      </div>
     </div>
-    {% else %}
-    <p>Tidak ada artikel.</p>
     {% endfor %}
+
   </div>
-  {% else %}
-  <p>Tidak ada artikel.</p>
-  {% endif %}
+</div>
+{% endif %}
+
+  </div>
 </div>
 {% endblock %}

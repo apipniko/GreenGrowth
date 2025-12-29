@@ -1,0 +1,76 @@
+{% extends "admin/layout_admin.html" %}
+
+{% block sidebar %}{% include 'admin/dashboard.html' %}{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <div class="mb-6 flex items-center justify-between">
+        <h1 class="text-2xl font-bold">Statistik Output Ekonomi</h1>
+        <a href="{{ url_for('program.list_program') }}" class="px-4 py-2 bg-gray-200 rounded">Kembali</a>
+    </div>
+
+    {% if statistik and statistik|length > 0 %}
+    <div class="mb-6">
+        <h2 class="text-lg font-semibold">{% if program %}{{ program[1] }}{% else %}{{ statistik[0][1] }}{% endif %}</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-4 rounded shadow w-full">
+            <canvas id="outputChart"></canvas>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow overflow-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr>
+                        <th class="py-2">Tanggal</th>
+                        <th class="py-2">Output Ekonomi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in statistik %}
+                    <tr class="border-t">
+                        <td class="py-2">{{ s[3] }}</td>
+                        <td class="py-2">{{ s[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function(){
+            const labels = {{ labels|default([])|tojson }};
+            const data = {{ data|default([])|tojson }};
+
+            const ctx = document.getElementById('outputChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Output Ekonomi',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        })();
+    </script>
+
+    {% else %}
+        <div class="bg-white p-6 rounded shadow">
+            <p class="font-medium">Tidak ada data laporan untuk program ini.</p>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

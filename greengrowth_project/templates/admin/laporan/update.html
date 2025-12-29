@@ -9,7 +9,7 @@
 <div class="p-6 flex flex-col h-screen">
   <!--============================= judul halaman ===========================-->
   <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
-    Edit Laporan
+    Update Laporan
   </h1>
 {% include 'partials/flash.html' %}
   <!--============================= INPUT FORM ===========================-->
@@ -37,7 +37,7 @@
           required
         >
           <option value="" disabled style="background-color: #15f275">
-            -- Pilih Program --
+            -- Select Program --
           </option>
           {% for program in programs %}
           <option
@@ -57,13 +57,13 @@
           for="foto_laporan"
           class="block text-black font-bold mb-2 text-sm"
         >
-          Foto Laporan
+          Report Photo
         </label>
         
         <!--============================= preview foto lama ===========================-->
         {% if laporan and laporan[2] %}
         <div class="mb-3">
-          <p class="text-xs text-black/60 font-semibold mb-2">Foto Saat Ini:</p>
+          <p class="text-xs text-black/60 font-semibold mb-2">current photo :</p>
           <img
             src="{{ url_for('static', filename=laporan[2]) }}"
             alt="Foto Laporan"
@@ -83,7 +83,7 @@
           />
         </div>
         <p class="mt-1 text-xs text-black/60 font-semibold">
-          Biarkan kosong jika tidak ingin mengubah foto. Format: JPG, PNG, JPEG. Maksimal 5MB
+          Format: JPG, PNG, JPEG. Max 5MB
         </p>
       </div>
 
@@ -93,7 +93,7 @@
           for="tanggal_laporan"
           class="block text-black font-bold mb-2 text-sm"
         >
-          Tanggal Laporan
+          Report Laporan
         </label>
         <input
           type="date"
@@ -121,12 +121,12 @@
           max="100"
           step="0.1"
           value="{{ laporan[4] if laporan else '' }}"
-          placeholder="Masukkan persentase (0-100)"
+          placeholder="Enter percentage (0-100)"
           class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
           required
         />
         <p class="mt-1 text-xs text-black/60 font-semibold">
-          Masukkan nilai antara 0 hingga 100
+          Enter a value between 0 and 100
         </p>
       </div>
 
@@ -136,7 +136,7 @@
           for="laporan_output_ekonomi"
           class="block text-black font-bold mb-2 text-sm"
         >
-          Output Ekonomi (Rp)
+          Economic Output (Rp)
         </label>
         <input
           type="number"
@@ -145,12 +145,12 @@
           min="0"
           step="0.01"
           value="{{ laporan[5] if laporan else '' }}"
-          placeholder="Masukkan nilai output ekonomi"
+          placeholder="Enter economic output value"
           class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
           required
         />
         <p class="mt-1 text-xs text-black/60 font-semibold">
-          Masukkan nilai dalam Rupiah (contoh: 1000000 untuk Rp 1.000.000)
+          Enter value in Rupiah (example: 1000000 for Rp 1,000,000)
         </p>
       </div>
 
@@ -160,13 +160,13 @@
           type="submit"
           class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
         >
-          Simpan Perubahan
+          Save Changes
         </button>
         <a
           href="{{ url_for('laporan.read_laporan') }}"
           class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full flex items-center"
         >
-          Batal
+          Back
         </a>
       </div>
     </form>
