@@ -83,3 +83,70 @@ def get_user_lamaran(user_id):
     except Exception as e:
         print(f"Error getting user lamaran: {e}")
         return []
+
+
+def get_all_lamaran_by_admin(admin_id):
+    """Get all applications for programs owned by given admin"""
+    from greengrowth_project.app import mysql
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute(
+            """
+            SELECT
+                l.lamaran_id,
+                l.lowongan_id,
+                l.user_id,
+                u.nama_user,
+                l.status_lamaran,
+                l.applied_at,
+                lo.judul_lowongan,
+                p.program_id,
+                p.nama_program
+            FROM lamaran l
+            JOIN lowongan lo ON l.lowongan_id = lo.lowongan_id
+            JOIN program p ON lo.program_id = p.program_id
+            JOIN users u ON l.user_id = u.user_id
+            WHERE p.admin_id = %s
+            ORDER BY l.applied_at DESC
+            """,
+            (admin_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+
+        result = []
+        for row in rows:
+            result.append({
+                'id': row[0],
+                'lowongan_id': row[1],
+                'user_id': row[2],
+                'user_name': row[3],
+                'status': row[4],
+                'applied_at': row[5],
+                'judul_lowongan': row[6],
+                'program_id': row[7],
+                'nama_program': row[8]
+            })
+
+        return result
+    except Exception as e:
+        print(f"Error getting admin lamaran: {e}")
+        return []
+
+
+def update_lamaran_status(lamaran_id, status):
+    from greengrowth_project.app import mysql
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute(
+            """
+            UPDATE lamaran SET status_lamaran = %s WHERE lamaran_id = %s
+            """,
+            (status, lamaran_id)
+        )
+        mysql.connection.commit()
+        cur.close()
+        return True
+    except Exception as e:
+        print(f"Error updating lamaran status: {e}")
+        return False
