@@ -32,6 +32,7 @@ def save_upload(file_storage):
 
 @profile_user_bp.route('/<int:user_id>', methods=['GET', 'POST'])
 def view_profile(user_id):
+    current_app.logger.info(f"view_profile called with path={request.path} args={dict(request.args)} method={request.method}")
     if 'logged_in' not in session:
         return redirect(url_for('auth.login'))
     profile = get_user_profile(user_id)
@@ -89,12 +90,19 @@ def view_profile(user_id):
         if errors:
             flash('Periksa kembali data yang belum valid.', 'error')
         else:
+            # Map form values ('male'/'female') to DB enum values ('Laki-laki','Perempuan') or None
+            db_gender = None
+            if gender == 'male':
+                db_gender = 'Laki-laki'
+            elif gender == 'female':
+                db_gender = 'Perempuan'
+
             edit_profile_by_id(
                 user_id,
                 nama_user,
                 email_user,
                 foto_url,
-                gender,
+                db_gender,
                 tanggal_lahir,
                 pendidikan_tertinggi,
                 softskill,
@@ -107,6 +115,8 @@ def view_profile(user_id):
             if next_url:
                 return redirect(next_url)
             profile = get_user_profile(user_id)
+            # update session so navbar shows latest photo immediately
+            session['profile_image'] = profile.get('foto_user')
             form_data = None
 
     return render_template(
@@ -121,5 +131,17 @@ def view_profile(user_id):
 
 @profile_user_bp.route('/<int:user_id>/edit', methods=['GET', 'POST'])
 def edit_profile(user_id):
-    # Alihkan ke halaman profil utama agar edit dilakukan di tempat yang sama
-    return view_profile(user_id)
+    current_app.logger.info(f"edit_profile called with path={request.path} args={dict(request.args)} method={request.method}")
+    # Render a dedicated edit page on GET, and delegate POST to the existing view_profile handler
+    if 'logged_in' not in session:
+        return redirect(url_for('auth.login'))
+    profile = get_user_profile(user_id)
+    if not profile:
+        abort(404)
+
+    if request.method == 'POST':
+        # reuse existing POST handling (validation + save) implemented in view_profile
+        return view_profile(user_id)
+
+    # GET: show the edit form
+    return render_template('user/profile_edit.html', profile=profile, back_url=url_for('profile_user.view_profile', user_id=user_id))

@@ -20,7 +20,7 @@
           <li><a href="{{ url_for('user.dashboard') }}" class="hover:text-[#C7FB01] transition">Home</a></li>
           <li><a href="{{ url_for('artikel_user.list_artikel') }}" class="hover:text-[#C7FB01] transition">Artikel</a></li>
           <li><a href="{{ url_for('lamaran_user.my_activity') }}" class="hover:text-[#C7FB01] transition">My Activity</a></li>
-          <li><a href="#" class="hover:text-[#C7FB01] transition">Explore</a></li>
+          <li><a href="{{ url_for('lowongan_user.explore') }}" class="hover:text-[#C7FB01] transition">Explore</a></li>
           {% endif %} {% else %}
           <li><a href="/" class="hover:text-[#C7FB01] transition">Home</a></li>
           <li><a href="{{ url_for('auth.login') }}" class="hover:text-[#C7FB01] transition">Lowongan</a></li>
@@ -36,11 +36,16 @@
         <div class="relative">
           <button onclick="toggleProfileMenu()" class="flex items-center gap-2 focus:outline-none text-black">
             <img
-              src="{% if profile_image %}
-                      {{ url_for('static', filename=profile_image) }}
-                  {% else %}
-                      https://cdn-icons-png.flaticon.com/512/892/892781.png
-                  {% endif %}"
+              src="{% set _img = session.get('profile_image') %}
+                      {% if _img %}
+                          {% if _img.startswith('/static/') or _img.startswith('http') %}
+                              {{ _img }}
+                          {% else %}
+                              {{ url_for('static', filename=_img) }}
+                          {% endif %}
+                      {% else %}
+                          https://cdn-icons-png.flaticon.com/512/892/892781.png
+                      {% endif %}"
               class="w-9 h-9 rounded-full object-cover border-2 border-[#15F275]"
               alt="Profile"
               referrerpolicy="no-referrer"
@@ -82,7 +87,7 @@
     <li><a href="{{ url_for('user.dashboard') }}" class="hover:text-[#C7FB01]">Home</a></li>
     <li><a href="{{ url_for('artikel_user.list_artikel') }}" class="hover:text-[#C7FB01]">Artikel</a></li>
     <li><a href="{{ url_for('lamaran_user.my_activity') }}" class="hover:text-[#C7FB01]">My Activity</a></li>
-    <li><a href="#" class="hover:text-[#C7FB01]">Explore</a></li>
+    <li><a href="{{ url_for('lowongan_user.explore') }}" class="hover:text-[#C7FB01]">Explore</a></li>
     {% endif %} {% else %}
     <li><a href="/" class="hover:text-[#C7FB01]">Home</a></li>
     <li><a href="{{ url_for('auth.login') }}" class="hover:text-[#C7FB01]">Lowongan</a></li>

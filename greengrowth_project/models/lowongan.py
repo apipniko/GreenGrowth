@@ -144,4 +144,109 @@ def deleteLowongan_db(lowongan_id):
     except Exception as e:
         print(f"Error deleting lowongan {e}")
         return False
+
+
+def get_all_lowongan_with_program(lokasi_filter=None, pendidikan_filter=None):
+    """
+    Get all lowongan with program info.
+    Optionally filter by lokasi_program and lowongan_min_pendidikan.
+    Returns list of lowongan with program details.
+    """
+    from greengrowth_project.app import mysql
+    try:
+        cur = mysql.connection.cursor()
+        
+        # Base query with JOIN
+        query = """
+            SELECT 
+                l.lowongan_id,
+                l.program_id,
+                l.judul_lowongan,
+                l.status_lowongan,
+                l.lowongan_min_umur,
+                l.lowongan_max_umur,
+                l.lowongan_keahlian,
+                l.lowongan_pengalaman,
+                l.lowongan_min_pendidikan,
+                l.kuota_pekerja,
+                p.nama_program,
+                p.lokasi_program,
+                p.sektor_program,
+                p.deskripsi_program
+            FROM lowongan l
+            JOIN program p ON l.program_id = p.program_id
+            WHERE l.status_lowongan = 'dibuka'
+        """
+        
+        params = []
+        
+        # Add filters if provided
+        if lokasi_filter:
+            query += " AND p.lokasi_program IN (%s)" % ','.join(['%s'] * len(lokasi_filter))
+            params.extend(lokasi_filter)
+            
+        if pendidikan_filter:
+            query += " AND l.lowongan_min_pendidikan IN (%s)" % ','.join(['%s'] * len(pendidikan_filter))
+            params.extend(pendidikan_filter)
+        
+        query += " ORDER BY l.lowongan_id DESC"
+        
+        if params:
+            cur.execute(query, tuple(params))
+        else:
+            cur.execute(query)
+            
+        rows = cur.fetchall()
+        cur.close()
+        
+        lowongans = []
+        for row in rows:
+            lowongans.append({
+                'id': row[0],
+                'program_id': row[1],
+                'judul': row[2],
+                'status': row[3],
+                'min_umur': row[4],
+                'max_umur': row[5],
+                'keahlian': row[6],
+                'pengalaman': row[7],
+                'min_pendidikan': row[8],
+                'kuota': row[9],
+                'nama_program': row[10],
+                'lokasi_program': row[11],
+                'sektor_program': row[12],
+                'deskripsi_program': row[13]
+            })
+        return lowongans
+    except Exception as e:
+        print(f"Error getting all lowongan with program: {e}")
+        return []
+
+
+def get_unique_locations():
+    """Get all unique locations from program table"""
+    from greengrowth_project.app import mysql
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT DISTINCT lokasi_program FROM program WHERE lokasi_program IS NOT NULL ORDER BY lokasi_program")
+        rows = cur.fetchall()
+        cur.close()
+        return [row[0] for row in rows if row[0]]
+    except Exception as e:
+        print(f"Error getting unique locations: {e}")
+        return []
+
+
+def get_unique_education_levels():
+    """Get all unique education levels from lowongan table"""
+    from greengrowth_project.app import mysql
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT DISTINCT lowongan_min_pendidikan FROM lowongan WHERE lowongan_min_pendidikan IS NOT NULL ORDER BY lowongan_min_pendidikan")
+        rows = cur.fetchall()
+        cur.close()
+        return [row[0] for row in rows if row[0]]
+    except Exception as e:
+        print(f"Error getting unique education levels: {e}")
+        return []
     
