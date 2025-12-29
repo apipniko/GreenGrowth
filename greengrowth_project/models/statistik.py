@@ -25,7 +25,8 @@ def statistik_output_ekonomi_db(program_id):
             """
             SELECT laporan.program_id, program.nama_program, laporan.laporan_output_ekonomi, laporan.laporan_tanggal FROM laporan 
             JOIN program ON laporan.program_id = program.program_id
-            WHERE laporan.program_id = %s;
+            WHERE laporan.program_id = %s
+            ORDER BY laporan.laporan_output_ekonomi;
             """,(program_id,)
         )
         result = cur.fetchall()

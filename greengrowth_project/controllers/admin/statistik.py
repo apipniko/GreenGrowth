@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from greengrowth_project.models.statistik import statistik_persentase_program_db, statistik_output_ekonomi_db
-from greengrowth_project.models.program_admin import readProgram_by_id
+from greengrowth_project.models.program import readProgram_by_id
 from decimal import Decimal
 
 statistik_bp = Blueprint('statistik', __name__, url_prefix='/statistik')

@@ -1,0 +1,6 @@
+{
+  // Revert association to default HTML to avoid forcing Jinja highlighting
+  "files.associations": {
+    "**/templates/**/*.html": "html"
+  }
+}
