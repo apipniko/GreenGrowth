@@ -1,83 +1,105 @@
 <!--============================= SIDE BAR (LOGO DAN NAVBAR) ===========================-->
-<div class="flex flex-col h-screen p-4">
+<div
+  id="admin-sidebar"
+  class="sidebar-container flex flex-col min-h-screen bg-gradient-to-b from-[#0BDAAA] to-[#09b399] p-6 shadow-2xl border-r border-white/20 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out fixed md:static inset-y-0 left-0 w-72 z-30"
+>
   <!--============================= LOGO ===========================-->
-  <div class="mb-6 flex justify-center">
-    <img
-      src="{{ url_for('static', filename='images/logo_rmv.png') }}"
-      alt="Logo"
-      class="w-24 h-24"
-    />
+  <div class="mb-8 flex justify-center">
+    <div class="relative">
+      <img src="{{ url_for('static', filename='images/logo_rmv.png') }}" alt="Logo" class="w-28 h-28 drop-shadow-lg hover:scale-110 transition-transform duration-300" />
+    </div>
+  </div>
+
+  <!--============================= BRANDING ===========================-->
+  <div class="text-center mb-8 pb-6 border-b border-white/20">
+    <h2 class="text-xl font-bold text-white">Admin Panel</h2>
+    <p class="text-sm text-white/70 mt-1 brand-extra">GreenGrowth Management</p>
   </div>
 
   <!--============================= NAVBAR ===========================-->
-  <aside class="flex-1 p-6 rounded-3xl bg-[#0BDAAA] flex flex-col">
-    <nav class="flex-1 overflow-y-auto">
-      <ul class="space-y-1">
-        <li>
-          <a
-            href="{{ url_for('program.list_program') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >program statistics</a
-          >
-        </li>
+  <nav class="flex-1 overflow-y-auto space-y-2">
+    <ul class="space-y-2">
+      <!-- Dashboard Home -->
+      <li>
+        <a href="{{ url_for('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-home text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">Home</span>
+        </a>
+      </li>
 
-        <li>
-          <a
-            href="{{ url_for('program.create_program') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >create a program</a
-          >
-        </li>
+      <!-- Program Statistics -->
+      <li>
+        <a href="{{ url_for('program.list_program') }}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-chart-line text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">Program Statistics</span>
+        </a>
+      </li>
 
-        <li>
-          <a
-            href="{{ url_for('lowongan.read_lowongan') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >view job vacancies</a
-          >
-        </li>
+      <!-- Create Program -->
+      <li>
+        <a href="{{ url_for('program.create_program') }}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-plus-circle text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">Create Program</span>
+        </a>
+      </li>
 
-        <li>
-          <a
-            href="{{ url_for('lowongan.create_lowongan') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >create job vacancies</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('lamaran_admin.list_lamaran') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Memantau Lamaran</a
-          >
-        </li>
+      <!-- Job Vacancies Divider -->
+      <li class="pt-2">
+        <p class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-wider nav-label">Job Management</p>
+      </li>
 
-        <li>
-          <a
-            href="{{url_for('laporan.read_laporan')}}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >Report</a
-          >
-        </li>
+      <!-- View Job Vacancies -->
+      <li>
+        <a href="{{ url_for('lowongan.read_lowongan') }}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-briefcase text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">View Vacancies</span>
+        </a>
+      </li>
 
-        <li>
-          <a
-            href="{{ url_for('artikel.index') }}"
-            class="block px-4 py-2.5 font-bold text-black hover:bg-[#C7FB01] rounded-2xl"
-            >articles</a
-          >
-        </li>
-      </ul>
-    </nav>
+      <!-- Create Job Vacancies -->
+      <li>
+        <a href="{{ url_for('lowongan.create_lowongan') }}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-file-invoice text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">Create Vacancy</span>
+        </a>
+      </li>
 
-    <!--============================= LOGOUT BUTTON (BOTTOM) ===========================-->
-    <div class="mt-4 pt-4 border-t border-black/10">
-      <a
-        href="{{ url_for('auth.logout') }}"
-        class="block px-4 py-2.5 font-bold text-black hover:bg-red-500 rounded-2xl text-center"
-      >
-        Logout
-      </a>
-    </div>
-  </aside>
+      <!-- Monitor Applications -->
+      <li>
+        <a href="{{ url_for('lamaran_admin.list_lamaran') }}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-inbox text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">Monitor Applications</span>
+        </a>
+      </li>
+
+      <!-- Content Divider -->
+      <li class="pt-2">
+        <p class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-wider nav-label">Content</p>
+      </li>
+
+      <!-- Articles -->
+      <li>
+        <a href="{{ url_for('artikel.index') }}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-newspaper text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">Articles</span>
+        </a>
+      </li>
+
+      <!-- Reports -->
+      <li>
+        <a href="{{url_for('laporan.read_laporan')}}" class="flex items-center gap-3 px-4 py-3 font-semibold text-white hover:bg-white/20 rounded-xl transition-all duration-200 group">
+          <i class="fas fa-file-pdf text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="nav-label">Reports</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!--============================= LOGOUT BUTTON (BOTTOM) ===========================-->
+  <div class="mt-auto pt-6 border-t border-white/20">
+    <a href="{{ url_for('auth.logout') }}" class="flex items-center justify-center gap-2 px-4 py-3 font-bold text-white bg-yellow-600/80 hover:bg-yellow-400 rounded-xl transition-all duration-200 text-center group w-full">
+      <i class="fas fa-sign-out-alt group-hover:scale-110 transition-transform"></i>
+      <span class="nav-label">Logout</span>
+    </a>
+  </div>
 </div>

@@ -1,27 +1,140 @@
-{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include
-'admin/sidebar.html' %} {% endblock %} {% block content %}
+{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include 'admin/sidebar.html' %} {% endblock %} {% block content %}
 
 <!--============================= KONTEN UTAMA ===========================-->
-<div class="p-6 flex flex-col h-screen">
+<div class="p-8 flex flex-col gap-8 min-h-screen">
   <!-- Header -->
-  <div class="mb-6 text-center mt-4 shrink-0">
-    <h1 class="text-4xl font-bold text-black">Dashboard Admin</h1>
+  <div class="mb-6">
+    <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0BDAAA] to-[#15F275]">Admin Dashboard</h1>
+    <p class="text-gray-600 text-lg mt-2">Welcome back to your management center</p>
   </div>
 
   {% include 'partials/flash.html' %}
-  <!-- Main Content -->
-  <div
-    class="flex-1 bg-[#0BDAAA] rounded-3xl flex flex-col justify-center items-center mt-8"
-  >
-      <!-- Welcome Message -->
-      <h2 class="text-3xl font-bold text-black mb-4">
-        Selamat Datang di Dashboard Admin!
-      </h2>
-      <p class="text-lg text-black font-semibold mb-8">
-        Kelola program, lowongan pekerjaan, artikel, dan loporan dengan mudah melalui
-        sistem manajemen ini.
-      </p>
+
+  <!-- Dashboard Cards Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Programs Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-[#0BDAAA] transition-all duration-300 group">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <p class="text-gray-600 font-semibold text-sm">Total Programs</p>
+          <h3 class="text-4xl font-bold text-black mt-2">{{ stats.total_programs | default(0) }}</h3>
+          <p class="text-sm text-gray-500 mt-3">Manage your programs</p>
+        </div>
+        <div class="bg-gradient-to-br from-[#0BDAAA]/20 to-[#15F275]/20 p-4 rounded-2xl group-hover:scale-110 transition-transform">
+          <i class="fas fa-chart-line text-2xl text-[#0BDAAA]"></i>
+        </div>
       </div>
+      <a href="{{ url_for('program.list_program') }}" class="text-[#0BDAAA] font-semibold text-sm mt-4 inline-flex items-center gap-2 hover:gap-3 transition-all"> View All <i class="fas fa-arrow-right"></i> </a>
+    </div>
+
+    <!-- Job Vacancies Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-[#0BDAAA] transition-all duration-300 group">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <p class="text-gray-600 font-semibold text-sm">Active Vacancies</p>
+          <h3 class="text-4xl font-bold text-black mt-2">{{ stats.active_vacancies | default(0) }}</h3>
+          <p class="text-sm text-gray-500 mt-3">Open job positions</p>
+        </div>
+        <div class="bg-gradient-to-br from-blue-500/20 to-blue-300/20 p-4 rounded-2xl group-hover:scale-110 transition-transform">
+          <i class="fas fa-briefcase text-2xl text-blue-500"></i>
+        </div>
+      </div>
+      <a href="{{ url_for('lowongan.read_lowongan') }}" class="text-blue-500 font-semibold text-sm mt-4 inline-flex items-center gap-2 hover:gap-3 transition-all"> Manage <i class="fas fa-arrow-right"></i> </a>
+    </div>
+
+    <!-- Applications Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-[#0BDAAA] transition-all duration-300 group">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <p class="text-gray-600 font-semibold text-sm">Applications</p>
+          <h3 class="text-4xl font-bold text-black mt-2">{{ stats.pending_applications | default(0) }}</h3>
+          <p class="text-sm text-gray-500 mt-3">Pending reviews</p>
+        </div>
+        <div class="bg-gradient-to-br from-purple-500/20 to-pink-300/20 p-4 rounded-2xl group-hover:scale-110 transition-transform">
+          <i class="fas fa-inbox text-2xl text-purple-500"></i>
+        </div>
+      </div>
+      <a href="{{ url_for('lamaran_admin.list_lamaran') }}" class="text-purple-500 font-semibold text-sm mt-4 inline-flex items-center gap-2 hover:gap-3 transition-all"> Review <i class="fas fa-arrow-right"></i> </a>
+    </div>
+
+    <!-- Articles Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:border-[#0BDAAA] transition-all duration-300 group">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <p class="text-gray-600 font-semibold text-sm">Published Articles</p>
+          <h3 class="text-4xl font-bold text-black mt-2">{{ stats.total_articles | default(0) }}</h3>
+          <p class="text-sm text-gray-500 mt-3">Content management</p>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-500/20 to-orange-300/20 p-4 rounded-2xl group-hover:scale-110 transition-transform">
+          <i class="fas fa-newspaper text-2xl text-yellow-600"></i>
+        </div>
+      </div>
+      <a href="{{ url_for('artikel.index') }}" class="text-yellow-600 font-semibold text-sm mt-4 inline-flex items-center gap-2 hover:gap-3 transition-all"> Manage <i class="fas fa-arrow-right"></i> </a>
+    </div>
+  </div>
+
+  <!-- Welcome Section -->
+  <div class="bg-gradient-to-r from-[#0BDAAA]/10 via-[#15F275]/10 to-[#0BDAAA]/10 rounded-3xl border border-[#0BDAAA]/20 p-8 mt-8">
+    <div class="flex items-center gap-6">
+      <div class="hidden sm:flex flex-shrink-0">
+        <i class="fas fa-star text-5xl text-[#0BDAAA]/40"></i>
+      </div>
+      <div>
+        <h2 class="text-3xl font-bold text-black mb-3">Welcome to Your Admin Panel</h2>
+        <p class="text-gray-700 leading-relaxed">
+          Manage all aspects of GreenGrowth efficiently. Create programs, post job vacancies, review applications, and maintain articles from one centralized dashboard. Get started by selecting an option from the sidebar.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-6">
+          <a href="{{ url_for('program.create_program') }}" class="px-6 py-3 bg-[#0BDAAA] text-black font-bold rounded-xl hover:bg-[#15F275] transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-plus"></i> Create Program
+          </a>
+          <a href="{{ url_for('lowongan.create_lowongan') }}" class="px-6 py-3 bg-[#C7FB01] text-black font-bold rounded-xl hover:bg-[#15F275] transition-all duration-200 flex items-center gap-2">
+            <i class="fas fa-file-invoice"></i> Post Vacancy
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  <div>
+    <h3 class="text-2xl font-bold text-black mb-6">Quick Actions</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <a href="{{ url_for('program.create_program') }}" class="group p-6 bg-white rounded-2xl border border-gray-200 hover:border-[#0BDAAA] shadow-sm hover:shadow-lg transition-all">
+        <div class="flex items-center gap-4">
+          <div class="bg-[#0BDAAA]/20 p-3 rounded-xl group-hover:bg-[#0BDAAA]/30 transition-colors">
+            <i class="fas fa-plus-circle text-[#0BDAAA] text-2xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-black group-hover:text-[#0BDAAA] transition-colors">New Program</h4>
+            <p class="text-sm text-gray-600">Create a new program</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ url_for('lowongan.create_lowongan') }}" class="group p-6 bg-white rounded-2xl border border-gray-200 hover:border-[#0BDAAA] shadow-sm hover:shadow-lg transition-all">
+        <div class="flex items-center gap-4">
+          <div class="bg-blue-500/20 p-3 rounded-xl group-hover:bg-blue-500/30 transition-colors">
+            <i class="fas fa-file-invoice text-blue-500 text-2xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-black group-hover:text-blue-500 transition-colors">Job Vacancy</h4>
+            <p class="text-sm text-gray-600">Post a new vacancy</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="{{ url_for('artikel.create') }}" class="group p-6 bg-white rounded-2xl border border-gray-200 hover:border-[#0BDAAA] shadow-sm hover:shadow-lg transition-all">
+        <div class="flex items-center gap-4">
+          <div class="bg-yellow-500/20 p-3 rounded-xl group-hover:bg-yellow-500/30 transition-colors">
+            <i class="fas fa-pen-fancy text-yellow-600 text-2xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-black group-hover:text-yellow-600 transition-colors">New Article</h4>
+            <p class="text-sm text-gray-600">Write an article</p>
+          </div>
+        </div>
+      </a>
     </div>
   </div>
 </div>

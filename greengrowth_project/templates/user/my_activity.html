@@ -1,140 +1,148 @@
-{% extends 'layout.html' %} {% block title %}My Activity{% endblock %} {% block body_class %}bg-gray-50 font-sans{% endblock %} {% block nav %} {% include "partials/navbar.html" %} {% endblock %} {% block article %}
-<div class="w-full px-10 py-14">
+{% extends 'layout.html' %}
+
+{% block body_class %}bg-gray-50 font-sans{% endblock %}
+
+{% block nav %}
+{% include "partials/navbar.html" %}
+{% endblock %}
+
+{% block article %}
+
+<div class="relative w-full px-6 md:px-10 py-10 md:py-14">
+
+  <!-- KEMBALI DASHBOARD (ABSOLUTE KIRI ATAS) -->
+
+<a
+ href="{{ url_for('user.dashboard') }}"
+ class="group
+        md:absolute md:top-6 md:left-6 md:z-20
+        w-10 h-10 rounded-full
+        flex items-center justify-center
+        bg-[#0BDAAA] border border-[#0BDAAA]
+        shadow hover:shadow-md transition">
+
+
+<svg xmlns="http://www.w3.org/2000/svg"
+  fill="none" viewBox="0 0 24 24"
+  stroke-width="2" stroke="currentColor"
+  class="w-5 h-5 text-black transition group-hover:-translate-x-0.5">
+  <path stroke-linecap="round" stroke-linejoin="round"
+    d="M15 19l-7-7 7-7" />
+</svg>
+
+
+  </a>
+
   <div class="max-w-6xl mx-auto">
-    <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">My Activity</h1>
-      <p class="text-gray-600">Pantau status lamaran Anda</p>
-    </div>
 
-    {% if lamaran_list %}
-    <div class="space-y-4">
-      {% for lamaran in lamaran_list %}
-      <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition duration-300">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <!-- Left Section: Job Info -->
-          <div class="flex-1">
-            <div class="flex items-start gap-4">
-              <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#0BDAAA] to-[#15F275] rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
 
-              <div class="flex-1 min-w-0">
-                <h3 class="text-xl font-bold text-gray-800 mb-1">{{ lamaran.judul_lowongan }}</h3>
-                <p class="text-gray-600 mb-2">{{ lamaran.nama_program }}</p>
+<!-- HEADER -->
+<div class="mb-10">
+  <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">My Activity</h1>
+  <p class="text-gray-600">Pantau status lamaran Anda</p>
+</div>
 
-                <div class="flex flex-wrap gap-3 text-sm text-gray-600">
-                  {% if lamaran.lokasi_program %}
-                  <span class="flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    {{ lamaran.lokasi_program }}
-                  </span>
-                  {% endif %}
+{% if lamaran_list %}
+<div class="space-y-4">
+  {% for lamaran in lamaran_list %}
+  <div class="bg-white rounded-2xl shadow border border-gray-200 p-6 hover:shadow-lg transition">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-                  <span class="flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Applied: {{ lamaran.applied_at.strftime('%d %b %Y') if lamaran.applied_at else '-' }}
-                  </span>
-                </div>
-              </div>
-            </div>
+      <!-- INFO LOWONGAN -->
+      <div class="flex-1">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-[#0BDAAA] to-[#15F275] rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
           </div>
 
-          <!-- Right Section: Status -->
-          <div class="flex flex-col items-end gap-3">
-            {% if lamaran.status == 'menunggu' %}
-            <span class="px-5 py-2 bg-yellow-100 text-yellow-800 rounded-full font-semibold text-sm flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Menunggu
-            </span>
-            {% elif lamaran.status == 'diterima' %}
-            <span class="px-5 py-2 bg-green-100 text-green-800 rounded-full font-semibold text-sm flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Diterima
-            </span>
-            {% elif lamaran.status == 'ditolak' %}
-            <span class="px-5 py-2 bg-red-100 text-red-800 rounded-full font-semibold text-sm flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Ditolak
-            </span>
-            {% endif %}
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold text-gray-800">{{ lamaran.judul_lowongan }}</h3>
+            <p class="text-gray-600 mb-2">{{ lamaran.nama_program }}</p>
 
-            <a href="{{ url_for('lowongan_user.show', lowongan_id=lamaran.lowongan_id) }}" class="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1">
-              Lihat Detail
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
+            <div class="flex flex-wrap gap-3 text-sm text-gray-600">
+              {% if lamaran.lokasi_program %}
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                {{ lamaran.lokasi_program }}
+              </span>
+              {% endif %}
+
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10" />
+                </svg>
+                Applied: {{ lamaran.applied_at.strftime('%d %b %Y') if lamaran.applied_at else '-' }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-      {% endfor %}
-    </div>
 
-    <!-- Statistics Summary -->
-    <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% set total = lamaran_list|length %} {% set menunggu = lamaran_list|selectattr('status', 'equalto', 'menunggu')|list|length %} {% set diterima = lamaran_list|selectattr('status', 'equalto', 'diterima')|list|length %} {% set ditolak =
-      lamaran_list|selectattr('status', 'equalto', 'ditolak')|list|length %}
+      <!-- STATUS -->
+      <div class="flex flex-col items-end gap-3">
+        {% if lamaran.status == 'menunggu' %}
+        <span class="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">Menunggu</span>
+        {% elif lamaran.status == 'diterima' %}
+        <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold">Diterima</span>
+        {% elif lamaran.status == 'ditolak' %}
+        <span class="px-4 py-2 bg-red-100 text-red-800 rounded-full text-sm font-semibold">Ditolak</span>
+        {% endif %}
 
-      <div class="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-6 text-center">
-        <div class="text-4xl font-bold text-yellow-800 mb-2">{{ menunggu }}</div>
-        <div class="text-yellow-700 font-semibold">Menunggu Review</div>
+        <a href="{{ url_for('lowongan_user.show', lowongan_id=lamaran.lowongan_id) }}"
+          class="text-blue-600 hover:underline text-sm font-medium">Lihat Detail →</a>
       </div>
 
-      <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-6 text-center">
-        <div class="text-4xl font-bold text-green-800 mb-2">{{ diterima }}</div>
-        <div class="text-green-700 font-semibold">Diterima</div>
-      </div>
-
-      <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-6 text-center">
-        <div class="text-4xl font-bold text-red-800 mb-2">{{ ditolak }}</div>
-        <div class="text-red-700 font-semibold">Ditolak</div>
-      </div>
-    </div>
-
-    {% else %}
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-12 text-center">
-      <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg>
-      <h3 class="text-2xl font-bold text-gray-800 mb-2">Belum Ada Lamaran</h3>
-      <p class="text-gray-600 mb-6">Anda belum melamar pekerjaan apapun</p>
-      <a
-        href="{{ url_for('user.dashboard') }}"
-        class="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black font-semibold hover:from-[#15F275] hover:to-[#0BDAAA] transition duration-300 shadow-md hover:shadow-lg"
-      >
-        Cari Lowongan
-      </a>
-    </div>
-    {% endif %}
-
-    <!-- Back Button -->
-    <div class="mt-8">
-      <a href="{{ url_for('user.dashboard') }}" class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 transition duration-300">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Kembali ke Dashboard
-      </a>
     </div>
   </div>
+  {% endfor %}
 </div>
-{% endblock %} {% block footer %} {% include "partials/footer.html" %} {% endblock %}
+
+<!-- RINGKASAN -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+  {% set total = lamaran_list|length %}
+  {% set menunggu = lamaran_list|selectattr('status','equalto','menunggu')|list|length %}
+  {% set diterima = lamaran_list|selectattr('status','equalto','diterima')|list|length %}
+  {% set ditolak = lamaran_list|selectattr('status','equalto','ditolak')|list|length %}
+
+  <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 text-center">
+    <div class="text-3xl font-bold text-yellow-800">{{ menunggu }}</div>
+    <p class="text-yellow-700">Menunggu</p>
+  </div>
+
+  <div class="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
+    <div class="text-3xl font-bold text-green-800">{{ diterima }}</div>
+    <p class="text-green-700">Diterima</p>
+  </div>
+
+  <div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+    <div class="text-3xl font-bold text-red-800">{{ ditolak }}</div>
+    <p class="text-red-700">Ditolak</p>
+  </div>
+</div>
+
+{% else %}
+<div class="bg-white rounded-2xl border p-12 text-center">
+  <h3 class="text-2xl font-bold text-gray-800 mb-2">Belum ada lamaran</h3>
+  <p class="text-gray-600 mb-6">Anda belum melamar pekerjaan</p>
+  <a href="{{ url_for('user.dashboard') }}"
+    class="inline-block px-6 py-3 rounded-full bg-[#0BDAAA] text-black font-semibold">Cari Lowongan</a>
+</div>
+{% endif %}
+
+
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include "partials/footer.html" %}
+{% endblock %}

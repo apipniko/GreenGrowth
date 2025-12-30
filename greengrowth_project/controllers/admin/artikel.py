@@ -95,35 +95,53 @@ def edit(artikel_id):
         abort(404)
     programs = get_all_programs()
     if request.method == 'POST':
-        new_judul = request.form.get('judul_artikel')
-        new_deskripsi = request.form.get('deskripsi')
-        program_id = request.form.get('program_id')
-
-        # validate program
-        if program_id and not get_program_by_id(program_id):
-            flash('Program yang dipilih tidak valid.', 'error')
-            return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
-
-        # handle upload (optional)
-        file = request.files.get('foto_artikel')
-        new_foto_rel = None
-        if file and file.filename:
-            new_foto_rel = save_upload(file)
-            if new_foto_rel is None:
-                flash('Format file tidak diizinkan.', 'error')
-                return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
-            # delete old file if exists
-            if artikel.get('foto_artikel'):
-                old_full = os.path.join(current_app.root_path, 'static', artikel.get('foto_artikel'))
+        try:
+            new_judul = request.form.get('judul_artikel')
+            new_deskripsi = request.form.get('deskripsi')
+            program_id = request.form.get('program_id')
+            
+            # Convert program_id to int and validate
+            if program_id:
                 try:
-                    if os.path.exists(old_full):
-                        os.remove(old_full)
-                except Exception:
-                    pass
+                    program_id = int(program_id)
+                except (ValueError, TypeError):
+                    flash('Program ID tidak valid.', 'error')
+                    return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
+                
+                if not get_program_by_id(program_id):
+                    flash('Program yang dipilih tidak ditemukan.', 'error')
+                    return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
+            else:
+                program_id = None
 
-        edit_artikel_by_id(artikel_id, new_judul, new_deskripsi, new_foto_rel or None, program_id)
-        flash('Artikel diperbarui.', 'success')
-        return redirect(url_for('artikel.show', artikel_id=artikel_id))
+            # handle upload (optional)
+            file = request.files.get('foto_artikel')
+            new_foto_rel = None
+            if file and file.filename:
+                new_foto_rel = save_upload(file)
+                if new_foto_rel is None:
+                    flash('Format file tidak diizinkan.', 'error')
+                    return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
+                # delete old file if exists
+                if artikel.get('foto_artikel'):
+                    old_full = os.path.join(current_app.root_path, 'static', artikel.get('foto_artikel'))
+                    try:
+                        if os.path.exists(old_full):
+                            os.remove(old_full)
+                    except Exception:
+                        pass
+
+            edit_artikel_by_id(artikel_id, new_judul, new_deskripsi, new_foto_rel or None, program_id)
+            flash('Artikel diperbarui.', 'success')
+            return redirect(url_for('artikel.show', artikel_id=artikel_id))
+        except ValueError as ve:
+            # Handle invalid program ID
+            flash(f'Error: {str(ve)}', 'error')
+            return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
+        except Exception as e:
+            # Handle database/constraint errors
+            flash('Gagal memperbarui artikel. Program mungkin sudah dihapus. Silakan pilih program lain.', 'error')
+            return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
     return render_template('admin/artikel_edit.html', artikel=artikel, programs=programs)
 
 

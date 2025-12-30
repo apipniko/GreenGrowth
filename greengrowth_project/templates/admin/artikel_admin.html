@@ -6,36 +6,41 @@
 {% block content %}
 
 <!--============================= KONTEN UTAMA ===========================-->
-<div class="p-6 flex flex-col h-screen">
+<div class="p-8 flex flex-col gap-6 min-h-screen">
   <!--============================= judul halaman ===========================-->
-  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
-    Create a New Article
-  </h1>
-{% include 'partials/flash.html' %}
-  <!--============================= INPUT FORM ===========================-->
-  <div class="bg-[#0BDAAA] rounded-3xl p-6 overflow-y-auto mt-8 pb-16">
+  <div>
+    <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0BDAAA] to-[#15F275] mb-2">
+      Create New Article
+    </h1>
+    <p class="text-gray-600">Write and publish a new article</p>
+  </div>
 
+{% include 'partials/flash.html' %}
+
+  <!--============================= INPUT FORM ===========================-->
+  <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 flex-1 overflow-hidden">
+    <div class="overflow-y-auto h-full">
     <form
       action="{{ url_for('artikel.create') }}"
       method="post"
       enctype="multipart/form-data"
-      class="space-y-2"
+      class="space-y-6"
     >
       <!--============================= judul artikel ===========================-->
       <div>
         <label
           for="judul_artikel"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Article Title
+          Article Title <span class="text-red-500">*</span>
         </label>
         <input
           type="text"
           id="judul_artikel"
           name="judul_artikel"
           value="{{ form.judul_artikel if form is defined else '' }}"
-          placeholder="Enter the article title"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          placeholder="Enter an engaging article title"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
           required
         />
       </div>
@@ -44,42 +49,40 @@
       <div>
         <label
           for="deskripsi"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Article Description
+          Article Content <span class="text-red-500">*</span>
         </label>
         <textarea
           id="deskripsi"
           name="deskripsi"
-          rows="8"
-          placeholder="Enter the article description"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          rows="10"
+          placeholder="Write your article content here..."
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all resize-vertical"
           required
         >{{ form.deskripsi if form is defined else '' }}</textarea>
+        <p class="mt-2 text-xs text-gray-600">Tip: Write clear and engaging content for your readers.</p>
       </div>
 
       <!--============================= pilih program ===========================-->
       <div>
         <label
           for="program_id"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Related Programs
+          Related Program <span class="text-red-500">*</span>
         </label>
         <select
           id="program_id"
           name="program_id"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
           required
         >
-          <option value="" disabled selected style="background-color: #15f275">
-            -- Select Program --
-          </option>
+          <option value="" disabled selected>-- Select a Program --</option>
           {% for p in programs %}
           <option
             value="{{ p.program_id }}"
             {% if form is defined and form.program_id == p.program_id %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
           >
             {{ p.nama_program }}
           </option>
@@ -91,9 +94,9 @@
       <div>
         <label
           for="foto_artikel"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          article photo
+          Article Cover Image
         </label>
         <div class="relative">
           <input
@@ -101,30 +104,32 @@
             id="foto_artikel"
             name="foto_artikel"
             accept="image/*"
-            class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#15F275] file:text-black hover:file:bg-[#C7FB01] cursor-pointer"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 border-dashed rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#0BDAAA] file:text-black hover:file:bg-[#15F275] cursor-pointer transition-all"
           />
         </div>
-        <p class="mt-1 text-xs text-black/60 font-semibold">
-          Format: JPG, PNG, JPEG. Max 5MB
+        <p class="mt-2 text-xs text-gray-600">
+          <i class="fas fa-info-circle mr-1"></i>
+          Supported formats: JPG, PNG, JPEG. Max 5MB. Choose an attractive cover image.
         </p>
       </div>
 
       <!--============================= BAGIAN BUTTON ===========================-->
-      <div class="flex justify-center gap-4 pt-2">
-        <button
-          type="submit"
-          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
-        >
-          Save Article
-        </button>
+      <div class="flex justify-end gap-3 pt-8 border-t border-gray-200">
         <a
           href="{{ url_for('artikel.index') }}"
-          class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full flex items-center"
+          class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition-colors inline-flex items-center gap-2"
         >
-          Back
+          <i class="fas fa-arrow-left"></i> Cancel
         </a>
+        <button
+          type="submit"
+          class="px-8 py-3 bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black font-bold rounded-lg hover:shadow-lg transition-all inline-flex items-center gap-2"
+        >
+          <i class="fas fa-save"></i> Publish Article
+        </button>
       </div>
     </form>
+    </div>
   </div>
 </div>
 {% endblock %}
