@@ -1,52 +1,111 @@
 {% extends "layout.html" %} {% block body_class %} bg-gray-50 font-sans {% endblock %} {% block nav %} {% include "partials/navbar.html" %} {% endblock %} {% block article %}
-<div class="w-full px-10 py-14 flex flex-col gap-16">
-  <!-- ================= CATEGORY SECTION ================= -->
-  <section>
-    <h2 class="text-3xl font-bold text-black mb-6">Category</h2>
-
-    {% if categories %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-      {% for category in categories %}
-      <div class="bg-white rounded-2xl border border-black/10 shadow-sm p-6 text-center hover:shadow-md transition duration-300">
-        <p class="font-semibold text-black">{{ category.nama }}</p>
+<div class="w-full max-w-7xl mx-auto px-6 md:px-10 py-10 flex flex-col gap-8">
+  <!-- ================= HEADER / SEARCH ================= -->
+  <section class="bg-white rounded-2xl border border-black/10 shadow-sm p-6">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold text-black">Dashboard</h1>
+        <p class="text-black/60 mt-1">Temukan program berdasarkan sektor dan kata kunci.</p>
       </div>
-      {% endfor %}
+
+      <form method="get" action="{{ url_for('user.dashboard') }}" class="w-full lg:max-w-xl">
+        {% if selected_sector %}
+        <input type="hidden" name="sektor" value="{{ selected_sector }}" />
+        {% endif %}
+
+        <div class="flex gap-2">
+          <input type="text" name="q" value="{{ q or '' }}" placeholder="Cari program (nama, lokasi, deskripsi)…" class="w-full px-4 py-3 rounded-xl border border-black/10 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black/10" />
+          <button type="submit" class="px-5 py-3 rounded-xl text-sm font-semibold bg-black text-white hover:bg-black/90 transition">Cari</button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 mt-3">
+          <span class="text-sm text-black/60">Hasil:</span>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-black">{{ result_count or 0 }} program</span>
+
+          {% if selected_sector %}
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-black">Sektor: {{ selected_sector }}</span>
+          {% endif %} {% if q %}
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-black">Kata kunci: “{{ q }}”</span>
+          {% endif %} {% if selected_sector or q %}
+          <a href="{{ url_for('user.dashboard') }}" class="text-sm font-semibold text-black/70 hover:text-black ml-auto">Reset semua</a>
+          {% endif %}
+        </div>
+      </form>
     </div>
-    {% else %}
-    <p class="text-black/50">Belum ada kategori tersedia.</p>
-    {% endif %}
   </section>
 
-  <!-- ================= PROGRAM SECTION ================= -->
-  <section>
-    <h2 class="text-3xl font-bold text-black mb-6">Program</h2>
+  <!-- ================= CONTENT ================= -->
+  <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- LEFT: SECTOR FILTER -->
+    <div class="lg:col-span-4">
+      <div class="bg-white rounded-2xl border border-black/10 shadow-sm p-6">
+        <div class="flex items-end justify-between gap-4 mb-4">
+          <h2 class="text-xl font-bold text-black">Sektor</h2>
+          {% if selected_sector %}
+          <a href="{{ url_for('user.dashboard', q=q) }}" class="text-sm font-semibold text-black/70 hover:text-black">Reset</a>
+          {% endif %}
+        </div>
 
-    {% if programs %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      {% for program in programs %}
-      <div class="bg-white rounded-2xl border border-black/10 shadow-sm p-5 flex flex-col hover:shadow-lg hover:-translate-y-1 transition duration-300">
-        <h3 class="text-xl font-semibold text-black mb-1">{{ program.nama }}</h3>
+        {% if sectors %}
+        <div class="flex flex-wrap gap-2">
+          <a
+            href="{{ url_for('user.dashboard', q=q) }}"
+            class="inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-semibold border transition duration-200 {{ 'bg-black text-white border-black' if not selected_sector else 'bg-white text-black border-black/10 hover:bg-gray-50' }}"
+          >
+            Semua
+          </a>
 
-        {% if program.lokasi %}
-        <p class="text-sm text-black/60 mb-3">📍 {{ program.lokasi }}</p>
+          {% for sector in sectors %}
+          <a
+            href="{{ url_for('user.dashboard', sektor=sector.nama, q=q) }}"
+            class="inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-semibold border transition duration-200 {{ 'bg-black text-white border-black' if selected_sector == sector.nama else 'bg-white text-black border-black/10 hover:bg-gray-50' }}"
+          >
+            {{ sector.nama }}
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-black/50">Belum ada sektor tersedia.</p>
         {% endif %}
-
-        {% if program.deskripsi %}
-        <p class="text-sm text-black/70 mb-4 line-clamp-3">{{ program.deskripsi }}</p>
-        {% endif %}
-
-        <a
-          href="{{ url_for('program_user.show', program_id=program.id) }}"
-          class="mt-auto inline-block text-center px-5 py-2 text-sm font-semibold bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black rounded-full shadow hover:from-[#15F275] hover:to-[#0BDAAA] transition duration-300"
-        >
-          View Details
-        </a>
       </div>
-      {% endfor %}
     </div>
-    {% else %}
-    <p class="text-black/50">Belum ada program tersedia.</p>
-    {% endif %}
+
+    <!-- RIGHT: PROGRAM LIST -->
+    <div class="lg:col-span-8">
+      <div class="flex items-end justify-between gap-4 mb-4">
+        <h2 class="text-xl font-bold text-black">Program</h2>
+        <span class="text-sm text-black/60">Menampilkan {{ result_count or 0 }} program</span>
+      </div>
+
+      {% if programs %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+        {% for program in programs %}
+        <div class="bg-white rounded-2xl border border-black/10 shadow-sm p-5 flex flex-col hover:shadow-lg hover:-translate-y-1 transition duration-300">
+          <h3 class="text-lg font-semibold text-black mb-1">{{ program.nama }}</h3>
+
+          {% if program.lokasi %}
+          <p class="text-sm text-black/60 mb-3">📍 {{ program.lokasi }}</p>
+          {% endif %} {% if program.deskripsi %}
+          <p class="text-sm text-black/70 mb-4 line-clamp-3">{{ program.deskripsi }}</p>
+          {% endif %}
+
+          <a
+            href="{{ url_for('program_user.show', program_id=program.id) }}"
+            class="mt-auto inline-block text-center px-5 py-2 text-sm font-semibold bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black rounded-full shadow hover:from-[#15F275] hover:to-[#0BDAAA] transition duration-300"
+          >
+            View Details
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="bg-white rounded-2xl border border-black/10 shadow-sm p-8 text-center">
+        <p class="text-black/70 font-semibold">Program tidak ditemukan.</p>
+        <p class="text-black/50 mt-1">Coba ganti sektor atau kata kunci pencarian.</p>
+        <a href="{{ url_for('user.dashboard') }}" class="inline-flex mt-4 px-5 py-2 rounded-xl text-sm font-semibold bg-black text-white hover:bg-black/90 transition">Reset</a>
+      </div>
+      {% endif %}
+    </div>
   </section>
 </div>
 {% endblock %} {% block footer %} {% include "partials/footer.html" %} {% endblock %}

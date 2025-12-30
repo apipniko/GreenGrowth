@@ -1,13 +1,13 @@
-{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include
-'admin/sidebar.html' %} {% endblock %} {% block content %}
+{% extends "admin/layout_admin.html" %} {% block sidebar %} {% include 'admin/sidebar.html' %} {% endblock %} {% block content %}
 <!-- ============================================================================ -->
 <!--                              KONTEN UTAMA                                    -->
 <!-- ============================================================================ -->
-<div class="p-6 flex flex-col h-screen">
+<div class="p-8 flex flex-col gap-6 min-h-screen">
   <!-- Judul Halaman -->
-  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
-    Create a Program
-  </h1>
+  <div>
+    <h1 class="text-5xl h-16 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0BDAAA] to-[#15F275] mb-2">Create Program</h1>
+    <p class="text-gray-600">Launch a new growth program</p>
+  </div>
 
   <!-- Flash Messages -->
   {% include 'partials/flash.html' %}
@@ -15,156 +15,100 @@
   <!-- ========================================================================== -->
   <!--                           FORM INPUT PROGRAM                               -->
   <!-- ========================================================================== -->
-  <div class="bg-[#0BDAAA] rounded-3xl p-6 overflow-y-auto mt-8">
-    <form
-      method="post"
-      action="{{ url_for('program.create_program') }}"
-      class="space-y-2"
-    >
-      <!-- Field: Nama Program -->
-      <div>
-        <label
-          for="nama_program"
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Program Name
-        </label>
-        <input
-          type="text"
-          id="nama_program"
-          name="nama_program"
-          placeholder="Enter the program name"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-          required
-        />
-      </div>
+  <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 flex-1 overflow-hidden">
+    <div class="overflow-y-auto h-full">
+      <form method="post" action="{{ url_for('program.create_program') }}" class="space-y-6">
+        <!-- Field: Nama Program -->
+        <div>
+          <label for="nama_program" class="block text-black font-bold mb-3 text-sm"> Program Name <span class="text-red-500">*</span> </label>
+          <input
+            type="text"
+            id="nama_program"
+            name="nama_program"
+            placeholder="e.g., Green Skills Training 2024"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+            required
+          />
+        </div>
 
-      <!-- Field: Status Program -->
-      <div>
-        <label
-          for="status_program"
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Program Status
-        </label>
-        <select
-          id="status_program"
-          name="status_program"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none"
-          required
-        >
-          <option value="" disabled selected style="background-color: #15f275">
-            Select program status
-          </option>
-          <option
-            value="perencanaan"
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Perencanaan
-          </option>
-          <option
-            value="berjalan"
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Berjalan
-          </option>
-          <option
-            value="selesai"
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Selesai
-          </option>
-        </select>
-      </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Field: Status Program -->
+          <div>
+            <label for="status_program" class="block text-black font-bold mb-3 text-sm"> Program Status <span class="text-red-500">*</span> </label>
+            <select
+              id="status_program"
+              name="status_program"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            >
+              <option value="" disabled selected>-- Select status --</option>
+              <option value="perencanaan">Perencanaan (Planning)</option>
+              <option value="berjalan">Berjalan (Running)</option>
+              <option value="selesai">Selesai (Completed)</option>
+            </select>
+          </div>
 
-      <!-- Field: Sektor Program -->
-      <div>
-        <label
-          for="sektor_program"
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Program Sector
-        </label>
-        <input
-          type="text"
-          id="sektor_program"
-          name="sektor_program"
-          placeholder="Enter sector/category"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-          required
-        />
-      </div>
+          <!-- Field: Sektor Program -->
+          <div>
+            <label for="sektor_program" class="block text-black font-bold mb-3 text-sm"> Sector <span class="text-red-500">*</span> </label>
+            <input
+              type="text"
+              id="sektor_program"
+              name="sektor_program"
+              placeholder="e.g., Agriculture, Technology"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            />
+          </div>
+        </div>
 
-      <!-- Field: Lokasi Program -->
-      <div>
-        <label
-          for="lokasi_program"
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Program Location
-        </label>
-        <input
-          type="text"
-          id="lokasi_program"
-          name="lokasi_program"
-          placeholder="Enter location/region"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-          required
-        />
-      </div>
+        <!-- Field: Lokasi Program -->
+        <div>
+          <label for="lokasi_program" class="block text-black font-bold mb-3 text-sm"> Region / Location <span class="text-red-500">*</span> </label>
+          <input
+            type="text"
+            id="lokasi_program"
+            name="lokasi_program"
+            placeholder="e.g., Jakarta, Java, Indonesia"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+            required
+          />
+        </div>
 
-      <!-- Field: Tujuan Program -->
-      <div>
-        <label
-          for="tujuan_program"
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Program Objectives
-        </label>
-        <textarea
-          id="tujuan_program"
-          name="tujuan_program"
-          rows="2"
-          placeholder="Enter the program objectives/targets"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-          required
-        ></textarea>
-      </div>
+        <!-- Field: Tujuan Program -->
+        <div>
+          <label for="tujuan_program" class="block text-black font-bold mb-3 text-sm"> Program Objectives <span class="text-red-500">*</span> </label>
+          <textarea
+            id="tujuan_program"
+            name="tujuan_program"
+            rows="3"
+            placeholder="What are the main goals of this program?"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all resize-vertical"
+            required
+          ></textarea>
+        </div>
 
-      <!-- Field: Deskripsi Program -->
-      <div>
-        <label
-          for="deskripsi_program"
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Program Description
-        </label>
-        <textarea
-          id="deskripsi_program"
-          name="deskripsi_program"
-          rows="3"
-          placeholder="Enter description"
-          class="w-full px-4 py-2 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
-        ></textarea>
-      </div>
+        <!-- Field: Deskripsi Program -->
+        <div>
+          <label for="deskripsi_program" class="block text-black font-bold mb-3 text-sm"> Description </label>
+          <textarea
+            id="deskripsi_program"
+            name="deskripsi_program"
+            rows="4"
+            placeholder="Provide details about the program, activities, and expected outcomes..."
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all resize-vertical"
+          ></textarea>
+        </div>
 
-      <!-- Tombol aksi -->
-      <div class="flex justify-center gap-4 pt-2">
-        <button
-          type="submit"
-          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
-        >
-          Create a Program
-        </button>
-
-        <a
-          href="{{ url_for('admin.dashboard') }}"
-          class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full inline-flex items-center"
-        >
-          Back
-        </a>
-      </div>
-    </form>
+        <!-- Tombol aksi -->
+        <div class="flex justify-end gap-3 pt-8 border-t border-gray-200">
+          <a href="{{ url_for('admin.dashboard') }}" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition-colors inline-flex items-center gap-2"> <i class="fas fa-arrow-left"></i> Cancel </a>
+          <button type="submit" class="px-8 py-3 bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black font-bold rounded-lg hover:shadow-lg transition-all inline-flex items-center gap-2">
+            <i class="fas fa-plus-circle"></i> Create Program
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}

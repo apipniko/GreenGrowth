@@ -66,4 +66,3 @@ def explore():
         all_education=all_education
     )
     
-    #fandy backup

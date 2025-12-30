@@ -5,310 +5,212 @@
 {% endblock %}
 
 {% block content %}
-<!-- ============================================================================ -->
-<!--                              KONTEN UTAMA                                    -->
-<!-- ============================================================================ -->
-<div class="p-6 flex flex-col h-screen">
-  
-  <!-- Judul Halaman -->
-  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
-    Update Job Vacancy
-  </h1>
-  
-  <!-- Flash Messages -->
-  {% include 'partials/flash.html' %}
-
-  <!-- ========================================================================== -->
-  <!--                        FORM UPDATE LOWONGAN                                -->
-  <!-- ========================================================================== -->
-  <div class="bg-[#0BDAAA] rounded-3xl p-6 overflow-y-auto mt-8">
-    <form 
-      method="post" 
-      action="{{ url_for('lowongan.edit_lowongan', lowongan_id=lowongan_id) }}" 
-      class="space-y-2"
-    >
-      
-      <!-- Field: Program -->
+<div class="min-h-screen bg-gradient-to-br from-[#0BDAAA]/10 via-white to-[#15F275]/10 px-6 py-8">
+  <div class="max-w-5xl mx-auto space-y-8">
+    <!-- Header -->
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <label 
-          for="program_id" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Program
-        </label>
-        <select 
-          id="program_id" 
-          name="program_id" 
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none" 
-          required
-        >
-          <option value="" disabled style="background-color: #15f275">
-            -- Select Program --
-          </option>
-          {% for program in programs %}
-          <option 
-            value="{{ program[0] }}" 
-            {% if program[0] == lowongan.program_id %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            {{ program[1] if program[1] else 'Program ' ~ program[0] }}
-          </option>
-          {% endfor %}
-        </select>
+        <p class="text-sm uppercase tracking-[0.2em] text-gray-500 font-semibold">Manage Vacancy</p>
+        <h1 class="text-4xl md:text-5xl font-black text-gray-900 leading-tight">Update Job Vacancy</h1>
+        <p class="text-gray-600 mt-2">Perbarui detail lowongan dengan cepat dan pastikan informasi tetap akurat.</p>
+      </div>
+      <a href="{{ url_for('lowongan.read_lowongan') }}" class="inline-flex items-center gap-2 px-4 py-3 bg-white text-gray-800 font-semibold rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
+        <i class="fas fa-arrow-left"></i>
+        Back to List
+      </a>
+    </div>
+
+    {% include 'partials/flash.html' %}
+
+    <!-- Form Card -->
+    <div class="bg-white/90 backdrop-blur rounded-3xl border border-gray-200 shadow-xl overflow-hidden">
+      <div class="bg-gradient-to-r from-[#0BDAAA] to-[#15F275] px-6 py-4 text-gray-900 font-bold flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-white/80 flex items-center justify-center text-[#0BDAAA] shadow-sm">
+          <i class="fas fa-briefcase text-lg"></i>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-[0.25em] text-gray-800">Vacancy</p>
+          <p class="text-lg font-extrabold">Edit Lowongan</p>
+        </div>
       </div>
 
-      <!-- Field: Nama Lowongan -->
-      <div>
-        <label 
-          for="judul_lowongan" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Job Vacancy Name
-        </label>
-        <input 
-          type="text" 
-          id="judul_lowongan" 
-          name="judul_lowongan" 
-          value="{{ lowongan.judul }}" 
-          placeholder="Enter job vacancy name"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required 
-        />
-      </div>
+      <form
+        method="post"
+        action="{{ url_for('lowongan.edit_lowongan', lowongan_id=lowongan_id) }}"
+        class="p-8 space-y-8"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Program -->
+          <div class="space-y-2">
+            <label for="program_id" class="block text-sm font-semibold text-gray-800">Program</label>
+            <select
+              id="program_id"
+              name="program_id"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            >
+              <option value="" disabled>-- Select Program --</option>
+              {% for program in programs %}
+              <option
+                value="{{ program[0] }}"
+                {% if program[0] == lowongan.program_id %}selected{% endif %}
+              >
+                {{ program[1] if program[1] else 'Program ' ~ program[0] }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
 
-      <!-- Field: Status Lowongan -->
-      <div>
-        <label 
-          for="status_lowongan" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Vacancy Status
-        </label>
-        <select 
-          id="status_lowongan" 
-          name="status_lowongan" 
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none" 
-          required
-        >
-          <option 
-            value="dibuka" 
-            {% if lowongan.status == 'dibuka' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Open
-          </option>
-          <option 
-            value="ditutup" 
-            {% if lowongan.status == 'ditutup' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Closed
-          </option>
-        </select>
-        <small class="block mt-1 text-xs text-black/70">
-          If not specified, default will be <strong>Open</strong>.
-        </small>
-      </div>
+          <!-- Status -->
+          <div class="space-y-2">
+            <label for="status_lowongan" class="block text-sm font-semibold text-gray-800">Vacancy Status</label>
+            <select
+              id="status_lowongan"
+              name="status_lowongan"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            >
+              <option value="dibuka" {% if lowongan.status == 'dibuka' %}selected{% endif %}>Open</option>
+              <option value="ditutup" {% if lowongan.status == 'ditutup' %}selected{% endif %}>Closed</option>
+            </select>
+            <p class="text-xs text-gray-500">Jika tidak diubah, default akan tetap <strong>Open</strong>.</p>
+          </div>
 
-      <!-- Field: Minimal Umur -->
-      <div>
-        <label 
-          for="min_umur" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Minimum Age
-        </label>
-        <input 
-          type="number" 
-          id="min_umur" 
-          name="min_umur" 
-          min="0" 
-          max="70" 
-          value="{{ lowongan.min_umur }}" 
-          placeholder="Enter minimum age"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required 
-        />
-        <small class="block mt-1 text-xs text-black/70">
-          the value must be below or equal to 70.
-        </small>
-      </div>
+          <!-- Nama Lowongan -->
+          <div class="space-y-2 md:col-span-2">
+            <label for="judul_lowongan" class="block text-sm font-semibold text-gray-800">Job Vacancy Name</label>
+            <input
+              type="text"
+              id="judul_lowongan"
+              name="judul_lowongan"
+              value="{{ lowongan.judul }}"
+              placeholder="Enter job vacancy name"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            />
+          </div>
 
-      <!-- Field: Maksimal Umur -->
-      <div>
-        <label 
-          for="max_umur" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Maximum Age
-        </label>
-        <input 
-          type="number" 
-          id="max_umur" 
-          name="max_umur" 
-          min="0" 
-          max="70" 
-          value="{{ lowongan.max_umur }}" 
-          placeholder="Enter maximum age"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required 
-        />
-        <small class="block mt-1 text-xs text-black/70">
-          the value must be below or equal to 70.
-        </small>
-      </div>
+          <!-- Min / Max Age -->
+          <div class="space-y-2">
+            <label for="min_umur" class="block text-sm font-semibold text-gray-800">Minimum Age</label>
+            <input
+              type="number"
+              id="min_umur"
+              name="min_umur"
+              min="0"
+              max="70"
+              value="{{ lowongan.min_umur }}"
+              placeholder="e.g. 18"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            />
+            <p class="text-xs text-gray-500">Nilai harus ≤ 70.</p>
+          </div>
+          <div class="space-y-2">
+            <label for="max_umur" class="block text-sm font-semibold text-gray-800">Maximum Age</label>
+            <input
+              type="number"
+              id="max_umur"
+              name="max_umur"
+              min="0"
+              max="70"
+              value="{{ lowongan.max_umur }}"
+              placeholder="e.g. 45"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            />
+            <p class="text-xs text-gray-500">Nilai harus ≤ 70.</p>
+          </div>
 
-      <!-- Field: Keahlian -->
-      <div>
-        <label 
-          for="keahlian" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Required Skills
-        </label>
-        <textarea 
-          id="keahlian" 
-          name="keahlian" 
-          rows="3" 
-          placeholder="Enter required skills"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required
-        >{{ lowongan.keahlian }}</textarea>
-      </div>
+          <!-- Skills -->
+          <div class="space-y-2 md:col-span-2">
+            <label for="keahlian" class="block text-sm font-semibold text-gray-800">Required Skills</label>
+            <textarea
+              id="keahlian"
+              name="keahlian"
+              rows="3"
+              placeholder="List key skills candidates should have"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            >{{ lowongan.keahlian }}</textarea>
+          </div>
 
-      <!-- Field: Pengalaman -->
-      <div>
-        <label 
-          for="pengalaman" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Work Experience
-        </label>
-        <textarea 
-          id="pengalaman" 
-          name="pengalaman" 
-          rows="5" 
-          placeholder="Enter work experience requirements"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required
-        >{{ lowongan.pengalaman }}</textarea>
-      </div>
+          <!-- Experience -->
+          <div class="space-y-2 md:col-span-2">
+            <label for="pengalaman" class="block text-sm font-semibold text-gray-800">Work Experience</label>
+            <textarea
+              id="pengalaman"
+              name="pengalaman"
+              rows="4"
+              placeholder="Describe the experience expected"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            >{{ lowongan.pengalaman }}</textarea>
+          </div>
 
-      <!-- Field: Minimal Pendidikan -->
-      <div>
-        <label 
-          for="min_pendidikan" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Minimum Education Level
-        </label>
-        <select 
-          id="min_pendidikan" 
-          name="min_pendidikan" 
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none" 
-          required
-        >
-          <option 
-            value="SD" 
-            {% if lowongan.min_pendidikan == 'SD' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Elementary School (SD)
-          </option>
-          <option 
-            value="SMP" 
-            {% if lowongan.min_pendidikan == 'SMP' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Junior High School (SMP)
-          </option>
-          <option 
-            value="SMA" 
-            {% if lowongan.min_pendidikan == 'SMA' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Senior High School (SMA/SMK/MAN)
-          </option>
-          <option 
-            value="D3" 
-            {% if lowongan.min_pendidikan == 'D3' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Diploma 3 (D3)
-          </option>
-          <option 
-            value="D4" 
-            {% if lowongan.min_pendidikan == 'D4' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Diploma 4 (D4)
-          </option>
-          <option 
-            value="S1" 
-            {% if lowongan.min_pendidikan == 'S1' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Bachelor's Degree (S1)
-          </option>
-          <option 
-            value="S2" 
-            {% if lowongan.min_pendidikan == 'S2' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Master's Degree (S2)
-          </option>
-          <option 
-            value="S3" 
-            {% if lowongan.min_pendidikan == 'S3' %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
-          >
-            Doctoral Degree (S3)
-          </option>
-        </select>
-      </div>
+          <!-- Minimum Education -->
+          <div class="space-y-2">
+            <label for="min_pendidikan" class="block text-sm font-semibold text-gray-800">Minimum Education Level</label>
+            <select
+              id="min_pendidikan"
+              name="min_pendidikan"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            >
+              <option value="SD" {% if lowongan.min_pendidikan == 'SD' %}selected{% endif %}>Elementary School (SD)</option>
+              <option value="SMP" {% if lowongan.min_pendidikan == 'SMP' %}selected{% endif %}>Junior High School (SMP)</option>
+              <option value="SMA" {% if lowongan.min_pendidikan == 'SMA' %}selected{% endif %}>Senior High School (SMA/SMK/MAN)</option>
+              <option value="D3" {% if lowongan.min_pendidikan == 'D3' %}selected{% endif %}>Diploma 3 (D3)</option>
+              <option value="D4" {% if lowongan.min_pendidikan == 'D4' %}selected{% endif %}>Diploma 4 (D4)</option>
+              <option value="S1" {% if lowongan.min_pendidikan == 'S1' %}selected{% endif %}>Bachelor's Degree (S1)</option>
+              <option value="S2" {% if lowongan.min_pendidikan == 'S2' %}selected{% endif %}>Master's Degree (S2)</option>
+              <option value="S3" {% if lowongan.min_pendidikan == 'S3' %}selected{% endif %}>Doctoral Degree (S3)</option>
+            </select>
+          </div>
 
-      <!-- Field: Kuota Pekerja -->
-      <div>
-        <label 
-          for="kuota_pekerja" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Worker Quota
-        </label>
-        <input 
-          type="number" 
-          id="kuota_pekerja" 
-          name="kuota_pekerja" 
-          min="0" 
-          max="70" 
-          value="{{ lowongan.kuota_pekerja }}" 
-          placeholder="Enter worker quota"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required 
-        />
-        <small class="block mt-1 text-xs text-black/70">
-          the value must be below or equal to 70.
-        </small>
-      </div>
+          <!-- Worker Quota -->
+          <div class="space-y-2">
+            <label for="kuota_pekerja" class="block text-sm font-semibold text-gray-800">Worker Quota</label>
+            <input
+              type="number"
+              id="kuota_pekerja"
+              name="kuota_pekerja"
+              min="0"
+              max="70"
+              value="{{ lowongan.kuota_pekerja }}"
+              placeholder="e.g. 10"
+              class="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+              required
+            />
+            <p class="text-xs text-gray-500">Nilai harus ≤ 70.</p>
+          </div>
+        </div>
 
-      <!-- Tombol Aksi -->
-      <div class="flex justify-center gap-4 pt-2">
-        <button 
-          type="submit" 
-          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
-        >
-          Update Vacancy
-        </button>
-        <a 
-          href="{{ url_for('lowongan.read_lowongan') }}" 
-          class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full inline-flex items-center"
-        >
-          Back
-        </a>
-      </div>
-      
-    </form>
+        <!-- Actions -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-4">
+          <p class="text-sm text-gray-500 flex items-center gap-2">
+            <i class="fas fa-info-circle text-[#0BDAAA]"></i>
+            Pastikan seluruh field sudah terisi dengan benar sebelum menyimpan.
+          </p>
+          <div class="flex gap-3">
+            <a
+              href="{{ url_for('lowongan.read_lowongan') }}"
+              class="px-5 py-3 rounded-xl border border-gray-200 bg-white text-gray-700 font-semibold hover:shadow-md transition-all inline-flex items-center gap-2"
+            >
+              <i class="fas fa-times"></i>
+              Cancel
+            </a>
+            <button
+              type="submit"
+              class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-gray-900 font-bold shadow-md hover:shadow-lg transition-all inline-flex items-center gap-2"
+            >
+              <i class="fas fa-save"></i>
+              Update Vacancy
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  
 </div>
 {% endblock %}

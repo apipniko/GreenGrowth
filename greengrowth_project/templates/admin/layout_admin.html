@@ -5,11 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Admin Dashboard{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(11, 218, 170, 0.5);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(11, 218, 170, 0.8);
+      }
+      #admin-layout.mobile-open #admin-sidebar {
+        transform: translateX(0);
+      }
+      #admin-layout.collapsed {
+        grid-template-columns: 96px 1fr;
+      }
+      #admin-layout.collapsed .nav-label,
+      #admin-layout.collapsed .brand-extra {
+        opacity: 0;
+        width: 0;
+        margin: 0;
+        overflow: hidden;
+        transition: opacity 0.2s ease, width 0.2s ease;
+      }
+      #admin-layout.collapsed #admin-sidebar {
+        width: 96px;
+      }
+      #admin-layout.collapsed .sidebar-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      #admin-layout.mobile-open #sidebar-backdrop {
+        display: block;
+      }
+      @media (max-width: 1023px) {
+        #admin-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
-  <body class="bg-white">
-    <div class="grid min-h-screen md:grid-cols-[280px_1fr]">
+  <body class="bg-gradient-to-br from-gray-50 via-white to-gray-100 font-sans">
+    <div id="admin-layout" class="grid min-h-screen md:grid-cols-[280px_1fr] transition-[grid-template-columns] duration-300">
       {% block sidebar %}{% endblock %}
-      <main>{% block content %}{% endblock %}</main>
+      <main class="overflow-auto relative">
+        <div class="sticky top-0 z-20 flex items-center gap-3 bg-white/80 backdrop-blur px-4 py-3 border-b border-gray-200 md:hidden">
+          <button id="sidebar-toggle" class="p-2 rounded-xl bg-black text-white hover:bg-[#0BDAAA] transition-colors" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <span class="font-semibold text-gray-800">Admin Menu</span>
+        </div>
+        {% block content %}{% endblock %}
+        <button id="collapse-toggle" class="hidden md:flex items-center justify-center w-11 h-11 rounded-full bg-black text-white shadow-lg hover:bg-[#0BDAAA] transition-colors absolute left-4 bottom-6" aria-label="Collapse sidebar">
+          <i class="fas fa-angles-left"></i>
+        </button>
+      </main>
     </div>
+
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/30 backdrop-blur-sm hidden md:hidden"></div>
+
+    <script>
+      const layout = document.getElementById("admin-layout");
+      const sidebar = document.getElementById("admin-sidebar");
+      const mobileToggle = document.getElementById("sidebar-toggle");
+      const collapseToggle = document.getElementById("collapse-toggle");
+      const backdrop = document.getElementById("sidebar-backdrop");
+
+      function toggleMobile() {
+        const isOpen = layout.classList.toggle("mobile-open");
+        backdrop.classList.toggle("hidden", !isOpen);
+      }
+
+      function toggleCollapse() {
+        layout.classList.toggle("collapsed");
+        if (collapseToggle) {
+          const icon = collapseToggle.querySelector("i");
+          icon.classList.toggle("fa-angles-left");
+          icon.classList.toggle("fa-angles-right");
+        }
+      }
+
+      mobileToggle?.addEventListener("click", toggleMobile);
+      collapseToggle?.addEventListener("click", toggleCollapse);
+      backdrop?.addEventListener("click", toggleMobile);
+    </script>
   </body>
 </html>
