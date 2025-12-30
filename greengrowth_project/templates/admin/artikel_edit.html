@@ -6,20 +6,25 @@
 {% block content %}
 
 <!--============================= KONTEN UTAMA ===========================-->
-<div class="p-6 flex flex-col h-screen">
+<div class="p-8 flex flex-col gap-6 min-h-screen">
   <!--============================= judul halaman ===========================-->
-  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
-    Update Artikel
-  </h1>
+  <div>
+    <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0BDAAA] to-[#15F275] mb-2">
+      Edit Article
+    </h1>
+    <p class="text-gray-600">Update your article content</p>
+  </div>
+
 {% include 'partials/flash.html' %}
+
   <!--============================= INPUT FORM ===========================-->
-  <div class="bg-[#0BDAAA] rounded-3xl p-6 mt-8 flex-1 overflow-hidden">
-    <div class="overflow-y-auto h-full pb-6">
+  <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 flex-1 overflow-hidden">
+    <div class="overflow-y-auto h-full">
     <form
       action="{{ url_for('artikel.edit', artikel_id=artikel.artikel_id) }}"
       method="post"
       enctype="multipart/form-data"
-      class="space-y-2"
+      class="space-y-6"
     >
       <input type="hidden" name="id" value="{{ artikel.artikel_id }}" />
 
@@ -27,9 +32,9 @@
       <div>
         <label
           for="judul_artikel"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Article Title
+          Article Title <span class="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -37,7 +42,7 @@
           name="judul_artikel"
           value="{{ artikel.judul_artikel }}"
           placeholder="Enter the article title"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
           required
         />
       </div>
@@ -46,16 +51,16 @@
       <div>
         <label
           for="deskripsi"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Article Description
+          Article Description <span class="text-red-500">*</span>
         </label>
         <textarea
           id="deskripsi"
           name="deskripsi"
-          rows="4"
+          rows="6"
           placeholder="Enter the article description"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all resize-vertical"
           required
         >{{ artikel.deskripsi }}</textarea>
       </div>
@@ -64,48 +69,50 @@
       <div>
         <label
           for="program_id"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Related Programs
+          Related Program <span class="text-red-500">*</span>
         </label>
-        <select
-          id="program_id"
-          name="program_id"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none"
-          required
-        >
-          <option value="" disabled style="background-color: #15f275">
-            -- Select Program --
-          </option>
-          {% for p in programs %}
-          <option
-            value="{{ p.program_id }}"
-            {% if p.program_id == artikel.program_id %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
+        <div class="relative">
+          <select
+            id="program_id"
+            name="program_id"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all"
+            required
           >
-            {{ p.nama_program }}
-          </option>
-          {% endfor %}
-        </select>
+            <option value="" disabled {% if not artikel.program_id %}selected{% endif %}>
+              -- Select Program --
+            </option>
+
+            {% for p in programs %}
+            <option
+              value="{{ p.id }}"
+              {% if p.id|string == artikel.program_id|string %}selected{% endif %}
+            >
+              {{ p.nama if p.nama else 'Program ' ~ p.id }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
 
       <!--============================= upload foto ===========================-->
       <div>
         <label
           for="foto_artikel"
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          article photo
+          Article Cover Image
         </label>
         
         <!--============================= preview foto lama ===========================-->
         {% if artikel.foto_artikel %}
-        <div class="mb-3">
-          <p class="text-xs text-black/60 font-semibold mb-2">Current Photo:</p>
+        <div class="mb-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+          <p class="text-xs text-gray-600 font-semibold mb-3">Current Image:</p>
           <img
             src="{{ url_for('static', filename=artikel.foto_artikel) }}"
             alt="preview"
-            class="w-48 h-auto rounded-xl shadow-md"
+            class="w-64 h-auto rounded-lg shadow-md border border-gray-200"
           />
         </div>
         {% endif %}
@@ -116,28 +123,29 @@
             id="foto_artikel"
             name="foto_artikel"
             accept="image/*"
-            class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#15F275] file:text-black hover:file:bg-[#C7FB01] cursor-pointer"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 border-dashed rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#0BDAAA] file:text-black hover:file:bg-[#15F275] cursor-pointer transition-all"
           />
         </div>
-        <p class="mt-1 text-xs text-black/60 font-semibold">
-          Leave blank if you don't want to change the photo. Format: JPG, PNG, JPEG. Max 5MB
+        <p class="mt-2 text-xs text-gray-600 font-medium">
+          <i class="fas fa-info-circle mr-1"></i>
+          Supported formats: JPG, PNG, JPEG. Max 5MB. Leave blank to keep current image.
         </p>
       </div>
 
       <!--============================= BAGIAN BUTTON ===========================-->
-      <div class="flex justify-center gap-4 pt-8">
-        <button
-          type="submit"
-          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
-        >
-          Update Article
-        </button>
+      <div class="flex justify-end gap-3 pt-8 border-t border-gray-200">
         <a
           href="{{ url_for('artikel.index') }}"
-          class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full flex items-center"
+          class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition-colors inline-flex items-center gap-2"
         >
-          Back
+          <i class="fas fa-arrow-left"></i> Cancel
         </a>
+        <button
+          type="submit"
+          class="px-8 py-3 bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black font-bold rounded-lg hover:shadow-lg transition-all inline-flex items-center gap-2"
+        >
+          <i class="fas fa-save"></i> Update Article
+        </button>
       </div>
     </form>
     </div>

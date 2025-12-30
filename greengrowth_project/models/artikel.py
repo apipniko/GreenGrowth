@@ -39,18 +39,28 @@ def get_all_artikels():
 def edit_artikel_by_id(artikel_id, new_judul, new_deskripsi, new_foto, program_id=None):
     from greengrowth_project.app import mysql
     cur = mysql.connection.cursor()
-    if program_id is not None:
-        cur.execute(
-            "UPDATE artikel SET judul_artikel=%s, deskripsi=%s, foto_artikel=%s, program_id=%s WHERE artikel_id=%s",
-            (new_judul, new_deskripsi, new_foto, program_id, artikel_id),
-        )
-    else:
-        cur.execute(
-            "UPDATE artikel SET judul_artikel=%s, deskripsi=%s, foto_artikel=%s WHERE artikel_id=%s",
-            (new_judul, new_deskripsi, new_foto, artikel_id),
-        )
-    mysql.connection.commit()
-    cur.close()
+    try:
+        if program_id is not None:
+            # Validate program exists before updating
+            cur.execute("SELECT program_id FROM program WHERE program_id=%s", (program_id,))
+            if not cur.fetchone():
+                raise ValueError(f"Program dengan ID {program_id} tidak ditemukan")
+            
+            cur.execute(
+                "UPDATE artikel SET judul_artikel=%s, deskripsi=%s, foto_artikel=%s, program_id=%s WHERE artikel_id=%s",
+                (new_judul, new_deskripsi, new_foto, program_id, artikel_id),
+            )
+        else:
+            cur.execute(
+                "UPDATE artikel SET judul_artikel=%s, deskripsi=%s, foto_artikel=%s WHERE artikel_id=%s",
+                (new_judul, new_deskripsi, new_foto, artikel_id),
+            )
+        mysql.connection.commit()
+    except Exception as e:
+        mysql.connection.rollback()
+        raise e
+    finally:
+        cur.close()
 
 
 def delete_artikel_by_id(artikel_id):

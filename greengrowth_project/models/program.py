@@ -75,17 +75,39 @@ def deleteProgram_db(program_id):
         return False
 
 
-def get_all_programs():
+def get_all_programs(sektor=None, q=None):
     from greengrowth_project.app import mysql
     cur = mysql.connection.cursor()
-    cur.execute("""
+
+    where_clauses = []
+    params = []
+
+    if sektor:
+        where_clauses.append("sektor_program = %s")
+        params.append(sektor)
+
+    if q:
+        like = f"%{q}%"
+        where_clauses.append("(nama_program LIKE %s OR deskripsi_program LIKE %s OR lokasi_program LIKE %s)")
+        params.extend([like, like, like])
+
+    where_sql = ""
+    if where_clauses:
+        where_sql = " WHERE " + " AND ".join(where_clauses)
+
+    cur.execute(
+        f"""
         SELECT 
             program_id,
             nama_program,
             lokasi_program,
             deskripsi_program
-        FROM program ORDER BY nama_program ASC
-    """)
+        FROM program
+        {where_sql}
+        ORDER BY nama_program ASC
+        """,
+        tuple(params),
+    )
     rows = cur.fetchall()
     cur.close()
 
@@ -129,4 +151,23 @@ def get_program_by_id(program_id):
         'lokasi': r[4],
         'deskripsi': r[5]
     }
+
+
+def get_all_program_sectors():
+    """Return unique program sectors suitable for UI filters."""
+    from greengrowth_project.app import mysql
+
+    cur = mysql.connection.cursor()
+    cur.execute(
+        """
+        SELECT DISTINCT sektor_program
+        FROM program
+        WHERE sektor_program IS NOT NULL AND sektor_program <> ''
+        ORDER BY sektor_program ASC
+        """
+    )
+    rows = cur.fetchall()
+    cur.close()
+
+    return [{'nama': r[0]} for r in rows]
 

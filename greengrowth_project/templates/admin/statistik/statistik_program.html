@@ -1,77 +1,107 @@
+{% extends "admin/layout_admin.html" %} {% block sidebar %}{% include 'admin/sidebar.html' %}{% endblock %} {% block content %}
+<div class="p-8 flex flex-col gap-6 min-h-screen">
+  <div class="flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <p class="text-sm uppercase tracking-[0.2em] text-gray-500">Statistics</p>
+      <h1 class="text-4xl h-16 font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0BDAAA] to-[#15F275]">Program Progress</h1>
+      <p class="text-gray-600 mt-1">{{ program[1] if program else (statistik[0][1] if statistik and statistik|length > 0 else 'Program') }}</p>
+    </div>
+    <a href="{{ url_for('program.list_program') }}" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold transition-colors inline-flex items-center gap-2">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back to Programs</span>
+    </a>
+  </div>
 
-{% extends "admin/layout_admin.html" %}
+  {% if statistik and statistik|length > 0 %}
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-gray-900">Progress Chart</h2>
+        <span class="text-xs text-gray-500">0 - 100%</span>
+      </div>
+      <canvas id="progressChart"></canvas>
+    </div>
 
-{% block sidebar %}{% include 'admin/dashboard.html' %}{% endblock %}
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 overflow-auto">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-bold text-gray-900">Data Points</h2>
+        <span class="text-xs text-gray-500">Chronological</span>
+      </div>
+      <table class="w-full text-left text-sm">
+        <thead class="text-gray-500 uppercase text-xs">
+          <tr>
+            <th class="pb-2">Tanggal</th>
+            <th class="pb-2">Persentase Progres (%)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for s in statistik %}
+          <tr class="hover:bg-gray-50">
+            <td class="py-3 text-gray-800">{{ s[3] }}</td>
+            <td class="py-3 font-semibold text-gray-900">{{ s[2] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-{% block content %}
-<div class="p-6">
-	<div class="mb-6 flex items-center justify-between">
-		<h1 class="text-2xl font-bold">Statistik Persentase Program</h1>
-		<a href="{{ url_for('program.list_program') }}" class="px-4 py-2 bg-gray-200 rounded">Kembali</a>
-	</div>
-
-	{% if statistik and statistik|length > 0 %}
-	<div class="mb-6">
-		<h2 class="text-lg font-semibold">{% if program %}{{ program[1] }}{% else %}{{ statistik[0][1] }}{% endif %}</h2>
-	</div>
-
-	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-		<div class="bg-white p-4 rounded shadow w-full">
-			<canvas id="progressChart"></canvas>
-		</div>
-
-		<div class="bg-white p-4 rounded shadow overflow-auto">
-			<table class="w-full text-left">
-				<thead>
-					<tr>
-						<th class="py-2">Tanggal</th>
-						<th class="py-2">Persentase Progres (%)</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for s in statistik %}
-					<tr class="border-t">
-						<td class="py-2">{{ s[3] }}</td>
-						<td class="py-2">{{ s[2] }}</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script>
-		(function(){
-			const labels = {{ labels|default([])|tojson }};
-			const data = {{ data|default([])|tojson }};
-
-			const ctx = document.getElementById('progressChart').getContext('2d');
-			new Chart(ctx, {
-				type: 'bar',
-				data: {
-					labels: labels,
-					datasets: [{
-						label: 'Persentase Progres',
-						data: data,
-						backgroundColor: 'rgba(75, 192, 192, 0.6)',
-						borderColor: 'rgb(75, 192, 192)',
-						borderWidth: 1
-					}]
-				},
-				options: {
-					responsive: true,
-					scales: { y: { beginAtZero: true, max: 100 } }
-				}
-			});
-		})();
-	</script>
-
-	{% else %}
-		<div class="bg-white p-6 rounded shadow">
-			<p class="font-medium">Tidak ada data laporan untuk program ini.</p>
-		</div>
-	{% endif %}
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="application/json" id="progress-chart-data">
+    {{ {'labels': labels|default([]), 'data': data|default([])}|tojson }}
+  </script>
+  <script>
+    (function () {
+      const payloadEl = document.getElementById("progress-chart-data");
+      if (!payloadEl) return;
+      let payload = { labels: [], data: [] };
+      try {
+        payload = JSON.parse(payloadEl.textContent || "{}");
+      } catch (e) {
+        payload = { labels: [], data: [] };
+      }
+      const progressCtx = document.getElementById("progressChart");
+      if (!progressCtx) return;
+      new Chart(progressCtx, {
+        type: "bar",
+        data: {
+          labels: payload.labels,
+          datasets: [
+            {
+              label: "Persentase Progres",
+              data: payload.data,
+              backgroundColor: "rgba(11, 218, 170, 0.4)",
+              borderColor: "rgba(11, 218, 170, 0.9)",
+              borderWidth: 1.5,
+              borderRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { stepSize: 10 },
+              grid: { color: "rgba(0,0,0,0.05)" },
+            },
+            x: { grid: { display: false } },
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.y}%` } },
+          },
+        },
+      });
+    })();
+  </script>
+  {% else %}
+  <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+    <div class="text-4xl mb-4">📊</div>
+    <p class="text-lg font-bold text-gray-900">Tidak ada data laporan untuk program ini.</p>
+    <p class="text-gray-600 mt-2">Tambahkan laporan untuk melihat statistik progres.</p>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

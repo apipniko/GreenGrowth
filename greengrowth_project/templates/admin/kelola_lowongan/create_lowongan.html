@@ -8,12 +8,15 @@
 <!-- ============================================================================ -->
 <!--                              KONTEN UTAMA                                    -->
 <!-- ============================================================================ -->
-<div class="p-6 flex flex-col h-screen">
+<div class="p-8 flex flex-col gap-6 min-h-screen">
   
   <!-- Judul Halaman -->
-  <h1 class="mt-4 mb-6 text-center text-4xl font-bold text-black">
-    Create New Job Vacancy
-  </h1>
+  <div>
+    <h1 class="text-5xl font-bold h-16 text-transparent bg-clip-text bg-gradient-to-r from-[#0BDAAA] to-[#15F275] mb-2">
+      Create Job Vacancy
+    </h1>
+    <p class="text-gray-600">Post a new job opportunity</p>
+  </div>
   
   <!-- Flash Messages -->
   {% include 'partials/flash.html' %}
@@ -21,35 +24,35 @@
   <!-- ========================================================================== -->
   <!--                        FORM CREATE LOWONGAN                                -->
   <!-- ========================================================================== -->
-  <div class="bg-[#0BDAAA] rounded-3xl p-6 overflow-y-auto mt-8">
+  <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 flex-1 overflow-hidden">
+    <div class="overflow-y-auto h-full">
     <form 
       method="post" 
       action="{{ url_for('lowongan.create_lowongan') }}" 
-      class="space-y-2"
+      class="space-y-6"
     >
       
       <!-- Field: Program -->
       <div>
         <label 
           for="program_id" 
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Program
+          Program <span class="text-red-500">*</span>
         </label>
         <select 
           id="program_id" 
           name="program_id" 
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none" 
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all" 
           required
         >
-          <option value="" disabled selected style="background-color: #15f275">
+          <option value="" disabled selected>
             -- Select Program --
           </option>
           {% for program in programs %}
           <option 
             value="{{ program[0] }}" 
             {% if program[0]|string == selected_program_id|string %}selected{% endif %}
-            style="background-color: #15f275; font-weight: bold"
           >
             {{ program[1] if program[1] else 'Program ' ~ program[0] }}
           </option>
@@ -61,16 +64,16 @@
       <div>
         <label 
           for="nama_lowongan" 
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Job Vacancy Name
+          Job Title <span class="text-red-500">*</span>
         </label>
         <input 
           type="text" 
           id="nama_lowongan" 
           name="nama_lowongan" 
-          placeholder="Enter job vacancy name"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
+          placeholder="e.g., Environmental Technician, Green Project Manager"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all" 
           required 
         />
       </div>
@@ -79,88 +82,76 @@
       <div>
         <label 
           for="status_lowongan" 
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Vacancy Status
+          Vacancy Status <span class="text-red-500">*</span>
         </label>
         <select 
           id="status_lowongan" 
           name="status_lowongan" 
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none" 
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all" 
           required
         >
-          <option value="dibuka" selected style="background-color: #15f275; font-weight: bold">
-            Open
-          </option>
-          <option value="ditutup" style="background-color: #15f275; font-weight: bold">
-            Closed
-          </option>
+          <option value="dibuka" selected>Open</option>
+          <option value="ditutup">Closed</option>
         </select>
-        <small class="block mt-1 text-xs text-black/70">
-          If not specified, default will be <strong>Open</strong>.
-        </small>
       </div>
 
-      <!-- Field: Minimal Umur -->
-      <div>
-        <label 
-          for="min_umur" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Minimum Age
-        </label>
-        <input 
-          type="number" 
-          id="min_umur" 
-          name="min_umur" 
-          min="0" 
-          max="70" 
-          placeholder="Enter minimum age"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required 
-        />
-        <small class="block mt-1 text-xs text-black/70">
-          the value must be below or equal to 70.
-        </small>
-      </div>
+      <!-- Age Range -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label 
+            for="min_umur" 
+            class="block text-black font-bold mb-3 text-sm"
+          >
+            Minimum Age <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="min_umur" 
+            name="min_umur" 
+            min="0" 
+            max="70" 
+            placeholder="18"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all" 
+            required 
+          />
+        </div>
 
-      <!-- Field: Maksimal Umur -->
-      <div>
-        <label 
-          for="max_umur" 
-          class="block text-black font-bold mb-2 text-sm"
-        >
-          Maximum Age
-        </label>
-        <input 
-          type="number" 
-          id="max_umur" 
-          name="max_umur" 
-          min="0" 
-          max="70" 
-          placeholder="Enter maximum age"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
-          required 
-        />
-        <small class="block mt-1 text-xs text-black/70">
-          the value must be below or equal to 70.
-        </small>
+        <div>
+          <label 
+            for="max_umur" 
+            class="block text-black font-bold mb-3 text-sm"
+          >
+            Maximum Age <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="max_umur" 
+            name="max_umur" 
+            min="0" 
+            max="70" 
+            placeholder="55"
+            class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all" 
+            required 
+          />
+        </div>
       </div>
 
       <!-- Field: Keahlian -->
       <div>
         <label 
           for="keahlian" 
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Required Skills
+          Required Skills <span class="text-red-500">*</span>
         </label>
         <textarea 
           id="keahlian" 
           name="keahlian" 
           rows="3" 
-          placeholder="Enter required skills"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
+          placeholder="List required technical and soft skills..."
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all resize-vertical" 
           required
         ></textarea>
       </div>
@@ -169,16 +160,16 @@
       <div>
         <label 
           for="pengalaman" 
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Work Experience
+          Work Experience Requirements <span class="text-red-500">*</span>
         </label>
         <textarea 
           id="pengalaman" 
           name="pengalaman" 
-          rows="5" 
-          placeholder="Enter work experience requirements"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
+          rows="4" 
+          placeholder="Describe the experience and background needed..."
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all resize-vertical" 
           required
         ></textarea>
       </div>
@@ -187,40 +178,24 @@
       <div>
         <label 
           for="min_pendidikan" 
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Minimum Education Level
+          Minimum Education Level <span class="text-red-500">*</span>
         </label>
         <select 
           id="min_pendidikan" 
           name="min_pendidikan" 
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold focus:outline-none" 
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all" 
           required
         >
-          <option value="SD" selected style="background-color: #15f275; font-weight: bold">
-            Elementary School (SD)
-          </option>
-          <option value="SMP" style="background-color: #15f275; font-weight: bold">
-            Junior High School (SMP)
-          </option>
-          <option value="SMA" style="background-color: #15f275; font-weight: bold">
-            Senior High School (SMA/SMK/MAN)
-          </option>
-          <option value="D3" style="background-color: #15f275; font-weight: bold">
-            Diploma 3 (D3)
-          </option>
-          <option value="D4" style="background-color: #15f275; font-weight: bold">
-            Diploma 4 (D4)
-          </option>
-          <option value="S1" style="background-color: #15f275; font-weight: bold">
-            Bachelor's Degree (S1)
-          </option>
-          <option value="S2" style="background-color: #15f275; font-weight: bold">
-            Master's Degree (S2)
-          </option>
-          <option value="S3" style="background-color: #15f275; font-weight: bold">
-            Doctoral Degree (S3)
-          </option>
+          <option value="SD" selected>Elementary School (SD)</option>
+          <option value="SMP">Junior High School (SMP)</option>
+          <option value="SMA">Senior High School (SMA/SMK)</option>
+          <option value="D3">Diploma 3 (D3)</option>
+          <option value="D4">Diploma 4 (D4)</option>
+          <option value="S1">Bachelor's Degree (S1)</option>
+          <option value="S2">Master's Degree (S2)</option>
+          <option value="S3">Doctoral Degree (S3)</option>
         </select>
       </div>
 
@@ -228,42 +203,40 @@
       <div>
         <label 
           for="kuota_pekerja" 
-          class="block text-black font-bold mb-2 text-sm"
+          class="block text-black font-bold mb-3 text-sm"
         >
-          Worker Quota
+          Worker Quota <span class="text-red-500">*</span>
         </label>
         <input 
           type="number" 
           id="kuota_pekerja" 
           name="kuota_pekerja" 
-          min="0" 
+          min="1" 
           max="70" 
-          placeholder="Enter worker quota"
-          class="w-full px-4 py-3 bg-black/10 rounded-xl text-black font-bold placeholder-black/40 focus:outline-none" 
+          placeholder="10"
+          class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0BDAAA] focus:border-transparent transition-all" 
           required 
         />
-        <small class="block mt-1 text-xs text-black/70">
-          the value must be below or equal to 70.
-        </small>
       </div>
 
       <!-- Tombol Aksi -->
-      <div class="flex justify-center gap-4 pt-2">
-        <button 
-          type="submit" 
-          class="bg-[#15F275] hover:bg-[#C7FB01] text-black font-bold px-20 py-3 rounded-full"
-        >
-          Create Vacancy
-        </button>
+      <div class="flex justify-end gap-3 pt-8 border-t border-gray-200">
         <a 
           href="{{ url_for('admin.dashboard') }}" 
-          class="bg-black/20 hover:bg-black/30 text-black font-bold px-16 py-3 rounded-full inline-flex items-center"
+          class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-black font-bold rounded-lg transition-colors inline-flex items-center gap-2"
         >
-          Back
+          <i class="fas fa-arrow-left"></i> Cancel
         </a>
+        <button 
+          type="submit" 
+          class="px-8 py-3 bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black font-bold rounded-lg hover:shadow-lg transition-all inline-flex items-center gap-2"
+        >
+          <i class="fas fa-plus-circle"></i> Create Vacancy
+        </button>
       </div>
       
     </form>
+    </div>
   </div>
   
 </div>

@@ -20,8 +20,8 @@
         Pencari Kerja
       </summary>
       <ul class="mt-1 space-y-0.5">
-        <li><a href="#" class="hover:text-[#C7FB01]">Explore</a></li>
-        <li class=""><a href="#" class="hover:text-[#C7FB01]">Lowongan</a></li>
+        <li><a href="{{url_for('lowongan_user.explore')}}" class="hover:text-[#C7FB01]">Explore</a></li>
+        <li class=""><a href="{{url_for('lowongan_user.explore')}}" class="hover:text-[#C7FB01]">Lowongan</a></li>
       </ul>
     </details>
 
@@ -31,7 +31,7 @@
         Tentang Kami
       </summary>
       <ul class="mt-1 space-y-0.5">
-        <li><a href="#" class="hover:text-[#C7FB01]">Artikel</a></li>
+        <li><a href="{{url_for('artikel_user.list_artikel')}}" class="hover:text-[#C7FB01]">Artikel</a></li>
         <li class=" "><a href="#" class="hover:text-[#C7FB01]">Tentang Kami</a></li>
         <li class=" "><a href="#" class="hover:text-[#C7FB01]">Report</a></li>
       </ul>
