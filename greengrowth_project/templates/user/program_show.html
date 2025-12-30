@@ -1,60 +1,111 @@
-{% extends 'layout.html' %} {% block title %}Detail Program - {{ program.nama }}{% endblock %} {% block body_class %}bg-gray-50 font-sans{% endblock %} {% block nav %} {% include "partials/navbar.html" %} {% endblock %} {% block article %}
-<div class="w-full px-10 py-14">
+{% extends 'layout.html' %}
+
+{% block title %}Detail Program - {{ program.nama }}{% endblock %}
+{% block body_class %}bg-gray-50 font-sans{% endblock %}
+
+{% block nav %}
+  {% include "partials/navbar.html" %}
+{% endblock %}
+
+{% block article %}
+<div class="w-full px-6 md:px-10 py-14 ">
+
   <div class="max-w-4xl mx-auto">
-    <!-- Header Section -->
-    <div class="mb-8">
-      <h1 class="text-4xl font-bold text-gray-800 mb-2">{{ program.nama }}</h1>
-      {% if program.lokasi %}
-      <p class="text-lg text-gray-600 flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        {{ program.lokasi }}
-      </p>
-      {% endif %}
+
+    <!-- ================= ONE CARD ================= -->
+    <div class="bg-white rounded-3xl shadow-2xl border border-green-100 overflow-hidden ">
+
+      <!-- ================= HEADER (ATAS) ================= -->
+      <div class="px-8 pt-8 pb-6">
+
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+          {{ program.nama }}
+        </h1>
+
+        {% if program.lokasi %}
+        <div class="flex items-center gap-2 text-gray-600">
+          <svg class="w-5 h-5 text-[#0BDAAA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 11a3 3 0 11-6 0 3 0 016 0z" />
+          </svg>
+          <span class="text-lg font-medium">{{ program.lokasi }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- ================= DIVIDER ================= -->
+      <div class="border-t border-gray-200"></div>
+
+      <!-- ================= CONTENT ================= -->
+      <div class="px-8 py-8 space-y-8">
+
+        {% if program.sektor %}
+        <div>
+          <h2 class="flex items-center gap-3 text-xl font-semibold text-gray-800 mb-3">
+            <span class="w-2 h-6 bg-[#0BDAAA] rounded-full"></span>
+            Sektor Program
+          </h2>
+          <span class="text-gray-700 leading-relaxed">
+            {{ program.sektor }}
+          </span>
+        </div>
+        {% endif %}
+
+        {% if program.tujuan %}
+        <div>
+          <h2 class="flex items-center gap-3 text-xl font-semibold text-gray-800 mb-3">
+            <span class="w-2 h-6 bg-[#15F275] rounded-full"></span>
+            Tujuan Program
+          </h2>
+          <p class="text-gray-700 leading-relaxed">
+            {{ program.tujuan }}
+          </p>
+        </div>
+        {% endif %}
+
+        {% if program.deskripsi %}
+        <div>
+          <h2 class="flex items-center gap-3 text-xl font-semibold text-gray-800 mb-3">
+            <span class="w-2 h-6 bg-gradient-to-b from-[#0BDAAA] to-[#15F275] rounded-full"></span>
+            Deskripsi Program
+          </h2>
+          <p class="text-gray-700 leading-relaxed ">
+            {{ program.deskripsi }}
+          </p>
+        </div>
+        {% endif %}
+
+        <!-- ================= ACTION BUTTON ================= -->
+        <div class="pt-8 border-t border-gray-200">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+            <!-- KIRI -->
+            <a href="{{ url_for('user.dashboard') }}"
+               class="px-8 py-3 rounded-full border border-gray-300 text-gray-700
+                      hover:bg-gray-100 transition text-center">
+              Kembali ke Dashboard
+            </a>
+
+            <!-- KANAN -->
+            <a href="{{ url_for('lowongan_user.list_lowongan', program_id=program.id) }}"
+               class="px-8 py-3 rounded-full bg-gradient-to-r from-[#0BDAAA] to-[#15F275]
+                      text-black font-semibold shadow-md hover:shadow-xl
+                      hover:scale-105 transition-all duration-300 text-center">
+               Lihat Lowongan
+            </a>
+
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Main Content Card -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 space-y-8">
-      {% if program.sektor %}
-      <div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
-          <span class="w-1 h-6 bg-gradient-to-b from-[#0BDAAA] to-[#15F275] rounded"></span>
-          Sektor Program
-        </h2>
-        <p class="text-gray-700 leading-relaxed">{{ program.sektor }}</p>
-      </div>
-      {% endif %} {% if program.tujuan %}
-      <div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
-          <span class="w-1 h-6 bg-gradient-to-b from-[#0BDAAA] to-[#15F275] rounded"></span>
-          Tujuan Program
-        </h2>
-        <p class="text-gray-700 leading-relaxed">{{ program.tujuan }}</p>
-      </div>
-      {% endif %} {% if program.deskripsi %}
-      <div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
-          <span class="w-1 h-6 bg-gradient-to-b from-[#0BDAAA] to-[#15F275] rounded"></span>
-          Deskripsi Program
-        </h2>
-        <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ program.deskripsi }}</p>
-      </div>
-      {% endif %}
-
-      <!-- Action Buttons -->
-      <div class="pt-6 flex flex-wrap gap-4 border-t border-gray-200">
-        <a
-          href="{{ url_for('lowongan_user.list_lowongan', program_id=program.id) }}"
-          class="px-6 py-3 rounded-full bg-gradient-to-r from-[#0BDAAA] to-[#15F275] text-black font-semibold hover:from-[#15F275] hover:to-[#0BDAAA] transition duration-300 shadow-md hover:shadow-lg"
-        >
-          Lihat Lowongan
-        </a>
-
-        <a href="{{ url_for('user.dashboard') }}" class="px-6 py-3 rounded-full border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition duration-300"> Kembali ke Dashboard </a>
-      </div>
-    </div>
   </div>
 </div>
-{% endblock %} {% block footer %} {% include "partials/footer.html" %} {% endblock %}
+{% endblock %}
+
+{% block footer %}
+  {% include "partials/footer.html" %}
+{% endblock %}
