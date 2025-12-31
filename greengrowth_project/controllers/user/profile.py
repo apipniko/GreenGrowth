@@ -139,9 +139,13 @@ def edit_profile(user_id):
     if not profile:
         abort(404)
 
+    raw_next = request.args.get('next') or request.form.get('next')
+    next_url = raw_next if raw_next and raw_next.startswith('/') else None
+    back_url = next_url or url_for('profile_user.view_profile', user_id=user_id)
+
     if request.method == 'POST':
         # reuse existing POST handling (validation + save) implemented in view_profile
         return view_profile(user_id)
 
     # GET: show the edit form
-    return render_template('user/profile_edit.html', profile=profile, back_url=url_for('profile_user.view_profile', user_id=user_id))
+    return render_template('user/profile_edit.html', profile=profile, back_url=back_url, next_url=next_url)

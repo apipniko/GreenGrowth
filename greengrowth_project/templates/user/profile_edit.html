@@ -8,7 +8,7 @@
   <div class="relative w-full">
 
     <!-- BACK BUTTON -->
-    <a href="{{ url_for('profile_user.view_profile', user_id=profile.user_id) }}"
+    <a href="{{ back_url }}"
        class="group absolute bg-[#0BDAAA] rounded-full top-3 left-3 inline-flex items-center gap-3 text-sm font-semibold text-black z-20">
       <span
         class="w-9 h-9 flex items-center justify-center rounded-full border border-[#0BDAAA]
@@ -85,6 +85,10 @@
       action="{{ url_for('profile_user.edit_profile', user_id=profile.user_id) }}"
       enctype="multipart/form-data"
       class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-2xl shadow-2xl shadow-lg">
+
+      {% if next_url %}
+      <input type="hidden" name="next" value="{{ next_url }}">
+      {% endif %}
 
       {% set input = "w-full px-4 py-2.5 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#0BDAAA] focus:outline-none bg-white" %}
 

@@ -31,8 +31,12 @@ def create_lowongan():
         pengalaman = request.form.get('pengalaman', '')
         min_pendidikan = request.form.get('min_pendidikan', '')
         # Memanggil model create_lowongan
-        createLowongan_db(program_id, nama_lowongan, status_lowongan, min_umur, max_umur, keahlian, pengalaman, min_pendidikan, kuota_pekerja)
-        return redirect(url_for('lowongan.read_lowongan', program_id=program_id))
+        result = createLowongan_db(program_id, nama_lowongan, status_lowongan, min_umur, max_umur, keahlian, pengalaman, min_pendidikan, kuota_pekerja)
+        if result:
+            flash("Lowongan berhasil ditambahkan!", "success")
+            return redirect(url_for('lowongan.read_lowongan', program_id=program_id))
+        flash("Gagal menambahkan lowongan!", "error")
+        return redirect(url_for('lowongan.create_lowongan', program_id=program_id))
     # GET request - tampil form, untuk menampilkan dropdown
     admin_id = session.get('admin_id') #Ambil ID admin yang sedang login dari session
     print(f"DEBUG create_lowongan GET: admin_id={admin_id}")
@@ -61,9 +65,13 @@ def edit_lowongan(lowongan_id):
         pengalaman = request.form.get('pengalaman', '')
         min_pendidikan = request.form.get('min_pendidikan', '')
         # Memanggil fungsi query untuk update lowongan
-        updateLowongan_db(lowongan_id, program_id, nama_lowongan, status_lowongan, min_umur, max_umur, keahlian, pengalaman, min_pendidikan, kuota_pekerja)
-        # Jika sudah selesai, alihkan ke read_lowongan
-        return redirect(url_for('lowongan.read_lowongan', program_id=program_id))
+        result = updateLowongan_db(lowongan_id, program_id, nama_lowongan, status_lowongan, min_umur, max_umur, keahlian, pengalaman, min_pendidikan, kuota_pekerja)
+        if result:
+            flash("Lowongan berhasil diupdate!", "success")
+            # Jika sudah selesai, alihkan ke read_lowongan
+            return redirect(url_for('lowongan.read_lowongan', program_id=program_id))
+        flash("Gagal update lowongan!", "error")
+        return redirect(url_for('lowongan.edit_lowongan', lowongan_id=lowongan_id))
      # GET request - tampil form, untuk menampilkan dropdown dan data lowongan
     admin_id = session.get('admin_id')
     programs = get_all_programs_by_admin(admin_id)
@@ -108,13 +116,26 @@ def delete_lowongan(lowongan_id):
     lowongan = readLowongan_by_id(lowongan_id)
     # Validasi ketersediaan lowongan
     if not lowongan:
+        flash("Lowongan tidak ditemukan", "error")
         return redirect(url_for('lowongan.read_lowongan'))
-    program_id = lowongan[1] #Untuk mengambil program_id dari lowongan
+    # readLowongan_by_id mengembalikan dict, bukan tuple
+    if isinstance(lowongan, dict):
+        program_id = lowongan.get('program_id')
+    else:
+        # fallback kalau suatu saat model mengembalikan tuple/list
+        program_id = lowongan[1] if len(lowongan) > 1 else None
+    if program_id is None:
+        flash("Data lowongan tidak valid", "error")
+        return redirect(url_for('lowongan.read_lowongan'))
     # Validasi apakah program benar-benar milik admin
     admin_program = get_all_programs_by_admin(admin_id)
     if not any(p[0]==program_id for p in admin_program):
-        flash("Anda tidak mempunyai akses untuk menghapus lowongan ini")
+        flash("Anda tidak mempunyai akses untuk menghapus lowongan ini", "error")
         return redirect(url_for('lowongan.read_lowongan'))
     # Hapus lowongan
-    deleteLowongan_db(lowongan_id)
+    result = deleteLowongan_db(lowongan_id)
+    if result:
+        flash("Lowongan berhasil dihapus!", "success")
+    else:
+        flash("Gagal menghapus lowongan!", "error")
     return redirect(url_for('lowongan.read_lowongan', program_id = program_id))

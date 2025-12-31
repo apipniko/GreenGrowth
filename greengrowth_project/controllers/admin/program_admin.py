@@ -42,6 +42,10 @@ def create_program():
         result = createProgram_db(admin_id, nama_program, sektor_program, tujuan_program, 
                                  lokasi_program, status_program, deskripsi_program)
         # Validasi untuk memeriksa query dalam veriabel result apakah berhasil atau tidak?
+        if result:
+            flash("Program berhasil ditambahkan!", "success")
+        else:
+            flash("Gagal menambahkan program!", "error")
         return redirect(url_for('program.create_program'))
     return render_template('admin/program/create.html')
 
@@ -101,9 +105,9 @@ def delete_program(program_id):
     result = deleteProgram_db(program_id)
      # Validasi untuk memeriksa query dalam variabel result, apakah berhasil atau tidak
     if result:
-        flash("Program berhasil dihapus!")
+        flash("Program berhasil dihapus!", "success")
     else:
-        flash("Gagal menghapus program!")
+        flash("Gagal menghapus program!", "error")
     
     return redirect(url_for('program.list_program'))
 
